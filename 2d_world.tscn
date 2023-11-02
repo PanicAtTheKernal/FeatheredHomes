@@ -1,10 +1,11 @@
-[gd_scene load_steps=23 format=3 uid="uid://dsps58agtajiu"]
+[gd_scene load_steps=24 format=3 uid="uid://dsps58agtajiu"]
 
 [ext_resource type="Texture2D" uid="uid://cnuew56xuo5jv" path="res://Assets/Titlemap/roguelikeSheet_transparent.png" id="1_q8hc6"]
 [ext_resource type="Script" path="res://Scripts/World/world_map.gd" id="2_g4m67"]
 [ext_resource type="Script" path="res://Scripts/Player/player_cam.gd" id="2_gse07"]
 [ext_resource type="Resource" uid="uid://lbomgeivl84f" path="res://Scripts/Food/ProtoFood.tres" id="3_vd1to"]
 [ext_resource type="PackedScene" uid="uid://bsqhgcwkdicrd" path="res://bird.tscn" id="5_f1wu6"]
+[ext_resource type="Script" path="res://FPS.gd" id="6_g5v7g"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_ym10v"]
 vertices = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -9116,6 +9117,7 @@ script = ExtResource("2_gse07")
 tile_map = NodePath("../TileMap")
 
 [node name="Bird" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
+visible = false
 z_index = 2
 position = Vector2(712, 368)
 target = Vector2i(16, 6)
@@ -9124,12 +9126,18 @@ world_resources = NodePath("../WorldResources")
 
 [node name="Bird2" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
 z_index = 2
-position = Vector2(150, 90)
+position = Vector2(329, 164)
 target = Vector2i(16, 6)
 tile_map = NodePath("../TileMap")
 world_resources = NodePath("../WorldResources")
+stamina = 300.0
+take_off_cost = 0.1
+ground_cost = 5.0
+flight_cost = 5.0
+max_stamina = 100000.0
 
 [node name="Bird3" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
+visible = false
 z_index = 2
 position = Vector2(294, 91)
 target = Vector2i(16, 6)
@@ -9137,6 +9145,7 @@ tile_map = NodePath("../TileMap")
 world_resources = NodePath("../WorldResources")
 
 [node name="Bird4" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
+visible = false
 z_index = 2
 position = Vector2(553, 91)
 target = Vector2i(16, 6)
@@ -9144,6 +9153,7 @@ tile_map = NodePath("../TileMap")
 world_resources = NodePath("../WorldResources")
 
 [node name="Bird5" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
+visible = false
 z_index = 2
 position = Vector2(433, 251)
 target = Vector2i(16, 6)
@@ -9151,6 +9161,7 @@ tile_map = NodePath("../TileMap")
 world_resources = NodePath("../WorldResources")
 
 [node name="Bird6" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
+visible = false
 z_index = 2
 position = Vector2(399, 362)
 target = Vector2i(16, 6)
@@ -9158,6 +9169,7 @@ tile_map = NodePath("../TileMap")
 world_resources = NodePath("../WorldResources")
 
 [node name="Bird7" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
+visible = false
 z_index = 2
 position = Vector2(276, 198)
 target = Vector2i(16, 6)
@@ -9165,6 +9177,7 @@ tile_map = NodePath("../TileMap")
 world_resources = NodePath("../WorldResources")
 
 [node name="Bird8" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
+visible = false
 z_index = 2
 position = Vector2(418, 127)
 target = Vector2i(16, 6)
@@ -9172,6 +9185,7 @@ tile_map = NodePath("../TileMap")
 world_resources = NodePath("../WorldResources")
 
 [node name="Bird9" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
+visible = false
 z_index = 2
 position = Vector2(624, 195)
 target = Vector2i(16, 6)
@@ -9179,13 +9193,22 @@ tile_map = NodePath("../TileMap")
 world_resources = NodePath("../WorldResources")
 
 [node name="Bird10" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
+visible = false
 z_index = 2
-position = Vector2(200, 357)
+position = Vector2(624, 195)
 target = Vector2i(16, 6)
 tile_map = NodePath("../TileMap")
 world_resources = NodePath("../WorldResources")
 
 [node name="RegenFood" type="Timer" parent="."]
 wait_time = 10.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Hello world"
+script = ExtResource("6_g5v7g")
 
 [connection signal="timeout" from="RegenFood" to="WorldResources" method="_on_regen_food_timeout"]

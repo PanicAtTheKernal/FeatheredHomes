@@ -1,7 +1,7 @@
 class_name BirdHelperFunctions
 
 const TILE_SIZE = 16
-const SPEED = 1500
+const SPEED = 75**2
 
 static func calculate_tile_position(target: Vector2i)->Vector2:
 	return Vector2(target)*TILE_SIZE+(Vector2(TILE_SIZE/2.0, TILE_SIZE/2.0))

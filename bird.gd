@@ -39,12 +39,8 @@ signal change_state(new_state: String)
 #TODO create an inital state that count the path before the path is updated and use this inital state to determine if the bird should fly or not
 #Maybe stop the timer and only start it when the path is set
 func _ready():
-	#proper_target = calculate_tile_position()
-	#prefered_agent = nav_agent
-	
-	#set_collision_layer_value(2, true)
-	#set_collision_mask_value(2, true)
-	pass
+	$NavigationTimer.autostart = true
+	$NavigationTimer.start()
 
 func _physics_process(_delta: float)->void:
 	# If no path was found skip the update

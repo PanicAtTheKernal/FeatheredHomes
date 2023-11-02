@@ -13,12 +13,10 @@ var take_off_cost: float
 var mid_flight_calculations: bool = true
 
 func run():
+	# Prevent calculate distance to once per second instead of 60 a second  
 	if data["calculate_distances"] == false:
-		if BirdHelperFunctions.character_at_target(character_body.global_position, data["target"]):
-			super.success()
-			return
 		get_child(0).run()
-		super.running()
+		super.success()
 		return
 	
 	# It won't build the path unless this function is called
@@ -31,11 +29,22 @@ func run():
 	var ground_dist = BirdHelperFunctions.total_distance(ground_path)	
 	var flight_dist = BirdHelperFunctions.total_distance(flight_path)
 	
-	var total_ground_energy_cost = BirdHelperFunctions.calculate_energy_cost(ground_dist, 0.0, ground_cost)
-	var total_flight_energy_cost = BirdHelperFunctions.calculate_energy_cost(flight_dist, take_off_cost, flight_cost)
+	var ground_dist_index = ground_agent.get_current_navigation_path_index()#
+	var ground_path_actual = ground_path.slice(ground_dist_index, len(ground_path)-1)
+	var ground_dist_actual = BirdHelperFunctions.total_distance(ground_path_actual)
+	
+	var flight_dist_index = flight_agent.get_current_navigation_path_index()#
+	var flight_path_actual = flight_path.slice(flight_dist_index, len(flight_path)-1)
+	var flight_dist_actual = BirdHelperFunctions.total_distance(flight_path_actual)
+	
+	var total_ground_energy_cost = BirdHelperFunctions.calculate_energy_cost(ground_dist_actual, 0.0, ground_cost)
+	var total_flight_energy_cost = BirdHelperFunctions.calculate_energy_cost(flight_dist_actual, take_off_cost, flight_cost)
+	var position = character_body.global_position
 	
 	data["ground_dist"] = ground_dist
 	data["flight_dist"] = flight_dist
+	data["ground_dist_actual"] = ground_dist_actual
+	data["flight_dist_actual"] = flight_dist_actual
 	data["total_ground_energy_cost"] = total_ground_energy_cost
 	data["total_flight_energy_cost"] = total_flight_energy_cost
 	data["calculate_distances"] = false

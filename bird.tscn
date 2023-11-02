@@ -56,7 +56,6 @@ debug_path_custom_color = Color(0, 1, 1, 1)
 autostart = true
 
 [node name="NavigationTimer" type="Timer" parent="."]
-autostart = true
 
 [node name="BirdBehaviouralTree" type="Node" parent="."]
 script = ExtResource("4_2ob5f")

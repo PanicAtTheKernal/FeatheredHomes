@@ -12,7 +12,7 @@ func run():
 	var food_sources = world_resources.food_sources
 	var distances: Array[float] = []
 	var list_sources: Dictionary = {}
-	var character_position: Vector2 = character_body.global_position
+	var character_position: Vector2 = character_body.position
 	for food_source in food_sources:
 		# Only add resouce that are full
 		if food_source.current_state == "Empty":
@@ -31,8 +31,8 @@ func run():
 	#if shortest_distance <= min_distance:
 	#	super.fail()
 	#	return
-		
-	data["target"] = list_sources[shortest_distance]
+	var new_target = list_sources[shortest_distance]
+	data["target"] = new_target
 	super.success()
 	return
 

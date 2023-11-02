@@ -1,0 +1,150 @@
+[gd_scene load_steps=18 format=3 uid="uid://bsqhgcwkdicrd"]
+
+[ext_resource type="Script" path="res://bird.gd" id="1_5d8uq"]
+[ext_resource type="Texture2D" uid="uid://2ipr06ja7ya" path="res://Assets/Birds/secondResultGPT-4.png" id="1_hjisj"]
+[ext_resource type="Script" path="res://Modulate.gd" id="3_q4ybn"]
+[ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="4_2ob5f"]
+[ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/selector.gd" id="5_bnm8e"]
+[ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/sequence.gd" id="6_6s5px"]
+[ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_ground_is_efficient.gd" id="6_7jefj"]
+[ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_stamina.gd" id="6_h728u"]
+[ext_resource type="Script" path="res://Scripts/Bird/Conditions/find_nearest_food.gd" id="6_jx7n6"]
+[ext_resource type="Script" path="res://Scripts/Bird/Actions/move_on_ground.gd" id="7_dy828"]
+[ext_resource type="Script" path="res://Scripts/Bird/Actions/calculate_distances.gd" id="7_eteti"]
+[ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_flying_is_efficient.gd" id="9_f1xyi"]
+[ext_resource type="Script" path="res://Scripts/Bird/Actions/fly_to_target.gd" id="10_ijdn7"]
+[ext_resource type="Script" path="res://Scripts/Bird/Actions/consume_food.gd" id="13_3i557"]
+[ext_resource type="Script" path="res://Scripts/Bird/Actions/find_random_spot.gd" id="15_kja1q"]
+[ext_resource type="Script" path="res://Scripts/Behaviour Tree/Decorators/inverter.gd" id="15_m7c1u"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2ghpp"]
+radius = 6.0
+
+[node name="Bird" type="CharacterBody2D"]
+collision_layer = 0
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_5d8uq")
+bird_range = 90
+stamina = 3000.0
+max_stamina = 4000.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.102, 0.1)
+texture = ExtResource("1_hjisj")
+script = ExtResource("3_q4ybn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_2ghpp")
+
+[node name="GroundAgent" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+avoidance_mask = 3
+debug_enabled = true
+debug_use_custom = true
+
+[node name="FlightAgent" type="NavigationAgent2D" parent="."]
+navigation_layers = 2
+avoidance_enabled = true
+avoidance_layers = 2
+avoidance_mask = 3
+debug_enabled = true
+debug_use_custom = true
+debug_path_custom_color = Color(0, 1, 1, 1)
+
+[node name="CalorieTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="NavigationTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="BirdBehaviouralTree" type="Node" parent="."]
+script = ExtResource("4_2ob5f")
+
+[node name="Selector" type="Node" parent="BirdBehaviouralTree"]
+script = ExtResource("5_bnm8e")
+
+[node name="FoodSequence" type="Node" parent="BirdBehaviouralTree/Selector"]
+script = ExtResource("6_6s5px")
+
+[node name="CheckStamina" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence"]
+script = ExtResource("6_h728u")
+
+[node name="FindNearestFood" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence"]
+script = ExtResource("6_jx7n6")
+
+[node name="CalculateDistances" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence"]
+script = ExtResource("7_eteti")
+
+[node name="MovementSelector" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence/CalculateDistances"]
+script = ExtResource("5_bnm8e")
+
+[node name="GroundSequence" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence/CalculateDistances/MovementSelector"]
+script = ExtResource("6_6s5px")
+
+[node name="CheckIfGroundIsEfficient" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence/CalculateDistances/MovementSelector/GroundSequence"]
+script = ExtResource("6_7jefj")
+
+[node name="MoveOnGround" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence/CalculateDistances/MovementSelector/GroundSequence"]
+script = ExtResource("7_dy828")
+
+[node name="FlightSequence" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence/CalculateDistances/MovementSelector"]
+script = ExtResource("6_6s5px")
+
+[node name="CheckIfFlyingIsEfficient" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence/CalculateDistances/MovementSelector/FlightSequence"]
+script = ExtResource("9_f1xyi")
+
+[node name="FlyToTarget" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence/CalculateDistances/MovementSelector/FlightSequence"]
+script = ExtResource("10_ijdn7")
+
+[node name="ConsumeFood" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence"]
+script = ExtResource("13_3i557")
+
+[node name="FreeRoamSequence" type="Node" parent="BirdBehaviouralTree/Selector"]
+script = ExtResource("6_6s5px")
+
+[node name="Selector" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence"]
+script = ExtResource("5_bnm8e")
+
+[node name="ExcessStaminaInverter" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/Selector"]
+script = ExtResource("15_m7c1u")
+
+[node name="CheckStamina" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/Selector/ExcessStaminaInverter"]
+script = ExtResource("6_h728u")
+
+[node name="NoFoodFoundInverter" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/Selector"]
+script = ExtResource("15_m7c1u")
+
+[node name="FindNearestFood" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/Selector/NoFoodFoundInverter"]
+script = ExtResource("6_jx7n6")
+
+[node name="FindRandomSpot" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence"]
+script = ExtResource("15_kja1q")
+
+[node name="CalculateDistances" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence"]
+script = ExtResource("7_eteti")
+
+[node name="MovementSelector" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances"]
+script = ExtResource("5_bnm8e")
+
+[node name="GroundSequence" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector"]
+script = ExtResource("6_6s5px")
+
+[node name="CheckIfGroundIsEfficient" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector/GroundSequence"]
+script = ExtResource("6_7jefj")
+
+[node name="MoveOnGround" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector/GroundSequence"]
+script = ExtResource("7_dy828")
+
+[node name="FlightSequence" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector"]
+script = ExtResource("6_6s5px")
+
+[node name="CheckIfFlyingIsEfficient" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector/FlightSequence"]
+script = ExtResource("9_f1xyi")
+
+[node name="FlyToTarget" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector/FlightSequence"]
+script = ExtResource("10_ijdn7")
+
+[connection signal="change_state" from="." to="Sprite2D" method="_on_bird_change_state"]
+[connection signal="timeout" from="CalorieTimer" to="BirdBehaviouralTree" method="_on_calorie_timer_timeout"]
+[connection signal="timeout" from="NavigationTimer" to="BirdBehaviouralTree" method="_on_navigation_update_timeout"]

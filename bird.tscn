@@ -1,7 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://bsqhgcwkdicrd"]
+[gd_scene load_steps=20 format=3 uid="uid://bsqhgcwkdicrd"]
 
 [ext_resource type="Script" path="res://bird.gd" id="1_5d8uq"]
 [ext_resource type="Texture2D" uid="uid://2ipr06ja7ya" path="res://Assets/Birds/secondResultGPT-4.png" id="1_hjisj"]
+[ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="2_wcpli"]
+[ext_resource type="Script" path="res://Scripts/Bird/bird_animation.gd" id="3_mf0vd"]
 [ext_resource type="Script" path="res://Modulate.gd" id="3_q4ybn"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="4_2ob5f"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/selector.gd" id="5_bnm8e"]
@@ -29,7 +31,17 @@ bird_range = 90
 stamina = 3000.0
 max_stamina = 4000.0
 
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.15, 0.15)
+sprite_frames = ExtResource("2_wcpli")
+animation = &"Take-off"
+autoplay = "Take-off"
+frame = 4
+frame_progress = 1.0
+script = ExtResource("3_mf0vd")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 scale = Vector2(0.102, 0.1)
 texture = ExtResource("1_hjisj")
 script = ExtResource("3_q4ybn")
@@ -145,5 +157,7 @@ script = ExtResource("9_f1xyi")
 script = ExtResource("10_ijdn7")
 
 [connection signal="change_state" from="." to="Sprite2D" method="_on_bird_change_state"]
+[connection signal="change_state" from="." to="AnimatedSprite2D" method="_on_bird_change_state"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_animation_finished"]
 [connection signal="timeout" from="CalorieTimer" to="BirdBehaviouralTree" method="_on_calorie_timer_timeout"]
 [connection signal="timeout" from="NavigationTimer" to="BirdBehaviouralTree" method="_on_navigation_update_timeout"]

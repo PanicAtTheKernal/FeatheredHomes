@@ -18,7 +18,7 @@ func run():
 	
 	if flight_cost > ground_cost:
 		super.fail()
-		
+	
 	data["preferred_agent"] = "flight"
 	if data["is_flying"] == false:
 		BirdHelperFunctions.burn_caloires(data["take_off_cost"], data)

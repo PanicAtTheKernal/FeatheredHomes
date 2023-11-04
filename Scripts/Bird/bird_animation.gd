@@ -4,15 +4,21 @@ var state: String = "Ground"
 var animation_to_play: String = "default"
 
 func _process(delta):
-	play(animation_to_play)
+	if not is_playing():
+		play(animation_to_play)
 
 
-func _on_bird_change_state(new_state: String):
+func _on_bird_change_state(new_state: String, should_flip_h: bool):
+	#if should_flip_h == null:
+	#	flip_h = 
+	print(should_flip_h, flip_h)
 	if state == "Ground":
 		animation_to_play = "default"
 	elif state == "Water":
 		animation_to_play = "default"
 	elif state == "Flying":
+		flip_h = should_flip_h
+		print(should_flip_h, flip_h)
 		animation_to_play = "Take-off"
 		print(is_playing())
 		play("Flight")
@@ -20,4 +26,6 @@ func _on_bird_change_state(new_state: String):
 
 
 func _on_animation_finished():
-	animation_to_play = "Flight"
+	# Make sure the take-off animation finished
+	if animation == "Take-off":
+		animation_to_play = "Flight"

@@ -15,7 +15,7 @@ func run():
 	if flight_agent.is_target_reached() == false and flight_agent.is_target_reachable():
 		character_body.move_and_slide()
 		super.running()
-	elif flight_agent.is_target_reached() and BirdHelperFunctions.character_at_target(character_body.position, data["target"]):
+	elif flight_agent.is_target_reached() and BirdHelperFunctions.character_at_target(character_body.global_position, data["target"]):
 		data["is_flying"] = false
 		data["target_reached"] = true
 		super.success()

@@ -40,6 +40,8 @@ signal change_state(new_state: String)
 #Maybe stop the timer and only start it when the path is set
 func _ready():
 	$NavigationTimer.autostart = true
+	# Start the navaiagation timer at differnet times for each bird
+	await get_tree().create_timer(randf_range(0.1, 3.0))
 	$NavigationTimer.start()
 
 func _physics_process(_delta: float)->void:

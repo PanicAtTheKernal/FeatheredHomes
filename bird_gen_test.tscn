@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://d16nu7pd4eseh"]
+
+[ext_resource type="Script" path="res://bird_gen_test.gd" id="1_nkdvh"]
+[ext_resource type="Texture2D" uid="uid://dsjccfnuvru1e" path="res://Assets/Body test.png" id="1_v2rpu"]
+
+[node name="Node2D" type="Node2D"]
+position = Vector2(400, 400)
+scale = Vector2(7, 7)
+script = ExtResource("1_nkdvh")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_v2rpu")
+
+[node name="HeadStart" type="Marker2D" parent="."]
+position = Vector2(8, -11)
+
+[node name="HeadEnd" type="Marker2D" parent="."]
+position = Vector2(18, -11)

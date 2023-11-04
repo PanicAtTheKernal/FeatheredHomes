@@ -5,5 +5,7 @@ Assets/
 
 export_presets.cfg
 
+.DS_STORE
+
 icon.svg
 icon.svg.import

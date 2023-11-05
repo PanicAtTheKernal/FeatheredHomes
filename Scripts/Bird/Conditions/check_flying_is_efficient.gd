@@ -19,14 +19,12 @@ func run():
 	
 	if flight_cost > ground_cost:
 		super.fail()
+		return
 	
-	var direction = character_body.global_position.direction_to(path[-1])
-	var should_flip_h = direction.x < 0
 	data["preferred_agent"] = "flight"
 	if data["is_flying"] == false:
 		BirdHelperFunctions.burn_caloires(data["take_off_cost"], data)
 		data["is_flying"] = true
-		data["change_state"].emit("Flying", should_flip_h)
 	character_body.set_collision_mask_value(1, false)
 	character_body.set_collision_mask_value(2, true)
 	super.success()

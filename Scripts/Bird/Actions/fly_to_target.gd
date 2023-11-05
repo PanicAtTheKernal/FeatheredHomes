@@ -14,6 +14,8 @@ func run():
 	
 	var is_character_at_target = BirdHelperFunctions.character_at_target(character_body.global_position, data["target"])
 	if is_character_at_target == false and flight_agent.is_target_reachable():
+		var should_flip_h = direction.x < 0
+		data["change_state"].emit("Flying", should_flip_h)
 		character_body.move_and_slide()
 		super.running()
 	elif is_character_at_target:

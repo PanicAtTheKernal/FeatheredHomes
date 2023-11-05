@@ -1,10 +1,9 @@
 [gd_scene load_steps=21 format=3 uid="uid://cquo65bvi3v3n"]
 
 [ext_resource type="Script" path="res://bird.gd" id="1_h23r3"]
+[ext_resource type="Shader" path="res://bird_gen_test.gdshader" id="2_3yqmr"]
 [ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="2_dajh1"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_animation.gd" id="3_u2c0p"]
-[ext_resource type="Texture2D" uid="uid://2ipr06ja7ya" path="res://Assets/Birds/secondResultGPT-4.png" id="4_kcvp2"]
-[ext_resource type="Script" path="res://Modulate.gd" id="5_yb31a"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="6_lv1sx"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/selector.gd" id="7_7tjyf"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/sequence.gd" id="8_eo2tt"]
@@ -20,10 +19,14 @@
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Decorators/inverter.gd" id="17_h46m4"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/find_random_spot.gd" id="18_g2rg0"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5m4r2"]
+shader = ExtResource("2_3yqmr")
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_2ghpp"]
 radius = 6.0
 
 [node name="Bird" type="CharacterBody2D"]
+z_index = 2
 collision_layer = 0
 motion_mode = 1
 wall_min_slide_angle = 0.0
@@ -33,19 +36,12 @@ stamina = 3000.0
 max_stamina = 4000.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_5m4r2")
 scale = Vector2(0.15, 0.15)
 sprite_frames = ExtResource("2_dajh1")
 animation = &"Take-off"
-autoplay = "Take-off"
-frame = 4
-frame_progress = 1.0
+autoplay = "default"
 script = ExtResource("3_u2c0p")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
-scale = Vector2(0.102, 0.1)
-texture = ExtResource("4_kcvp2")
-script = ExtResource("5_yb31a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2ghpp")
@@ -66,6 +62,7 @@ debug_use_custom = true
 debug_path_custom_color = Color(0, 1, 1, 1)
 
 [node name="CalorieTimer" type="Timer" parent="."]
+autostart = true
 
 [node name="NavigationTimer" type="Timer" parent="."]
 
@@ -164,7 +161,6 @@ script = ExtResource("13_4ayn2")
 script = ExtResource("13_4ayn2")
 
 [connection signal="change_state" from="." to="AnimatedSprite2D" method="_on_bird_change_state"]
-[connection signal="change_state" from="." to="Sprite2D" method="_on_bird_change_state"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_animation_finished"]
 [connection signal="navigation_finished" from="GroundAgent" to="BirdBehaviouralTree" method="_on_ground_agent_navigation_finished"]
 [connection signal="path_changed" from="GroundAgent" to="BirdBehaviouralTree" method="_on_ground_agent_path_changed"]

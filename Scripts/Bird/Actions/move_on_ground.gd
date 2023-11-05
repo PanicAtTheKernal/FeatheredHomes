@@ -14,8 +14,9 @@ func run():
 	
 	var is_character_at_target = BirdHelperFunctions.character_at_target(character_body.global_position, data["target"])
 	if  is_character_at_target == false and ground_agent.is_target_reachable():
+		var should_flip_h = direction.x < 0
 		character_body.move_and_slide()
-		BirdHelperFunctions.find_tile_type(character_body.global_position, data)
+		BirdHelperFunctions.find_tile_type(character_body.global_position, should_flip_h, data)
 		super.running()	
 	elif is_character_at_target:
 		data["target_reached"] = true

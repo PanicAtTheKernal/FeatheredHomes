@@ -7,7 +7,7 @@ var character_body: CharacterBody2D
 var bird_range: float
 var min_distance: float = 5
 
-# TODO look at the perfromance under load
+# TODO look at the perfromance under load, also there is an issue where the shortest distance may be to 
 func run():
 	var food_sources = world_resources.food_sources
 	var distances: Array[float] = []
@@ -32,7 +32,10 @@ func run():
 	#	super.fail()
 	#	return
 	var new_target = list_sources[shortest_distance]
+	print("New_target" + str(new_target))
 	data["target"] = new_target
+	# Disable the physics process until the navagation agents updated
+	set_physics_process(false)
 	super.success()
 	return
 

@@ -12,11 +12,12 @@ func run():
 	var direction = character_body.to_local(ground_agent.get_next_path_position()).normalized()
 	character_body.velocity = direction * BirdHelperFunctions.SPEED * self.data["delta"]
 	
-	if ground_agent.is_target_reached() == false and ground_agent.is_target_reachable():
+	var is_character_at_target = BirdHelperFunctions.character_at_target(character_body.global_position, data["target"])
+	if  is_character_at_target == false and ground_agent.is_target_reachable():
 		character_body.move_and_slide()
 		BirdHelperFunctions.find_tile_type(character_body.global_position, data)
 		super.running()	
-	elif ground_agent.is_target_reached() and BirdHelperFunctions.character_at_target(character_body.position, data["target"]):
+	elif is_character_at_target:
 		data["target_reached"] = true
 		super.success()
 	elif not ground_agent.is_target_reachable():

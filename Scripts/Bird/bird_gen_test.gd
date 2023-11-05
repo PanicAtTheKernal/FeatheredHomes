@@ -38,6 +38,7 @@ func _process(delta):
 	if change:
 		$AnimatedSprite2D.play("Take-off")
 	else:
+		$AnimatedSprite2D.flip_h = true
 		$AnimatedSprite2D.play("Flight")	
 
 

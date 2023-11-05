@@ -41,7 +41,7 @@ signal change_state(new_state: String, should_flip_h: bool)
 func _ready():
 	$NavigationTimer.autostart = true
 	# Start the navaiagation timer at differnet times for each bird
-	await get_tree().create_timer(randf_range(0.1, 3.0))
+	await get_tree().create_timer(randf_range(0.1, 3.0)).timeout
 	$NavigationTimer.start()
 
 func _physics_process(_delta: float)->void:

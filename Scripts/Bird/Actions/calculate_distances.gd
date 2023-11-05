@@ -39,7 +39,6 @@ func run():
 	
 	var total_ground_energy_cost = BirdHelperFunctions.calculate_energy_cost(ground_dist_actual, 0.0, ground_cost)
 	var total_flight_energy_cost = BirdHelperFunctions.calculate_energy_cost(flight_dist_actual, take_off_cost, flight_cost)
-	var position = character_body.global_position
 	
 	data["ground_dist"] = ground_dist
 	data["flight_dist"] = flight_dist

@@ -2,6 +2,9 @@ extends Task
 
 class_name BirdBehaviouralTree
 
+var is_ground_agent_updated: bool = false
+var is_flight_agent_updated: bool = false
+
 func _ready():
 	var parent = self.get_parent()
 	self.data = {
@@ -24,23 +27,30 @@ func _ready():
 		"calculate_distances": true
 	}
 	super.start()
+	# Don't start processing the AI until the nav_agents have updated
+	set_physics_process(false)
 
+#
+func _process(_delta):
+	if is_ground_agent_updated and is_flight_agent_updated:
+		set_physics_process(true)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
 	self.data["delta"] = delta
 	run()
 
-
 func _on_navigation_update_timeout():
 	# If flight_agent is not set then none of the data is set
 	if self.data["flight_agent"] == null:
 		return
-	self.data["flight_agent"].set_navigation_map(data["tile_map"].get_navigation_map(1))
-	self.data["flight_agent"].target_position = data["target"]
-	self.data["ground_agent"].target_position = data["target"]
-	self.data["flight_agent"].get_next_path_position()
-	self.data["ground_agent"].get_next_path_position()
+	if data["ground_agent"].target_position != data["target"]:
+		self.data["flight_agent"].set_navigation_map(data["tile_map"].get_navigation_map(1))
+		self.data["flight_agent"].target_position = data["target"]
+		self.data["ground_agent"].target_position = data["target"]
+		self.data["flight_agent"].get_next_path_position()
+		self.data["ground_agent"].get_next_path_position()
+		self.data["ground_path"] = self.data["ground_agent"].get_current_navigation_result().path
 	self.data["calculate_distances"] = true
 
 func run():
@@ -58,3 +68,16 @@ func _on_calorie_timer_timeout():
 	if data["stamina"] == 0:
 		# Death State
 		self.get_parent().queue_free()
+
+
+func _on_ground_agent_path_changed():
+	is_ground_agent_updated = true
+
+
+func _on_flight_agent_path_changed():
+	is_flight_agent_updated = true
+
+
+func _on_ground_agent_navigation_finished():
+	pass
+	#data["target_reached"] = true

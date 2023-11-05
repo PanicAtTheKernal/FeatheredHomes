@@ -34,12 +34,14 @@ var current_ground: String = "Ground"
 var is_flying: bool = false
 var prefered_agent: NavigationAgent2D
 
-signal change_state(new_state: String)
+signal change_state(new_state: String, should_flip_h: bool)
 
 #TODO create an inital state that count the path before the path is updated and use this inital state to determine if the bird should fly or not
 #Maybe stop the timer and only start it when the path is set
 func _ready():
 	$NavigationTimer.autostart = true
+	# Start the navaiagation timer at differnet times for each bird
+	await get_tree().create_timer(randf_range(0.1, 3.0))
 	$NavigationTimer.start()
 
 func _physics_process(_delta: float)->void:

@@ -8,6 +8,7 @@ var flight_agent: NavigationAgent2D
 func run():
 	var flight_cost:float = data["total_flight_energy_cost"]
 	var ground_cost:float = data["total_ground_energy_cost"]
+	var path: PackedVector2Array = flight_agent.get_current_navigation_result().path
 	
 	if flight_cost == null:
 		printerr("calculate distances node is missing")
@@ -18,12 +19,14 @@ func run():
 	
 	if flight_cost > ground_cost:
 		super.fail()
-		
+	
+	var direction = character_body.global_position.direction_to(path[-1])
+	var should_flip_h = direction.x < 0
 	data["preferred_agent"] = "flight"
 	if data["is_flying"] == false:
 		BirdHelperFunctions.burn_caloires(data["take_off_cost"], data)
 		data["is_flying"] = true
-		data["change_state"].emit("Flying")
+		data["change_state"].emit("Flying", should_flip_h)
 	character_body.set_collision_mask_value(1, false)
 	character_body.set_collision_mask_value(2, true)
 	super.success()

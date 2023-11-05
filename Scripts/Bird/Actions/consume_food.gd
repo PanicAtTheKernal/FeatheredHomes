@@ -3,9 +3,10 @@ extends Task
 class_name ConsumeFood
 
 var tile_map: TileMap
+var character_body: CharacterBody2D
 
 func run():
-	if data["target_reached"] == false:
+	if BirdHelperFunctions.character_at_target(character_body.global_position, data["target"]) == false:
 		super.fail()
 		return
 	# Retrieve the resouces here instead of start just to make sure the resource are updated
@@ -19,4 +20,5 @@ func run():
 	super.success()
 	
 func start():
+	character_body = data["character_body"]
 	tile_map = data["tile_map"]

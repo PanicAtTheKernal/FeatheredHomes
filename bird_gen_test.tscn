@@ -1,18 +1,17 @@
 [gd_scene load_steps=3 format=3 uid="uid://d16nu7pd4eseh"]
 
-[ext_resource type="Script" path="res://bird_gen_test.gd" id="1_nkdvh"]
-[ext_resource type="Texture2D" uid="uid://dsjccfnuvru1e" path="res://Assets/Body test.png" id="1_v2rpu"]
+[ext_resource type="Script" path="res://Scripts/Bird/bird_gen_test.gd" id="1_nkdvh"]
+[ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="2_wh3s7"]
 
 [node name="Node2D" type="Node2D"]
 position = Vector2(400, 400)
 scale = Vector2(7, 7)
 script = ExtResource("1_nkdvh")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_v2rpu")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(1, 1)
+sprite_frames = ExtResource("2_wh3s7")
+animation = &"Flight"
 
-[node name="HeadStart" type="Marker2D" parent="."]
-position = Vector2(8, -11)
-
-[node name="HeadEnd" type="Marker2D" parent="."]
-position = Vector2(18, -11)
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]

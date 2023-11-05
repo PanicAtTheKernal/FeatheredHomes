@@ -38,7 +38,7 @@ static func add_caloires(amount:float, data: Dictionary):
 # Function to make sure the bird is at the target
 static func character_at_target(character_pos: Vector2, target: Vector2)->bool:
 	var distance = target.distance_to(character_pos)
-	if distance < 10.0:
+	if distance < 5.0:
 		return true
 	else:
 		return false
@@ -48,11 +48,11 @@ static func find_tile_type(loc: Vector2, data: Dictionary):
 	var tile_map_loc = tile_map.local_to_map(loc)
 	var tile_data = tile_map.get_cell_tile_data(0, tile_map_loc)
 	if tile_data == null:
-		print("Tile loc is missing type data; ", tile_map_loc)
+		printerr("Tile loc is missing type data; ", tile_map_loc)
 		return
 	var type = tile_data.get_custom_data("Type")
 	if data["current_ground"] != type:
-		data["change_state"].emit(type)
+		data["change_state"].emit(type, false)
 		data["current_ground"] = type
 
 static func check_if_within_bounds(loc: Vector2, tile_map:TileMap)->bool:

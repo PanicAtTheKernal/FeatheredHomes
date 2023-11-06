@@ -39,7 +39,6 @@ scale = Vector2(0.15, 0.15)
 sprite_frames = ExtResource("2_wcpli")
 animation = &"Take-off"
 autoplay = "Take-off"
-frame = 4
 frame_progress = 1.0
 script = ExtResource("3_mf0vd")
 

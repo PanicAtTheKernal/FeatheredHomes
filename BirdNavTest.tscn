@@ -1,7 +1,6 @@
-[gd_scene load_steps=21 format=3 uid="uid://cquo65bvi3v3n"]
+[gd_scene load_steps=19 format=3 uid="uid://cquo65bvi3v3n"]
 
 [ext_resource type="Script" path="res://bird.gd" id="1_h23r3"]
-[ext_resource type="Shader" path="res://bird_gen_test.gdshader" id="2_3yqmr"]
 [ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="2_dajh1"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_animation.gd" id="3_u2c0p"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="6_lv1sx"]
@@ -19,9 +18,6 @@
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Decorators/inverter.gd" id="17_h46m4"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/find_random_spot.gd" id="18_g2rg0"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5m4r2"]
-shader = ExtResource("2_3yqmr")
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_2ghpp"]
 radius = 6.0
 
@@ -36,7 +32,6 @@ stamina = 3000.0
 max_stamina = 4000.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-material = SubResource("ShaderMaterial_5m4r2")
 scale = Vector2(0.15, 0.15)
 sprite_frames = ExtResource("2_dajh1")
 animation = &"Take-off"

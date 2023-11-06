@@ -37,7 +37,7 @@ async function createHashMapsOfColours(): Promise<Map<number, number>> {
 async function main():Promise<void> {
     const colourHashMap: Map<number, number> = await createHashMapsOfColours();
     try {
-        const imageTemplate: Jimp = await Jimp.read("testImage.png");
+        const imageTemplate: Jimp = await Jimp.read("testImage3.png");
         const finalImage: Jimp = new Jimp(imageTemplate.bitmap.width, imageTemplate.bitmap.height);
 
         imageTemplate.scan(0,0, imageTemplate.bitmap.width, imageTemplate.bitmap.height, (x, y, idx) => {

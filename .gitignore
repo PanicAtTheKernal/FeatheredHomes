@@ -2,6 +2,7 @@
 .godot/
 
 Assets/
+addons
 
 export_presets.cfg
 

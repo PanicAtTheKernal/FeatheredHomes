@@ -9,9 +9,8 @@ scale = Vector2(7, 7)
 script = ExtResource("1_nkdvh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(1, 1)
 sprite_frames = ExtResource("2_wh3s7")
-animation = &"Flight"
+animation = &"Take-off"
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]

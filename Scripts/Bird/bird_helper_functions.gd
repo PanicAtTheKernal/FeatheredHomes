@@ -26,7 +26,7 @@ static func total_distance(path: Array[Vector2])->float:
 static func calculate_energy_cost(distance: float, take_off_cost: float, energy_cost: float)->float:
 	return (distance*energy_cost)+take_off_cost
 
-static func calculate_time_to_target(path: Array[Vector2]):
+static func calculate_time_to_target(_path: Array[Vector2]):
 	pass
 
 static func burn_caloires(amount:float, data: Dictionary):
@@ -43,7 +43,7 @@ static func character_at_target(character_pos: Vector2, target: Vector2)->bool:
 	else:
 		return false
 
-static func find_tile_type(loc: Vector2, data: Dictionary):
+static func find_tile_type(loc: Vector2, flip_h: bool, data: Dictionary):
 	var tile_map = data["tile_map"]
 	var tile_map_loc = tile_map.local_to_map(loc)
 	var tile_data = tile_map.get_cell_tile_data(0, tile_map_loc)
@@ -52,7 +52,7 @@ static func find_tile_type(loc: Vector2, data: Dictionary):
 		return
 	var type = tile_data.get_custom_data("Type")
 	if data["current_ground"] != type:
-		data["change_state"].emit(type, false)
+		data["change_state"].emit(type, flip_h)
 		data["current_ground"] = type
 
 static func check_if_within_bounds(loc: Vector2, tile_map:TileMap)->bool:

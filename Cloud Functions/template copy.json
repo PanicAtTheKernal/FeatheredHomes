@@ -1,8 +1,6 @@
 {
 	"Crown": [255,126,0],
-	"UpperSupercilium": [133, 98, 61],
-	"MiddleSupercilium": [255,163,177],
-	"LowerSupercilium": [79, 36, 69],
+	"Supercilium": [255,163,177],
 	"Nape": [237,28,36],
 	"Nostril": [255,194,14],
 	"UpperBeak": [168,230,29],
@@ -17,6 +15,8 @@
 	"Leg": [0,183,239],
 	"UndertailCoverts": [245,228,156],
 	"Tail": [211,249,188],
+	"UppertailCoverts": [181,165,213],
 	"Rump": [180,180,180],
+	"Back": [153,0,48],
 	"Flanks": [111, 49, 152]
 }

@@ -13,6 +13,7 @@ const SUPABASE_URL = env["SUPABASE_URL"];
 const VERSION = env["VERSION"];
 const OPENAI_API_KEY = env["OPENAI_API_KEY"];
 const birdSpeciesTable = "BirdSpecies";
+const nameCol = "birdName"
 const pontentialDietHeadings = ["Diet", "Behaviour and ecology"];
 const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -23,7 +24,6 @@ const headers = {
 async function findSpecies(request: Request): Promise<Response> {
     const requestUrl = new URL(request.url)
     const speciesName = requestUrl.searchParams.get("species");
-    const nameCol = "birdName"
     const supabaseAdminClient: SupabaseClient = createClient(
         SUPABASE_URL,
         SUPABASE_SERVICE_ROLE_KEY
@@ -51,7 +51,7 @@ async function findSpecies(request: Request): Promise<Response> {
         return await findWikiPage(speciesName, supabaseAdminClient);
     }
 
-    return new Response(JSON.stringify({ data: data }), {
+    return new Response(JSON.stringify({ data: data[0] }), {
         headers: headers,
         status: 200
     });
@@ -174,23 +174,33 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
 async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Promise<Response> {
     const helperFunctions: BirdHelperFunctions = new BirdHelperFunctions(client, OPENAI_API_KEY, VERSION);
     const newSpecies: BirdSpeciesTable = new BirdSpeciesTable()
+    const date = new Date();
 
     try {
         const shapeId = await helperFunctions.covertFamilyToShape(wikiPageInfo.birdFamily) as string;
-        //const dietId = await helperFunctions.findDietId(wikiPageInfo.birdDiet);
+        // const dietId = await helperFunctions.findDietId(wikiPageInfo.birdDiet);
 
         newSpecies.birdName = wikiPageInfo.birdName;
+        // newSpecies.birdDescription = await helperFunctions.getSummary(wikiPageInfo.birdSummary);
+        // newSpecies.birdDescription = "Test summary"
         newSpecies.birdScientificName = wikiPageInfo.birdScientificName;
         newSpecies.birdFamily = wikiPageInfo.birdFamily;
         newSpecies.birdShapeId = shapeId
         newSpecies.dietId = "5bd828f0-805a-4fd0-90a5-039294930d7f"
-        // newSpecies.birdImageUrl = await helperFunctions.createNewImage(wikiPageInfo.birdDescription, shapeId, wikiPageInfo.birdName);
-        newSpecies.birdImageUrl = "https://sjiikegnbgahukdwklux.supabase.co/storage/v1/object/public/BirdAssets/Chickadees/eurasian-blue-tit.png";
+        newSpecies.birdImageUrl = await helperFunctions.createNewImage(wikiPageInfo.birdDescription, shapeId, wikiPageInfo.birdName);
+        // newSpecies.birdImageUrl = "https://sjiikegnbgahukdwklux.supabase.co/storage/v1/object/public/BirdAssets/Chickadees/eurasian-blue-tit.png";
         newSpecies.version = VERSION;
-        newSpecies.createdAt = new Date().getTime()
+        newSpecies.createdAt = `${date.getFullYear()}-${date.getMonth()}-${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`
     
-        console.log(newSpecies);
-        return new Response(JSON.stringify({ message: "Creating new bird" }), {
+        const response = await client.from(birdSpeciesTable).insert(newSpecies);
+
+        if (response.error) throw response.error;
+
+        const { data, error } = await client.from(birdSpeciesTable).select().eq("birdId", newSpecies.birdId);
+
+        if (error) throw error;
+
+        return new Response(JSON.stringify({ data: data[0] }), {
             headers: headers,
             status: 200
         });

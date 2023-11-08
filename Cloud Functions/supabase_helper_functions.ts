@@ -9,32 +9,19 @@ enum GPTModels {
 }
 
 export class BirdSpeciesTable {
-    private _birdId: string;
-    public birdName: string;
-    public birdDescription: string;
-    public birdScientificName: string;
-    public birdFamily: string;
-    public birdShapeId: string;
-    public dietId: string;
-    public birdImageUrl: string;
-    public createdAt: number;
-    public version: string;
+    public birdId: string;
+    public birdName = "";
+    public birdDescription = "";
+    public birdScientificName = "";
+    public birdFamily = "";
+    public birdShapeId = "";
+    public dietId = "";
+    public birdImageUrl = "";
+    public createdAt = "";
+    public version = "0.0";
     
     constructor() {
-        this._birdId = crypto.randomUUID()
-        this.birdName = "";
-        this.birdDescription = "";
-        this.birdScientificName = "";
-        this.birdFamily = "";
-        this.birdShapeId = "";
-        this.dietId = "";
-        this.birdImageUrl = "";
-        this.createdAt = 0;
-        this.version = "0.0";
-    }
-
-    public get birdId() {
-        return this._birdId;
+        this.birdId = crypto.randomUUID()
     }
 }
 
@@ -101,47 +88,40 @@ export class BirdHelperFunctions {
 
     public async createNewImage(description: string, shapeId: string, birdName: string): Promise<string> {
         const { BirdShapeName, BirdShapeTemplateUrl, BirdShapeTemplateJson } = await this.getTemplate(shapeId);
-        const imageJson = await this.createBirdJsonTemplate(BirdShapeTemplateJson, BirdShapeTemplateUrl, description);
-        // const imageJson = await this.testJson();
+        // const imageJson = await this.createBirdJsonTemplate(BirdShapeTemplateJson, BirdShapeTemplateUrl, description);
+        const imageJson = await this.testJson();
         const colourHashMap = this.createHashMapsOfColours(imageJson, BirdShapeTemplateJson);
         const fileName = birdName.trim().replaceAll(" ", "-").toLowerCase();
 
-        try {
-            const imageTemplate: Jimp = await Jimp.read(BirdShapeTemplateUrl);
-            const finalImage: Jimp = new Jimp(imageTemplate.bitmap.width, imageTemplate.bitmap.height);
-    
-            imageTemplate.scan(0,0, imageTemplate.bitmap.width, imageTemplate.bitmap.height, (x, y, idx) => {
-                const pixelColourHex:number = Jimp.rgbaToInt(
-                    imageTemplate.bitmap.data[idx],
-                    imageTemplate.bitmap.data[idx+1],
-                    imageTemplate.bitmap.data[idx+2],
-                    imageTemplate.bitmap.data[idx+3],
-                )
-                let newPixelColourHex = colourHashMap.get(pixelColourHex);
-    
-                if(newPixelColourHex == undefined) {
-                    if(pixelColourHex != 0) {
-                        if (pixelColourHex != 255) console.log(Jimp.intToRGBA(pixelColourHex));
-                    }
-                    newPixelColourHex = pixelColourHex;
-                }
-    
-                finalImage.setPixelColor(newPixelColourHex, x, y);
-            });
-    
-            this._adminClient.storage.from("BirdAssets")
-                .upload(`${BirdShapeName}/${fileName}.png`, await finalImage.getBufferAsync(Jimp.MIME_PNG), {
-                    contentType: 'image/png'
-                })
-            const { data } = this._adminClient.storage.from("BirdAssets")
-                .getPublicUrl(`${BirdShapeName}/${fileName}.png`)
-            return data.publicUrl;
-        } catch(err) {
-            // throw err;
-            console.log(err);
-        }
+        const imageTemplate: Jimp = await Jimp.read(BirdShapeTemplateUrl);
+        const finalImage: Jimp = new Jimp(imageTemplate.bitmap.width, imageTemplate.bitmap.height);
 
-        return "";
+        imageTemplate.scan(0,0, imageTemplate.bitmap.width, imageTemplate.bitmap.height, (x, y, idx) => {
+            const pixelColourHex:number = Jimp.rgbaToInt(
+                imageTemplate.bitmap.data[idx],
+                imageTemplate.bitmap.data[idx+1],
+                imageTemplate.bitmap.data[idx+2],
+                imageTemplate.bitmap.data[idx+3],
+            )
+            let newPixelColourHex = colourHashMap.get(pixelColourHex);
+
+            if(newPixelColourHex == undefined) {
+                if(pixelColourHex != 0) {
+                    if (pixelColourHex != 255) console.log(Jimp.intToRGBA(pixelColourHex));
+                }
+                newPixelColourHex = pixelColourHex;
+            }
+
+            finalImage.setPixelColor(newPixelColourHex, x, y);
+        });
+
+        this._adminClient.storage.from("BirdAssets")
+            .upload(`${BirdShapeName}/${fileName}.png`, await finalImage.getBufferAsync(Jimp.MIME_PNG), {
+                contentType: 'image/png'
+            })
+        const { data } = this._adminClient.storage.from("BirdAssets")
+            .getPublicUrl(`${BirdShapeName}/${fileName}.png`)
+        return data.publicUrl;
     }
 
     private async getTemplate(shapeId: string) {
@@ -161,7 +141,6 @@ export class BirdHelperFunctions {
         const alphaValue = 255;
         const colours: Map<string, number[]> = new Map(Object.entries(JSON.parse(coloursStr)));
         const template: Map<string, number[]> = new Map(Object.entries(templateStr));
-        console.log("test")
         const colourHashMap: Map<number, number> = new Map();
     
         template.forEach((templateValue, birdPart) => {
@@ -244,7 +223,8 @@ export class BirdHelperFunctions {
                     type: "text",
                     text: systemMessage
                 }]
-            }]
+            }],
+            max_tokens: 500
         }
 
         if(content != null) {

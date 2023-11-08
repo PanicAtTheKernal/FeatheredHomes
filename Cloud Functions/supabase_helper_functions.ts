@@ -119,10 +119,10 @@ export class BirdHelperFunctions {
         const diets = await this.getAllDiets();
         const dietSM = await this.systemMessagePrep("Diet", diets);
 
-        const dietSummary = await this.askGPT(dietSummarySM, GPTModels.gpt3, dietParagraph)
+        const dietSummary = await this.askGPT(dietSummarySM, GPTModels.gpt3, dietParagraph);
         if (dietSummary == null) throw Error(`Diet summary form ${GPTModels.gpt3} failed`);
         
-        const dietName = await this.askGPT(dietSM, "gpt-3.5-turbo-1106", dietSummary)
+        const dietName = await this.askGPT(dietSM, "gpt-3.5-turbo-1106", dietSummary);
         if (dietName == null) throw Error(`Diet name form ${GPTModels.gpt3} failed`);
 
         const result = this._dietMap.get(dietName);
@@ -130,7 +130,12 @@ export class BirdHelperFunctions {
         return result;
     }
 
-    public async getSummary(paragraph: string) {
+    public async getSummary(paragraph: string): Promise<string> {
+        const summarySM = await this.systemMessagePrep("Summary");
+        const summary = await this.askGPT(summarySM, GPTModels.gpt3, paragraph);
+
+        if (summary == undefined) throw Error("Could not generate summary");
+        return summary
     }
 
     private async askGPT(systemMessage: string, model: string, content?: string, imageUrl?: string): Promise<string | null> {

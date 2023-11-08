@@ -34,7 +34,6 @@ max_stamina = 4000.0
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.15, 0.15)
 sprite_frames = ExtResource("2_dajh1")
-animation = &"Take-off"
 autoplay = "default"
 script = ExtResource("3_u2c0p")
 

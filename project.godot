@@ -15,17 +15,9 @@ run/main_scene="res://2d_world.tscn"
 config/features=PackedStringArray("4.1", "Mobile")
 config/icon="res://icon.svg"
 
-[autoload]
-
-Supabase="*res://addons/supabase/Supabase/supabase.gd"
-
 [dotnet]
 
 project/assembly_name="Fyp Prototype 1"
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/supabase/plugin.cfg")
 
 [input]
 

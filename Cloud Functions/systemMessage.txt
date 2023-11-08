@@ -22,3 +22,5 @@ You will given a text description of a bird. Your role is to extract colour info
 	"Flanks": ,
 }
 ". If the description does not define the colour you can use the colour of the closest body part instead within reason. The legs are a different colour from the feathers, if not defined just use the common leg colour of the bird type. Don't use max or min values like [255,255,255] or [0,0,0] etc. Also note that synonyms may be used in the description. Prefer male duck. No null values
+
+

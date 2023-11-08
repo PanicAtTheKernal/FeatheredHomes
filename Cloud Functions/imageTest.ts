@@ -33,7 +33,7 @@ async function createHashMapsOfColours(): Promise<Map<number, number>> {
     console.log(colourHashMap);
     return colourHashMap;
 }
-
+// Species 
 async function main():Promise<void> {
     const colourHashMap: Map<number, number> = await createHashMapsOfColours();
     try {

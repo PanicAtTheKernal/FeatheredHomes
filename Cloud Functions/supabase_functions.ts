@@ -11,6 +11,7 @@ const env = await load();
 const SUPABASE_SERVICE_ROLE_KEY = env["SUPABASE_SERVICE_ROLE_KEY"];
 const SUPABASE_URL = env["SUPABASE_URL"];
 const VERSION = env["VERSION"];
+const OPENAI_API_KEY = env["OPENAI_API_KEY"];
 const birdSpeciesTable = "BirdSpecies";
 const pontentialDietHeadings = ["Diet", "Behaviour and ecology"];
 const headers = {
@@ -171,31 +172,32 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
 }
 
 async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Promise<Response> {
-    const helperFunctions: BirdHelperFunctions = new BirdHelperFunctions(client);
+    const helperFunctions: BirdHelperFunctions = new BirdHelperFunctions(client, OPENAI_API_KEY);
     const newSpecies: BirdSpeciesTable = new BirdSpeciesTable()
 
-    const shapeId = await helperFunctions.covertFamilyToShape(wikiPageInfo.birdFamily);
-    const diets = await helperFunctions.getAllDiets();
+    try {
+        const shapeId = await helperFunctions.covertFamilyToShape(wikiPageInfo.birdFamily) as string;
+        //const dietId = await helperFunctions.findDietId(wikiPageInfo.birdDiet);
 
-    if (shapeId == null) {
-        return new Response(JSON.stringify({ error: "Unable to find bird shape" }), {
+        newSpecies.birdName = wikiPageInfo.birdName;
+        newSpecies.birdScientificName = wikiPageInfo.birdScientificName;
+        newSpecies.birdFamily = wikiPageInfo.birdFamily;
+        newSpecies.birdShapeId = shapeId
+        newSpecies.dietId = "5bd828f0-805a-4fd0-90a5-039294930d7f"
+        newSpecies.version = VERSION;
+        newSpecies.createdAt = new Date().getTime()
+    
+        console.log(newSpecies);
+        return new Response(JSON.stringify({ message: "Creating new bird" }), {
+            headers: headers,
+            status: 200
+        });
+    } catch (error) {
+        return new Response(JSON.stringify({ error: error }), {
             headers: headers,
             status: 501
         });
     }
-
-    newSpecies.birdName = wikiPageInfo.birdName;
-    newSpecies.birdScientificName = wikiPageInfo.birdScientificName;
-    newSpecies.birdFamily = wikiPageInfo.birdFamily;
-    newSpecies.birdShapeId = shapeId
-    newSpecies.version = VERSION;
-    newSpecies.createdAt = new Date().getTime()
-
-    console.log(newSpecies);
-    return new Response(JSON.stringify({ message: "Creating new bird" }), {
-        headers: headers,
-        status: 200
-    });
 }
 
 async function main() {
@@ -203,9 +205,6 @@ async function main() {
         headers: headers
     });
     console.log(await (await findSpecies(newRequest)).json())
-
-    //const result = await findSpecies("tests", supabaseAdminClient);
-    //console.log(result)
 }
 
 main();

@@ -1,5 +1,10 @@
 import { crypto } from "https://deno.land/std@0.202.0/crypto/crypto.ts";
 import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
+import { OpenAI } from "npm:openai@4.16.1";
+
+enum GPTModels {
+    gpt3="gpt-3.5-turbo-1106"
+}
 
 export class BirdSpeciesTable {
     private _birdId: string;
@@ -42,9 +47,15 @@ export class BirdWikiPage {
 
 export class BirdHelperFunctions {
     private _adminClient: SupabaseClient
+    private _openAIClient: OpenAI
+    private _dietMap: Map<string, string>
 
-    constructor (adminClient: SupabaseClient) {
+    constructor (adminClient: SupabaseClient, openAiKey: string) {
         this._adminClient = adminClient;
+        this._openAIClient = new OpenAI({
+            apiKey: openAiKey,
+        });
+        this._dietMap = new Map();
     }
 
     public async covertFamilyToShape(familyName: string): Promise<string | null> {
@@ -60,22 +71,99 @@ export class BirdHelperFunctions {
         return data[0]["BirdShapeName"] as string;
     }   
 
-    public async getAllDiets(): Promise<Array<string>> {
+    private async getAllDiets(): Promise<Array<string>> {
         const { data, error } = await this._adminClient.from("Diet")
-        .select("DietName")
+            .select();
 
         if (error != null) {
             return [];
         }
 
+        data.forEach((diet) => {
+            this._dietMap.set(diet["DietName"], diet["DietId"])
+        })
         const dietNames = data.map((dietName) => dietName["DietName"]);
         return dietNames;
     }
 
-    public async systemMessagePrep(messageName: string, values?: string) {
+    private async systemMessagePrep(messageName: string, values?: Array<string>): Promise<string> {
+        const replacementValue = "<>";
+        const { data, error } = await this._adminClient.from("SystemMessages")
+            .select("SystemMessageContent")
+            .eq("SystemMessageName", messageName);
+        
+        if (error != null) {
+            return "";
+        }
+        
+        const systemMessageRaw: string = data[0]["SystemMessageContent"];
 
+        // Just return the message if nothing in the message needs to be added
+        if (values == null || !systemMessageRaw.includes(replacementValue)) {
+            return data[0]["SystemMessageContent"];
+        }
+
+        const diets: string = values
+            .map((value) => value.replace(/^/, "- "))
+            .join("\n");
+        if (diets.length == 0) return "";
+
+        // Replacement 
+        const systemMessage = systemMessageRaw.replace("<>", diets)
+
+        return systemMessage;
     }
 
-    public async askGPT(systemMessage: string, content: string, model: string, imageUrl?: URL) {
+    public async findDietId(dietParagraph: string): Promise<string> {
+        const dietSummarySM = await this.systemMessagePrep("DietSummary");
+        const diets = await this.getAllDiets();
+        const dietSM = await this.systemMessagePrep("Diet", diets);
+
+        const dietSummary = await this.askGPT(dietSummarySM, GPTModels.gpt3, dietParagraph)
+        if (dietSummary == null) throw Error(`Diet summary form ${GPTModels.gpt3} failed`);
+        
+        const dietName = await this.askGPT(dietSM, "gpt-3.5-turbo-1106", dietSummary)
+        if (dietName == null) throw Error(`Diet name form ${GPTModels.gpt3} failed`);
+
+        const result = this._dietMap.get(dietName);
+        if (result == undefined) throw Error("Could not find diet id");
+        return result;
+    }
+
+    public async getSummary(paragraph: string) {
+    }
+
+    private async askGPT(systemMessage: string, model: string, content?: string, imageUrl?: string): Promise<string | null> {
+        const details: any = {
+            model: model,
+            messages: [{
+                role: "system",
+                content: [{
+                    type: "text",
+                    text: systemMessage
+                }]
+            }]
+        }
+
+        if(content != null) {
+            details.messages.push({
+                role: "user",
+                content: [{
+                    type: "text",
+                    text: content
+                }]
+            })
+        }
+
+        if(imageUrl != null && model != "gpt-4-vision-preview") {
+            details.messages[1].content.push({
+                type: "image_url",
+                image_url: imageUrl
+            })
+        }
+
+        // console.log(details)
+        const gptResponse = await this._openAIClient.chat.completions.create(details);
+        return gptResponse.choices[0].message.content;
     }
 }

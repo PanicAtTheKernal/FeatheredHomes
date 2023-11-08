@@ -172,7 +172,7 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
 }
 
 async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Promise<Response> {
-    const helperFunctions: BirdHelperFunctions = new BirdHelperFunctions(client, OPENAI_API_KEY);
+    const helperFunctions: BirdHelperFunctions = new BirdHelperFunctions(client, OPENAI_API_KEY, VERSION);
     const newSpecies: BirdSpeciesTable = new BirdSpeciesTable()
 
     try {
@@ -184,6 +184,8 @@ async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Pr
         newSpecies.birdFamily = wikiPageInfo.birdFamily;
         newSpecies.birdShapeId = shapeId
         newSpecies.dietId = "5bd828f0-805a-4fd0-90a5-039294930d7f"
+        // newSpecies.birdImageUrl = await helperFunctions.createNewImage(wikiPageInfo.birdDescription, shapeId, wikiPageInfo.birdName);
+        newSpecies.birdImageUrl = "https://sjiikegnbgahukdwklux.supabase.co/storage/v1/object/public/BirdAssets/Chickadees/eurasian-blue-tit.png";
         newSpecies.version = VERSION;
         newSpecies.createdAt = new Date().getTime()
     

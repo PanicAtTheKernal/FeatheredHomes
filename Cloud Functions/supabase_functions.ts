@@ -1,8 +1,10 @@
-import { BirdSpeciesTable, BirdWikiPage } from "./supabase_helper_functions.ts"
+import { BirdSpeciesTable, BirdWikiPage, BirdHelperFunctions } from "./supabase_helper_functions.ts"
 import { OpenAI } from "https://esm.sh/openai@4.11.1";
 import { load } from "https://deno.land/std@0.202.0/dotenv/mod.ts";
 import { SupabaseClient, createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
 import { DOMParser, Element, HTMLDocument } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
+import { format } from "https://deno.land/std@0.202.0/datetime/mod.ts";
+
 
 // Temp for local testing
 const env = await load();
@@ -10,6 +12,7 @@ const SUPABASE_SERVICE_ROLE_KEY = env["SUPABASE_SERVICE_ROLE_KEY"];
 const SUPABASE_URL = env["SUPABASE_URL"];
 const VERSION = env["VERSION"];
 const birdSpeciesTable = "BirdSpecies";
+const pontentialDietHeadings = ["Diet", "Behaviour and ecology"];
 const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -44,7 +47,7 @@ async function findSpecies(request: Request): Promise<Response> {
 
     if (data.length == 0) {
         // TODO Call the create bird function
-        return await findWikiPage(speciesName);
+        return await findWikiPage(speciesName, supabaseAdminClient);
     }
 
     return new Response(JSON.stringify({ data: data }), {
@@ -53,7 +56,7 @@ async function findSpecies(request: Request): Promise<Response> {
     });
 }
 
-async function findWikiPage(species: string): Promise<Response> {
+async function findWikiPage(species: string, client: SupabaseClient): Promise<Response> {
     const wikiSearchEndpoint = new URL("https://en.wikipedia.org/w/api.php");
     wikiSearchEndpoint.searchParams.append("origin", "*");
     wikiSearchEndpoint.searchParams.append("action", "opensearch");
@@ -75,10 +78,10 @@ async function findWikiPage(species: string): Promise<Response> {
 
     // console.log(searchBody);
     const speciesUrl: URL = new URL(urls[0]);
-    return await parseWikiPage(speciesUrl);
+    return await parseWikiPage(speciesUrl, client);
 }
 
-async function parseWikiPage(speciesUrl: URL): Promise<Response> {
+async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<Response> {
     const wikiPageResult = await fetch(speciesUrl);
     const wikiPageBody = await wikiPageResult.text();
     const domParser = new DOMParser();
@@ -152,13 +155,43 @@ async function parseWikiPage(speciesUrl: URL): Promise<Response> {
         lastIndex = index;
     }
 
+    const pontentialDietHeading = pontentialDietHeadings.find((value) => {
+        const data = paragraphs.get(value);
+        if (data != undefined) {
+            return data;
+        }
+    }) as string
+
     newBirdInfo.birdDescription = paragraphs.get("Description") as string
-    newBirdInfo.birdDiet = paragraphs.get("Diet") as string
+    newBirdInfo.birdDiet = paragraphs.get(pontentialDietHeading) as string
     newBirdInfo.birdSummary = paragraphs.get("Summary") as string
 
-    console.log(newBirdInfo)
     // Call the staging function
+    return await stageData(newBirdInfo, client);
+}
 
+async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Promise<Response> {
+    const helperFunctions: BirdHelperFunctions = new BirdHelperFunctions(client);
+    const newSpecies: BirdSpeciesTable = new BirdSpeciesTable()
+
+    const shapeId = await helperFunctions.covertFamilyToShape(wikiPageInfo.birdFamily);
+    const diets = await helperFunctions.getAllDiets();
+
+    if (shapeId == null) {
+        return new Response(JSON.stringify({ error: "Unable to find bird shape" }), {
+            headers: headers,
+            status: 501
+        });
+    }
+
+    newSpecies.birdName = wikiPageInfo.birdName;
+    newSpecies.birdScientificName = wikiPageInfo.birdScientificName;
+    newSpecies.birdFamily = wikiPageInfo.birdFamily;
+    newSpecies.birdShapeId = shapeId
+    newSpecies.version = VERSION;
+    newSpecies.createdAt = new Date().getTime()
+
+    console.log(newSpecies);
     return new Response(JSON.stringify({ message: "Creating new bird" }), {
         headers: headers,
         status: 200

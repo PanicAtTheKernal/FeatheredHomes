@@ -21,7 +21,7 @@ const headers = {
 
 export async function findSpecies(request: Request): Promise<Response> {
     const requestUrl = new URL(request.url)
-    const speciesName = requestUrl.searchParams.get("species");
+    const speciesName = requestUrl.searchParams.get("species")?.toLowerCase();
     const supabaseAdminClient: SupabaseClient = createClient(
         SUPABASE_URL,
         SUPABASE_SERVICE_ROLE_KEY
@@ -34,10 +34,10 @@ export async function findSpecies(request: Request): Promise<Response> {
         });
     }
 
-    const { data, error } = await supabaseAdminClient.from(birdSpeciesTable).select().eq(nameCol, speciesName);
+    const { data, error } = await supabaseAdminClient.from(birdSpeciesTable).select().like(nameCol, `%${speciesName}%`);
     
     if (error != null) {
-        console.log(error)
+        console.log(error);
         return new Response(JSON.stringify({ error: error.message }), {
             headers: headers,
             status: 400
@@ -45,7 +45,6 @@ export async function findSpecies(request: Request): Promise<Response> {
     }
 
     if (data.length == 0) {
-        // TODO Call the create bird function
         return await findWikiPage(speciesName, supabaseAdminClient);
     }
 
@@ -178,7 +177,7 @@ async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Pr
         const shapeId = await helperFunctions.covertFamilyToShape(wikiPageInfo.birdFamily) as string;
         const dietId = await helperFunctions.findDietId(wikiPageInfo.birdDiet);
 
-        newSpecies.birdName = wikiPageInfo.birdName;
+        newSpecies.birdName = wikiPageInfo.birdName.toLowerCase();
         newSpecies.birdDescription = await helperFunctions.getSummary(wikiPageInfo.birdSummary);
         // newSpecies.birdDescription = "Test summary"
         newSpecies.birdScientificName = wikiPageInfo.birdScientificName;

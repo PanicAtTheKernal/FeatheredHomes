@@ -1,7 +1,8 @@
 import { crypto } from "https://deno.land/std@0.202.0/crypto/crypto.ts";
 import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
-import { OpenAI } from "npm:openai@4.16.1";
-import Jimp from "npm:jimp";
+import OpenAI from 'https://deno.land/x/openai@v4.16.1/mod.ts';
+import { Image } from 'https://deno.land/x/imagescript@1.2.15/mod.ts'
+
 
 enum GPTModels {
     gpt3="gpt-3.5-turbo-1106",
@@ -92,31 +93,29 @@ export class BirdHelperFunctions {
         const imageJson = await this.testJson();
         const colourHashMap = this.createHashMapsOfColours(imageJson, BirdShapeTemplateJson);
         const fileName = birdName.trim().replaceAll(" ", "-").toLowerCase();
+        const imageTemplateBuffer = await fetch(BirdShapeTemplateUrl).then(result => result.arrayBuffer()) as Buffer;
+        const imageTemplate = await Image.decode(imageTemplateBuffer);
+        const finalImage: Image = new Image(imageTemplate.width, imageTemplate.height);
 
-        const imageTemplate: Jimp = await Jimp.read(BirdShapeTemplateUrl);
-        const finalImage: Jimp = new Jimp(imageTemplate.bitmap.width, imageTemplate.bitmap.height);
+        for(let x = 1; x <= imageTemplate.width; x++) {
+            for(let y = 1; y <= imageTemplate.height; y++) {
+                const colourValue = imageTemplate.getPixelAt(x,y);
+                let newPixelColourHex = colourHashMap.get(colourValue);
 
-        imageTemplate.scan(0,0, imageTemplate.bitmap.width, imageTemplate.bitmap.height, (x, y, idx) => {
-            const pixelColourHex:number = Jimp.rgbaToInt(
-                imageTemplate.bitmap.data[idx],
-                imageTemplate.bitmap.data[idx+1],
-                imageTemplate.bitmap.data[idx+2],
-                imageTemplate.bitmap.data[idx+3],
-            )
-            let newPixelColourHex = colourHashMap.get(pixelColourHex);
-
-            if(newPixelColourHex == undefined) {
-                if(pixelColourHex != 0) {
-                    if (pixelColourHex != 255) console.log(Jimp.intToRGBA(pixelColourHex));
+                if(newPixelColourHex == undefined) {
+                    // Print the colour that missing but don't print transparent values or the colour black since those will never be in the colour map
+                    if(colourValue != 0) {
+                        if (colourValue != 255) console.log(Image.colorToRGBA(colourValue));
+                    }
+                    // Leave the colour as is in case the value wasn't found
+                    newPixelColourHex = colourValue;
                 }
-                newPixelColourHex = pixelColourHex;
+                finalImage.setPixelAt(x, y, newPixelColourHex);
             }
-
-            finalImage.setPixelColor(newPixelColourHex, x, y);
-        });
+        }
 
         this._adminClient.storage.from("BirdAssets")
-            .upload(`${BirdShapeName}/${fileName}.png`, await finalImage.getBufferAsync(Jimp.MIME_PNG), {
+            .upload(`${BirdShapeName}/${fileName}.png`, await finalImage.encode(), {
                 contentType: 'image/png'
             })
         const { data } = this._adminClient.storage.from("BirdAssets")
@@ -150,8 +149,8 @@ export class BirdHelperFunctions {
                 throw new Error(`Missing value: ${birdPart}`);
             }
     
-            const coloursHash = Jimp.rgbaToInt(coloursValue[0], coloursValue[1], coloursValue[2], alphaValue);
-            const templateColourHash = Jimp.rgbaToInt(templateValue[0], templateValue[1], templateValue[2], alphaValue);
+            const coloursHash = Image.rgbaToColor(coloursValue[0], coloursValue[1], coloursValue[2], alphaValue);
+            const templateColourHash = Image.rgbaToColor(templateValue[0], templateValue[1], templateValue[2], alphaValue);
     
             colourHashMap.set(templateColourHash, coloursHash);
         })

@@ -1,9 +1,7 @@
-import { BirdSpeciesTable, BirdWikiPage, BirdHelperFunctions } from "./supabase_helper_functions.ts"
-import { OpenAI } from "https://esm.sh/openai@4.11.1";
+import { BirdSpeciesTable, BirdWikiPage, BirdHelperFunctions } from "./testing_supabase_helper_functions.ts"
 import { load } from "https://deno.land/std@0.202.0/dotenv/mod.ts";
 import { SupabaseClient, createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
 import { DOMParser, Element, HTMLDocument } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
-import { format } from "https://deno.land/std@0.202.0/datetime/mod.ts";
 
 
 // Temp for local testing
@@ -21,7 +19,7 @@ const headers = {
     'Content-Type': 'application/json'
   };
 
-async function findSpecies(request: Request): Promise<Response> {
+export async function findSpecies(request: Request): Promise<Response> {
     const requestUrl = new URL(request.url)
     const speciesName = requestUrl.searchParams.get("species");
     const supabaseAdminClient: SupabaseClient = createClient(
@@ -182,13 +180,13 @@ async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Pr
 
         newSpecies.birdName = wikiPageInfo.birdName;
         // newSpecies.birdDescription = await helperFunctions.getSummary(wikiPageInfo.birdSummary);
-        // newSpecies.birdDescription = "Test summary"
+        newSpecies.birdDescription = "Test summary"
         newSpecies.birdScientificName = wikiPageInfo.birdScientificName;
         newSpecies.birdFamily = wikiPageInfo.birdFamily;
         newSpecies.birdShapeId = shapeId
+        // newSpecies.dietId = dietId
         newSpecies.dietId = "5bd828f0-805a-4fd0-90a5-039294930d7f"
         newSpecies.birdImageUrl = await helperFunctions.createNewImage(wikiPageInfo.birdDescription, shapeId, wikiPageInfo.birdName);
-        // newSpecies.birdImageUrl = "https://sjiikegnbgahukdwklux.supabase.co/storage/v1/object/public/BirdAssets/Chickadees/eurasian-blue-tit.png";
         newSpecies.version = VERSION;
         newSpecies.createdAt = `${date.getFullYear()}-${date.getMonth()}-${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`
     
@@ -205,7 +203,8 @@ async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Pr
             status: 200
         });
     } catch (error) {
-        return new Response(JSON.stringify({ error: error }), {
+        console.log(error)
+        return new Response(JSON.stringify({ error: error.toString() }), {
             headers: headers,
             status: 501
         });
@@ -216,7 +215,9 @@ async function main() {
     const newRequest  = new Request("http://test.com/test?species=blue%20tit", {
         headers: headers
     });
-    console.log(await (await findSpecies(newRequest)).json())
+    const result = (await findSpecies(newRequest))
+    console.log(await result.json())
+    console.log(result.status)
 }
 
 main();

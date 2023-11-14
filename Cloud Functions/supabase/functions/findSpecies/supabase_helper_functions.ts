@@ -88,13 +88,10 @@ export class BirdHelperFunctions {
 
     public async createNewImage(description: string, shapeId: string, birdName: string): Promise<string> {
         const { BirdShapeName, BirdShapeTemplateUrl, BirdShapeTemplateJson } = await this.getTemplate(shapeId);
-        let imageJson = await this.createBirdJsonTemplate(BirdShapeTemplateJson, BirdShapeTemplateUrl, description);
-        const checkForMarkdown = imageJson.match(/```json([^*]+)```/);
-        if (checkForMarkdown != null && checkForMarkdown.length > 0) {
-            imageJson = checkForMarkdown[0].trim();
-        }
-        console.log(imageJson);
-        const colourHashMap = this.createHashMapsOfColours(imageJson, BirdShapeTemplateJson);
+        const imageJson = await this.createBirdJsonTemplate(BirdShapeTemplateJson, BirdShapeTemplateUrl, description);
+        const checkForMarkdown = imageJson.replace("```json", "").replace("```", "").trim();
+        console.log(checkForMarkdown);
+        const colourHashMap = this.createHashMapsOfColours(checkForMarkdown, BirdShapeTemplateJson);
         const fileName = birdName.trim().replaceAll(" ", "-").toLowerCase();
         const imageTemplateBuffer = await fetch(BirdShapeTemplateUrl).then(result => result.arrayBuffer()) as Buffer;
         const imageTemplate = await Image.decode(imageTemplateBuffer);

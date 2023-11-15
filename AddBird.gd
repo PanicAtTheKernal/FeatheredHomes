@@ -38,15 +38,7 @@ func _on_button_pressed():
 	var bird_species_file = find_potential_files(line_edit.text)
 	line_edit.clear()
 	if bird_species_file != "":
-		var bird_species_resource: BirdSpecies = load(ASSET_PATH + bird_species_file)
-		var bird = bird_scene.instantiate()
-		var center_pos = player_cam.get_screen_center_position()
-		bird.bird_species = bird_species_resource
-		bird.position = center_pos
-		bird.tile_map = tile_map
-		bird.world_resources = world_rescources
-		
-		get_parent().add_child(bird)
+		add_bird_to_scene(bird_species_file)
 	else:
 		get_bird_from_cloud(users_bird_name)
 		
@@ -60,6 +52,7 @@ func find_potential_files(bird_name: String) -> String:
 	file_regex.compile("[^*]*"+bird_file_name+"[^*]*[.]tres")
 	for file in files:
 		if file_regex.search(file):
+			print(file)
 			return file
 	return ""
 
@@ -98,7 +91,8 @@ func find_species_request_result(result: int, response_code: int, headers: Packe
 func build_simulation(request_body: Dictionary):
 	var body: Dictionary = request_body.get("data")
 	var new_species: BirdSpecies = BirdSpecies.new()
-	var name = body.get("birdName")
+	var bird_name: String = body.get("birdName")
+	var bird_file_name: String = bird_name.replace(" ", "-") + ".tres"
 	var simulation_info: Dictionary = body.get("birdSimulationInfo")
 	var bird_shape_id: String = body.get("birdShapeId")
 	var bird_template_url: String = body.get("birdImageUrl")
@@ -117,6 +111,9 @@ func build_simulation(request_body: Dictionary):
 	
 	for bird_trait in simulation_info.get("birdTraits"):
 		new_species.bird_traits.append(bird_trait)
+	
+	ResourceSaver.save(new_species, ASSET_PATH + bird_file_name)
+	add_bird_to_scene(bird_file_name)
 
 func build_animation(shape_id: String, template_url: String) -> SpriteFrames:
 	var image_name_index = template_url.rfind("BirdAssets")
@@ -126,8 +123,8 @@ func build_animation(shape_id: String, template_url: String) -> SpriteFrames:
 	var email = config.get_value(ENVIRONMENT_VARIABLES, "EMAIL")
 	var password = config.get_value(ENVIRONMENT_VARIABLES, "PASSWORD")
 	var sign_result: AuthTask = await Supabase.auth.sign_in(email, password).completed
-	if sign_result.user != null:
-		printerr("Failed to sign in")
+	if sign_result.user == null:
+		print("Failed to sign in")
 		return null
 	
 	var animationTemplateQuery: SupabaseQuery = SupabaseQuery.new().from("BirdShape").select().eq("BirdShapeId", shape_id)
@@ -136,8 +133,51 @@ func build_animation(shape_id: String, template_url: String) -> SpriteFrames:
 	var storageResult: StorageTask = await Supabase.storage.from("BirdAssets").download(image_name, ASSET_PATH + image_file_name).completed
 	
 	if storageResult.error != null:
-		printerr(storageResult.error)
+		print(storageResult.error)
+		return null
 	
-	return SpriteFrames.new()
+	var texture = Image.new()
+	texture.load(ASSET_PATH + image_file_name)
+	var image: ImageTexture = ImageTexture.create_from_image(texture)
+	var height = image.get_height() as float
+	var width = image.get_width() as float
+	var size = height
+	# Each frame is equal in size and the sprite sheet is in a 1x? configuration therefore to get 
+	# the amount of frame is to divide the width by the height
+	var amount_of_frames = floor(width/height)
+	var frames: Array[AtlasTexture] = []
+	for i in range(0, amount_of_frames):
+		var newFrame = AtlasTexture.new()
+		newFrame.atlas = image
+		newFrame.region = Rect2(size*i, 0, size, size)
+		frames.push_back(newFrame)
 	
-
+	var sprite_frames = SpriteFrames.new()
+	var animations = animatinoTemplate["animation"]
+	var animation_names = animations.keys()
+	print(animation_names)
+	for animation_name in animation_names:
+		var animation_info = animations.get(animation_name)
+		var animation_frames = animation_info["frames"]
+		var fps = animation_info["fps"]
+		var loop = animation_info["loop"]
+		# Fix the error with "default" already existing on new spriteFrames
+		if !sprite_frames.has_animation(animation_name):
+			sprite_frames.add_animation(animation_name)
+		sprite_frames.set_animation_loop(animation_name, loop)
+		sprite_frames.set_animation_speed(animation_name, fps)
+		for animation_frame in animation_frames:
+			sprite_frames.add_frame(animation_name, frames[animation_frame])
+	
+	return sprite_frames
+	
+func add_bird_to_scene(file_name: String):
+		var bird_species_resource: BirdSpecies = load(ASSET_PATH + file_name)
+		var bird = bird_scene.instantiate()
+		var center_pos = player_cam.get_screen_center_position()
+		bird.bird_species = bird_species_resource
+		bird.position = center_pos
+		bird.tile_map = tile_map
+		bird.world_resources = world_rescources
+		
+		get_parent().add_child(bird)

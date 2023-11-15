@@ -50,7 +50,7 @@ async function main() {
           {
             type: "image_url",
             image_url:
-              "https://sjiikegnbgahukdwklux.supabase.co/storage/v1/object/sign/BirdAssets/Templates/Chickadees/chickadees-sprite-sheet.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJCaXJkQXNzZXRzL1RlbXBsYXRlcy9DaGlja2FkZWVzL2NoaWNrYWRlZXMtc3ByaXRlLXNoZWV0LnBuZyIsImlhdCI6MTY5OTMwNTQ0MSwiZXhwIjoxNjk5OTEwMjQxfQ.DqC3gbFYAdniVVk0UO8RnaYF-pslhHaM3hnG4CR2suY&t=2023-11-06T21%3A17%3A21.434Z",
+              "https://.supabase.co/storage/v1/object/sign/BirdAssets/Templates/Chickadees/chickadees-sprite-sheet.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJCaXJkQXNzZXRzL1RlbXBsYXRlcy9DaGlja2FkZWVzL2NoaWNrYWRlZXMtc3ByaXRlLXNoZWV0LnBuZyIsImlhdCI6MTY5OTMwNTQ0MSwiZXhwIjoxNjk5OTEwMjQxfQ.DqC3gbFYAdniVVk0UO8RnaYF-pslhHaM3hnG4CR2suY&t=2023-11-06T21%3A17%3A21.434Z",
           },
         ],
       },

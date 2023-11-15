@@ -1,15 +1,13 @@
-[gd_scene load_steps=28 format=3 uid="uid://dsps58agtajiu"]
+[gd_scene load_steps=26 format=3 uid="uid://dsps58agtajiu"]
 
-[ext_resource type="Script" path="res://AddBird.gd" id="1_q6d87"]
 [ext_resource type="Texture2D" uid="uid://cnuew56xuo5jv" path="res://Assets/Titlemap/roguelikeSheet_transparent.png" id="1_q8hc6"]
 [ext_resource type="Script" path="res://Scripts/World/world_map.gd" id="2_g4m67"]
 [ext_resource type="Script" path="res://Scripts/Player/player_cam.gd" id="2_gse07"]
 [ext_resource type="Resource" uid="uid://lbomgeivl84f" path="res://Scripts/Food/ProtoFood.tres" id="3_vd1to"]
 [ext_resource type="PackedScene" uid="uid://bsqhgcwkdicrd" path="res://bird.tscn" id="5_f1wu6"]
-[ext_resource type="Script" path="res://FPS.gd" id="6_g5v7g"]
 [ext_resource type="PackedScene" uid="uid://cquo65bvi3v3n" path="res://BirdNavTest.tscn" id="6_pqj27"]
 [ext_resource type="Resource" uid="uid://x1v6f8nk08mm" path="res://Assets/Birds/NewBird/BirdNavTestSpecies.tres" id="8_anad4"]
-[ext_resource type="Texture2D" uid="uid://b7a6fk0fwanx8" path="res://Assets/crosshair.png" id="9_2t14e"]
+[ext_resource type="PackedScene" uid="uid://cc7jo7b3cgbem" path="res://Scripts/World/ui.tscn" id="8_k080l"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_ym10v"]
 vertices = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -9095,8 +9093,6 @@ custom_data_layer_3/type = 3
 sources/0 = SubResource("TileSetAtlasSource_hb7s6")
 
 [node name="2D world" type="Node2D"]
-script = ExtResource("1_q6d87")
-bird_scene = ExtResource("6_pqj27")
 
 [node name="WorldResources" type="Node2D" parent="." node_paths=PackedStringArray("tile_map")]
 script = ExtResource("2_g4m67")
@@ -9219,52 +9215,10 @@ world_resources = NodePath("../WorldResources")
 [node name="RegenFood" type="Timer" parent="."]
 wait_time = 10.0
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Label" type="Label" parent="CanvasLayer"]
-offset_left = 12.0
-offset_top = 13.0
-offset_right = 101.0
-offset_bottom = 39.0
-text = "Hello world"
-script = ExtResource("6_g5v7g")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -173.0
-offset_top = 18.0
-offset_bottom = 49.0
-grow_horizontal = 2
-scale = Vector2(3, 3)
-size_flags_vertical = 0
-
-[node name="LineEdit" type="LineEdit" parent="CanvasLayer/HBoxContainer"]
-layout_mode = 2
-placeholder_text = "Name of bird"
-expand_to_text_length = true
-
-[node name="VSeparator" type="VSeparator" parent="CanvasLayer/HBoxContainer"]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="CanvasLayer/HBoxContainer"]
-layout_mode = 2
-text = "Enter"
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -10.0
-offset_top = -10.0
-offset_right = 10.0
-offset_bottom = 10.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_2t14e")
+[node name="CanvasLayer" parent="." node_paths=PackedStringArray("world_rescources", "player_cam", "tile_map") instance=ExtResource("8_k080l")]
+bird_scene = ExtResource("6_pqj27")
+world_rescources = NodePath("../WorldResources")
+player_cam = NodePath("../PlayerCam")
+tile_map = NodePath("../TileMap")
 
 [connection signal="timeout" from="RegenFood" to="WorldResources" method="_on_regen_food_timeout"]
-[connection signal="pressed" from="CanvasLayer/HBoxContainer/Button" to="." method="_on_button_pressed"]

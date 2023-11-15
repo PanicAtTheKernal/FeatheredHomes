@@ -1,7 +1,14 @@
-extends Node2D
+extends CanvasLayer
 
 @export
 var bird_scene: PackedScene
+
+@export
+var world_rescources: WorldResources
+@export
+var player_cam: Camera2D
+@export
+var tile_map: TileMap
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -15,9 +22,9 @@ func _process(delta):
 
 func _on_button_pressed():
 	var bird = bird_scene.instantiate()
-	var center_pos = $PlayerCam.get_screen_center_position()
+	var center_pos = player_cam.get_screen_center_position()
 	bird.position = center_pos
-	bird.tile_map = $TileMap
-	bird.world_resources = $WorldResources
+	bird.tile_map = tile_map
+	bird.world_resources = world_rescources
 	
-	add_child(bird)
+	get_parent().add_child(bird)

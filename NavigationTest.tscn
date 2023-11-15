@@ -9390,4 +9390,3 @@ position = Vector2(79, 370)
 target = Vector2i(11, 5)
 tile_map = NodePath("../TileMap")
 world_resources = NodePath("../WorldResources")
-stamina = 100.0

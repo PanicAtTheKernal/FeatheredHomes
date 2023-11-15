@@ -11,19 +11,9 @@ var target: Vector2i
 @export
 var tile_map: TileMap
 @export
-var bird_range: int
+var bird_species: BirdSpecies
 @export
 var world_resources: WorldResources
-@export
-var stamina: float = 1000.0
-@export_range(0.1, 500.0)
-var take_off_cost: float = 100.0 
-@export_range(5.0, 300.0)
-var ground_cost: float = 50.0 
-@export_range(5.0, 300.0)
-var flight_cost: float = 20.0 
-@export_range(100, 100000)
-var max_stamina: float = 10000
 @onready
 var nav_agent:= $GroundAgent as NavigationAgent2D
 @onready

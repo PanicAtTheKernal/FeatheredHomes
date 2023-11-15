@@ -1,7 +1,7 @@
 [gd_scene load_steps=19 format=3 uid="uid://cquo65bvi3v3n"]
 
 [ext_resource type="Script" path="res://bird.gd" id="1_h23r3"]
-[ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="2_dajh1"]
+[ext_resource type="SpriteFrames" uid="uid://dutx302fjtpvt" path="res://Assets/eurasian-blue-tit.tres" id="2_i3dmd"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_animation.gd" id="3_u2c0p"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="6_lv1sx"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/selector.gd" id="7_7tjyf"]
@@ -33,7 +33,8 @@ max_stamina = 4000.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.15, 0.15)
-sprite_frames = ExtResource("2_dajh1")
+sprite_frames = ExtResource("2_i3dmd")
+animation = &"Flight"
 autoplay = "default"
 script = ExtResource("3_u2c0p")
 

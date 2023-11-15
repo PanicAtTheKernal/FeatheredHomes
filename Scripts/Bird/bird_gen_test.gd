@@ -8,9 +8,51 @@ func _enter_tree():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#var result: AuthTask = await Supabase.auth.sign_in("*", "*").completed
+
+	var animationTemplateResult = await Supabase.database.query(animationTemplate).completed
+	var animatinoTemplateDict = animationTemplateResult.data[0]["BirdShapeAnimationTemplate"]
+#	var storageResult: StorageTask = await Supabase.storage.from("BirdAssets").download("Chickadees/eurasian-blue-tit.png", "res://Assets/Download/eurasian-blue-tit.png").completed
 	#print(result)
-	pass
+	print(animatinoTemplateDict)
+	var texture = Image.load_from_file("res://Assets/Download/eurasian-blue-tit.png")
+	var image: ImageTexture = ImageTexture.create_from_image(texture)
+	var height = image.get_height()
+	var width = image.get_width()
+	var size = height
+	# Each frame is equal in size and the sprite sheet is in a 1x? configuration therefore to get 
+	# the amount of frame is to divide the width by the height
+	var amount_of_frames = width/height
+	var frames: Array[AtlasTexture] = []
+	for i in range(0, amount_of_frames):
+		var newFrame = AtlasTexture.new()
+		newFrame.atlas = image
+		newFrame.region = Rect2(size*i, 0, size, size)
+		frames.push_back(newFrame)
+		
+	var sprite_frames = SpriteFrames.new()
+	var animations = animatinoTemplateDict["animation"]
+	var animation_names = animations.keys()
+	print(animation_names)
+	for animation_name in animation_names:
+		var animation_info = animations.get(animation_name)
+		var animation_frames = animation_info["frames"]
+		var fps = animation_info["fps"]
+		var loop = animation_info["loop"]
+		sprite_frames.add_animation(animation_name)
+		sprite_frames.set_animation_loop(animation_name, loop)
+		sprite_frames.set_animation_speed(animation_name, fps)
+		for animation_frame in animation_frames:
+			sprite_frames.add_frame(animation_name, frames[animation_frame])
+	ResourceSaver.save(sprite_frames, "res://Assets/eurasian-blue-tit.tres")
+		
+	
+	
+	print(amount_of_frames)
+		
+	$Sprite2D.texture = frames[1]	
+
+
+	
 #	var halfway_x = (head_start.position.x + head_end.position.x)/2
 #	var halfway_y = (head_start.position.y + head_end.position.y)/2
 #	var halfway_point = Vector2(halfway_x, halfway_y)

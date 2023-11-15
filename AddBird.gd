@@ -92,16 +92,52 @@ func find_species_request_result(result: int, response_code: int, headers: Packe
 	print("4: "+ body.get_string_from_ascii())
 	if response_code == 200:
 		build_simulation(JSON.parse_string(body.get_string_from_ascii()))
+	else:
+		print("There was an error retriving the data")
 
-func build_simulation(body: Dictionary):
+func build_simulation(request_body: Dictionary):
+	var body: Dictionary = request_body.get("data")
 	var new_species: BirdSpecies = BirdSpecies.new()
 	var name = body.get("birdName")
 	var simulation_info: Dictionary = body.get("birdSimulationInfo")
+	var bird_shape_id: String = body.get("birdShapeId")
+	var bird_template_url: String = body.get("birdImageUrl")
+	
+	var animations = await build_animation(bird_shape_id, bird_template_url)
+	# If failed to build animation then return and not create the resource
+	if animations == null:
+		return
+	new_species.bird_animations = animations
+	new_species.bird_flight_cost = simulation_info.get("birdFlightCost")
+	new_species.bird_ground_cost = simulation_info.get("birdGroundCost")
+	new_species.bird_max_stamina = simulation_info.get("birdMaxStamina")
+	new_species.bird_range = simulation_info.get("birdRange")
+	new_species.bird_stamina = simulation_info.get("birdStamina")
+	new_species.bird_take_off_cost = simulation_info.get("birdTakeOffCost")
+	
+	for bird_trait in simulation_info.get("birdTraits"):
+		new_species.bird_traits.append(bird_trait)
 
-func build_animation():
-	pass
+func build_animation(shape_id: String, template_url: String) -> SpriteFrames:
+	var image_name_index = template_url.rfind("BirdAssets")
+	var image_name = template_url.substr(image_name_index).replace("BirdAssets/", "")	
+	var image_file_name = image_name.split("/")[1]
 	
+	var email = config.get_value(ENVIRONMENT_VARIABLES, "EMAIL")
+	var password = config.get_value(ENVIRONMENT_VARIABLES, "PASSWORD")
+	var sign_result: AuthTask = await Supabase.auth.sign_in(email, password).completed
+	if sign_result.user != null:
+		printerr("Failed to sign in")
+		return null
 	
-func build_traits():
-	# ??
-	pass 
+	var animationTemplateQuery: SupabaseQuery = SupabaseQuery.new().from("BirdShape").select().eq("BirdShapeId", shape_id)
+	var animationTemplateResult = await Supabase.database.query(animationTemplateQuery).completed
+	var animatinoTemplate = animationTemplateResult.data[0]["BirdShapeAnimationTemplate"]
+	var storageResult: StorageTask = await Supabase.storage.from("BirdAssets").download(image_name, ASSET_PATH + image_file_name).completed
+	
+	if storageResult.error != null:
+		printerr(storageResult.error)
+	
+	return SpriteFrames.new()
+	
+

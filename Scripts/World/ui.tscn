@@ -19,17 +19,18 @@ script = ExtResource("2_bh3mf")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -173.0
-offset_top = 18.0
-offset_bottom = 49.0
+offset_left = -193.0
+offset_top = 15.0
+offset_right = -64.0
+offset_bottom = 46.0
 grow_horizontal = 2
 scale = Vector2(3, 3)
 size_flags_vertical = 0
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer"]
+[node name="BirdNameLineEdit" type="LineEdit" parent="HBoxContainer"]
 layout_mode = 2
 placeholder_text = "Name of bird"
-expand_to_text_length = true
+caret_blink = true
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
 layout_mode = 2
@@ -51,5 +52,7 @@ offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_48hw7")
+
+[node name="FindSpeciesRequest" type="HTTPRequest" parent="."]
 
 [connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_button_pressed"]

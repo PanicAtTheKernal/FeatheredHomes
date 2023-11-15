@@ -7,6 +7,7 @@ addons
 export_presets.cfg
 
 .DS_STORE
+.env
 
 icon.svg
 icon.svg.import

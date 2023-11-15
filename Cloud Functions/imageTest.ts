@@ -1,4 +1,5 @@
-import Jimp from "npm:jimp";
+import { Image } from 'https://deno.land/x/imagescript@1.2.15/mod.ts'
+
 
 /**
  * Tasks:
@@ -24,8 +25,8 @@ async function createHashMapsOfColours(): Promise<Map<number, number>> {
             throw new Error(`Missing value: ${birdPart}`);
         }
 
-        const testColourHash = Jimp.rgbaToInt(testColourValue[0], testColourValue[1], testColourValue[2], alphaValue);
-        const templateColourHash = Jimp.rgbaToInt(templateValue[0], templateValue[1], templateValue[2], alphaValue);
+        const testColourHash = Image.rgbaToColor(testColourValue[0], testColourValue[1], testColourValue[2], alphaValue);
+        const templateColourHash = Image.rgbaToColor(templateValue[0], templateValue[1], templateValue[2], alphaValue);
 
         colourHashMap.set(templateColourHash, testColourHash);
     })
@@ -37,29 +38,51 @@ async function createHashMapsOfColours(): Promise<Map<number, number>> {
 async function main():Promise<void> {
     const colourHashMap: Map<number, number> = await createHashMapsOfColours();
     try {
-        const imageTemplate: Jimp = await Jimp.read("testImage3.png");
-        const finalImage: Jimp = new Jimp(imageTemplate.bitmap.width, imageTemplate.bitmap.height);
+        const testImage = await fetch("MISSING IMAGE URL").then(result => result.arrayBuffer()) as Buffer;
+        const imageTemplate: Image = await Image.decode(testImage);
+        const finalImage: Image = new Image(imageTemplate.width, imageTemplate.height);
 
-        imageTemplate.scan(0,0, imageTemplate.bitmap.width, imageTemplate.bitmap.height, (x, y, idx) => {
-            const pixelColourHex:number = Jimp.rgbaToInt(
-                imageTemplate.bitmap.data[idx],
-                imageTemplate.bitmap.data[idx+1],
-                imageTemplate.bitmap.data[idx+2],
-                imageTemplate.bitmap.data[idx+3],
-            )
-            let newPixelColourHex = colourHashMap.get(pixelColourHex);
+        for(let x = 1; x <= imageTemplate.width; x++) {
+            for(let y = 1; y <= imageTemplate.height; y++) {
+                const colourValue = imageTemplate.getPixelAt(x,y);
+                let newPixelColourHex = colourHashMap.get(colourValue);
 
-            if(newPixelColourHex == undefined) {
-                if(pixelColourHex != 0) {
-                    if (pixelColourHex != 255) console.log(Jimp.intToRGBA(pixelColourHex));
+
+                if(newPixelColourHex == undefined) {
+                    if(colourValue != 0) {
+                        if (colourValue != 255) console.log(Image.colorToRGBA(colourValue));
+                    }
+                    // Leave the colour as is incase the value wasn't found
+                    newPixelColourHex = colourValue;
                 }
-                newPixelColourHex = pixelColourHex;
+
+                finalImage.setPixelAt(x, y, newPixelColourHex);
             }
+    
+        }
 
-            finalImage.setPixelColor(newPixelColourHex, x, y);
-        });
+        const encoded =  await finalImage.encode()
+        Deno.writeFile('./testImageScript.png', encoded);
+        // imageTemplate.scan(0,0, imageTemplate.bitmap.width, imageTemplate.bitmap.height, (x, y, idx) => {
+        //     const pixelColourHex:number = Jimp.rgbaToInt(
+        //         imageTemplate.bitmap.data[idx],
+        //         imageTemplate.bitmap.data[idx+1],
+        //         imageTemplate.bitmap.data[idx+2],
+        //         imageTemplate.bitmap.data[idx+3],
+        //     )
+            // let newPixelColourHex = colourHashMap.get(pixelColourHex);
 
-        finalImage.write("finalImage.png");
+            // if(newPixelColourHex == undefined) {
+            //     if(pixelColourHex != 0) {
+            //         if (pixelColourHex != 255) console.log(Jimp.intToRGBA(pixelColourHex));
+            //     }
+            //     newPixelColourHex = pixelColourHex;
+            // }
+
+        //     finalImage.setPixelColor(newPixelColourHex, x, y);
+        // });
+
+        // finalImage.write("finalImage.png");
     } catch(err) {
         // throw err;
         console.log(err);

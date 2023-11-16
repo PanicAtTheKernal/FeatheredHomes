@@ -26,6 +26,7 @@ var proper_target: Vector2
 var current_ground: String = "Ground"
 var is_flying: bool = false
 var prefered_agent: NavigationAgent2D
+var traits_built: bool = false
 
 signal change_state(new_state: String, should_flip_h: bool)
 
@@ -33,10 +34,14 @@ signal change_state(new_state: String, should_flip_h: bool)
 #Maybe stop the timer and only start it when the path is set
 func _ready():
 	animatated_spite.sprite_frames = bird_species.bird_animations
+	build_traits()	
 	$NavigationTimer.autostart = true
 	# Start the navaiagation timer at differnet times for each bird
-	await get_tree().create_timer(randf_range(0.1, 3.0)).timeout
-	$NavigationTimer.start()
+	await get_tree().create_timer(randf_range(0.5, 3.0)).timeout
+	#$NavigationTimer.start()
+
+func _process(delta):
+	pass
 
 func _physics_process(_delta: float)->void:
 	# If no path was found skip the update
@@ -60,19 +65,40 @@ func _physics_process(_delta: float)->void:
 	#	is_flying = false
 	pass
 
-func make_path()->void:
-	pass
-	#fly_agent.set_navigation_map(tile_map.get_navigation_map(1))
-	#nav_agent.target_position = proper_target
-	#fly_agent.target_position = proper_target
-
+func build_traits():
+	var bird_traits = bird_species.bird_traits
+	var global_traits = Database.traits
 	
-
-func calc_distance_to_tiles()->float:
-	return 0.0
-
-func select_movement()->void:
-	return
+	# Wait for the global traits to load before modifing the tree
+	while global_traits.size() == 0:
+		await get_tree().create_timer(0.1).timeout	
+		global_traits = Database.traits
+	
+	var test_trait = bird_traits[0]
+	var test_trait_rule: Dictionary = global_traits[test_trait]["trait_rule"]
+	var target_node: Node
+	var target_found: bool = false
+	var current_node_name: String = test_trait_rule.keys()[0]
+	print(test_trait_rule.keys())
+	#for bird_trait in bird_traits:
+	while !target_found:
+		print(current_node_name)
+		var current_node = find_children(current_node_name)
+		if current_node.size() == 0:
+			print("Rule not found")
+			break
+		var next_node_name = current_node.keys()[0]
+		var next_node = current_node.get(next_node_name)
+		match typeof(next_node):
+			TYPE_DICTIONARY:
+				current_node_name = next_node.keys()[0]
+			TYPE_ARRAY:
+				target_found = true
+				print("Found target node")
+				target_node = current_node
+				break
+	if target_node != null:
+		print(target_node)
 
 func check_target()->void:
 	# Don't update the preferred_agent if destination is reached

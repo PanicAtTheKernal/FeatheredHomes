@@ -17,12 +17,24 @@ var line_edit := $HBoxContainer/BirdNameLineEdit as LineEdit
 var find_species_request := $FindSpeciesRequest as HTTPRequest
 var config
 
-const ASSET_PATH = "res://Assets/Download/"
+const ASSET_PATH = "user://Assets/Download/"
 const ENVIRONMENT_VARIABLES = "environment" 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	config = load_env_file()
+	
+	# TEMP
+	if !DirAccess.dir_exists_absolute(ASSET_PATH):
+		DirAccess.make_dir_recursive_absolute(ASSET_PATH)
+	
+	# ALSO TEMP
+	var email = config.get_value(ENVIRONMENT_VARIABLES, "EMAIL")
+	var password = config.get_value(ENVIRONMENT_VARIABLES, "PASSWORD")
+	var sign_result: AuthTask = await Supabase.auth.sign_in(email, password).completed
+	if sign_result.user == null:
+		print("Failed to sign in")
+		return null
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -50,6 +62,7 @@ func find_potential_files(bird_name: String) -> String:
 	var files = DirAccess.get_files_at(ASSET_PATH)
 	var file_regex = RegEx.new()
 	file_regex.compile("[^*]*"+bird_file_name+"[^*]*[.]tres")
+	print(files)
 	for file in files:
 		if file_regex.search(file):
 			print(file)
@@ -120,13 +133,6 @@ func build_animation(shape_id: String, template_url: String) -> SpriteFrames:
 	var image_name = template_url.substr(image_name_index).replace("BirdAssets/", "")	
 	var image_file_name = image_name.split("/")[1]
 	
-	var email = config.get_value(ENVIRONMENT_VARIABLES, "EMAIL")
-	var password = config.get_value(ENVIRONMENT_VARIABLES, "PASSWORD")
-	var sign_result: AuthTask = await Supabase.auth.sign_in(email, password).completed
-	if sign_result.user == null:
-		print("Failed to sign in")
-		return null
-	
 	var animationTemplateQuery: SupabaseQuery = SupabaseQuery.new().from("BirdShape").select().eq("BirdShapeId", shape_id)
 	var animationTemplateResult = await Supabase.database.query(animationTemplateQuery).completed
 	var animatinoTemplate = animationTemplateResult.data[0]["BirdShapeAnimationTemplate"]
@@ -172,7 +178,7 @@ func build_animation(shape_id: String, template_url: String) -> SpriteFrames:
 	return sprite_frames
 	
 func add_bird_to_scene(file_name: String):
-		var bird_species_resource: BirdSpecies = load(ASSET_PATH + file_name)
+		var bird_species_resource: BirdSpecies = ResourceLoader.load(ASSET_PATH + file_name)
 		var bird = bird_scene.instantiate()
 		var center_pos = player_cam.get_screen_center_position()
 		bird.bird_species = bird_species_resource

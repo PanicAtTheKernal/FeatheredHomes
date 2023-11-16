@@ -22,24 +22,11 @@ const ENVIRONMENT_VARIABLES = "environment"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	config = load_env_file()
+	config = Database.config
 	
 	# TEMP
 	if !DirAccess.dir_exists_absolute(ASSET_PATH):
 		DirAccess.make_dir_recursive_absolute(ASSET_PATH)
-	
-	# ALSO TEMP
-	var email = config.get_value(ENVIRONMENT_VARIABLES, "EMAIL")
-	var password = config.get_value(ENVIRONMENT_VARIABLES, "PASSWORD")
-	var sign_result: AuthTask = await Supabase.auth.sign_in(email, password).completed
-	if sign_result.user == null:
-		print("Failed to sign in")
-		return null
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 
 
 func _on_button_pressed():
@@ -82,14 +69,6 @@ func get_bird_from_cloud(bird_name: String):
 	var find_species_url = config.get_value(ENVIRONMENT_VARIABLES, "FIND_SPECIES_URL", "") + "?species=" + url_bird_name
 	find_species_request.request_completed.connect(find_species_request_result)
 	find_species_request.request(find_species_url, headers, HTTPClient.METHOD_POST, data)
-
-func load_env_file() -> ConfigFile:
-	var config = ConfigFile.new()
-	var error = config.load("res://.env")
-	if error != OK:
-		print("Could not load env file")
-		return null
-	return config
 	
 func find_species_request_result(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray):
 	print("1: "+ str(result))
@@ -136,6 +115,8 @@ func build_animation(shape_id: String, template_url: String) -> SpriteFrames:
 	var animationTemplateQuery: SupabaseQuery = SupabaseQuery.new().from("BirdShape").select().eq("BirdShapeId", shape_id)
 	var animationTemplateResult = await Supabase.database.query(animationTemplateQuery).completed
 	var animatinoTemplate = animationTemplateResult.data[0]["BirdShapeAnimationTemplate"]
+	
+	# TODO CHECK IF IMAGE EXISTS ALREADY
 	var storageResult: StorageTask = await Supabase.storage.from("BirdAssets").download(image_name, ASSET_PATH + image_file_name).completed
 	
 	if storageResult.error != null:

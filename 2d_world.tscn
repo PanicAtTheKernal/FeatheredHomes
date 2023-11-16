@@ -9118,90 +9118,9 @@ zoom = Vector2(6, 6)
 script = ExtResource("2_gse07")
 tile_map = NodePath("../TileMap")
 
-[node name="Bird" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
-visible = false
-z_index = 2
-position = Vector2(712, 368)
-target = Vector2i(16, 6)
-tile_map = NodePath("../TileMap")
-bird_species = ExtResource("8_anad4")
-world_resources = NodePath("../WorldResources")
-
 [node name="Bird2" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
 z_index = 2
 position = Vector2(329, 164)
-target = Vector2i(16, 6)
-tile_map = NodePath("../TileMap")
-bird_species = ExtResource("8_anad4")
-world_resources = NodePath("../WorldResources")
-
-[node name="Bird3" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
-visible = false
-z_index = 2
-position = Vector2(294, 91)
-target = Vector2i(16, 6)
-tile_map = NodePath("../TileMap")
-bird_species = ExtResource("8_anad4")
-world_resources = NodePath("../WorldResources")
-
-[node name="Bird4" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
-visible = false
-z_index = 2
-position = Vector2(553, 91)
-target = Vector2i(16, 6)
-tile_map = NodePath("../TileMap")
-bird_species = ExtResource("8_anad4")
-world_resources = NodePath("../WorldResources")
-
-[node name="Bird5" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
-visible = false
-z_index = 2
-position = Vector2(433, 251)
-target = Vector2i(16, 6)
-tile_map = NodePath("../TileMap")
-bird_species = ExtResource("8_anad4")
-world_resources = NodePath("../WorldResources")
-
-[node name="Bird6" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
-visible = false
-z_index = 2
-position = Vector2(399, 362)
-target = Vector2i(16, 6)
-tile_map = NodePath("../TileMap")
-bird_species = ExtResource("8_anad4")
-world_resources = NodePath("../WorldResources")
-
-[node name="Bird7" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
-visible = false
-z_index = 2
-position = Vector2(276, 198)
-target = Vector2i(16, 6)
-tile_map = NodePath("../TileMap")
-bird_species = ExtResource("8_anad4")
-world_resources = NodePath("../WorldResources")
-
-[node name="Bird8" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
-visible = false
-z_index = 2
-position = Vector2(418, 127)
-target = Vector2i(16, 6)
-tile_map = NodePath("../TileMap")
-bird_species = ExtResource("8_anad4")
-world_resources = NodePath("../WorldResources")
-
-[node name="Bird9" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
-visible = false
-z_index = 2
-position = Vector2(624, 195)
-target = Vector2i(16, 6)
-tile_map = NodePath("../TileMap")
-bird_species = ExtResource("8_anad4")
-world_resources = NodePath("../WorldResources")
-
-[node name="Bird10" parent="." node_paths=PackedStringArray("tile_map", "world_resources") instance=ExtResource("5_f1wu6")]
-visible = false
-z_index = 2
-position = Vector2(624, 195)
 target = Vector2i(16, 6)
 tile_map = NodePath("../TileMap")
 bird_species = ExtResource("8_anad4")

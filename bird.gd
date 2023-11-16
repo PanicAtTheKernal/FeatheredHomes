@@ -11,23 +11,16 @@ var target: Vector2i
 @export
 var tile_map: TileMap
 @export
-var bird_range: int
+var bird_species: BirdSpecies
 @export
 var world_resources: WorldResources
-@export
-var stamina: float = 1000.0
-@export_range(0.1, 500.0)
-var take_off_cost: float = 100.0 
-@export_range(5.0, 300.0)
-var ground_cost: float = 50.0 
-@export_range(5.0, 300.0)
-var flight_cost: float = 20.0 
-@export_range(100, 100000)
-var max_stamina: float = 10000
 @onready
 var nav_agent:= $GroundAgent as NavigationAgent2D
 @onready
 var fly_agent:= $FlightAgent as NavigationAgent2D
+@onready
+var animatated_spite := $AnimatedSprite2D as AnimatedSprite2D
+
 
 var proper_target: Vector2
 var current_ground: String = "Ground"
@@ -39,6 +32,7 @@ signal change_state(new_state: String, should_flip_h: bool)
 #TODO create an inital state that count the path before the path is updated and use this inital state to determine if the bird should fly or not
 #Maybe stop the timer and only start it when the path is set
 func _ready():
+	animatated_spite.sprite_frames = bird_species.bird_animations
 	$NavigationTimer.autostart = true
 	# Start the navaiagation timer at differnet times for each bird
 	await get_tree().create_timer(randf_range(0.1, 3.0)).timeout

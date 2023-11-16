@@ -187,8 +187,18 @@ async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Pr
         // newSpecies.dietId = "5bd828f0-805a-4fd0-90a5-039294930d7f"
         newSpecies.birdImageUrl = await helperFunctions.createNewImage(wikiPageInfo.birdDescription, shapeId, wikiPageInfo.birdName);
         newSpecies.version = VERSION;
-        newSpecies.createdAt = `${date.getFullYear()}-${date.getMonth()}-${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`
-    
+        // Have to offset month by 1 since data.getMonth returns the values between 0-11 and not 1-12
+        newSpecies.createdAt = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`
+        newSpecies.birdSimulationInfo = {
+            "birdRange": 90,
+            "birdStamina": 2000,
+            "birdTakeOffCost": 100,
+            "birdGroundCost": 50,
+            "birdFlightCost": 20,
+            "birdMaxStamina": 4000,
+            "birdTraits": ["Can't walk long distances"]
+        }
+
         const response = await client.from(birdSpeciesTable).insert(newSpecies);
 
         if (response.error) throw response.error;

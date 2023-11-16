@@ -7,6 +7,7 @@ var is_flight_agent_updated: bool = false
 
 func _ready():
 	var parent = self.get_parent()
+	var species: BirdSpecies = parent.bird_species
 	self.data = {
 		"tile_map": parent.tile_map,
 		"ground_agent": parent.find_child("GroundAgent"),
@@ -15,12 +16,12 @@ func _ready():
 		"target_reached": false,
 		"character_body": parent,
 		"world_resources": parent.world_resources,
-		"range": parent.bird_range,
-		"take_off_cost": parent.take_off_cost, 
-		"flight_cost": parent.flight_cost,
-		"ground_cost": parent.ground_cost,
-		"stamina": parent.stamina,
-		"max_stamina": parent.max_stamina,
+		"range": species.bird_range,
+		"take_off_cost": species.bird_take_off_cost, 
+		"flight_cost": species.bird_flight_cost,
+		"ground_cost": species.bird_ground_cost,
+		"stamina": species.bird_stamina,
+		"max_stamina": species.bird_max_stamina,
 		"is_flying": false,
 		"change_state": parent.change_state,
 		"current_ground": "",

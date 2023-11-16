@@ -19,6 +19,7 @@ export class BirdSpeciesTable {
     public birdImageUrl = "";
     public createdAt = "";
     public version = "0.0";
+    public birdSimulationInfo = {};
     
     constructor() {
         this.birdId = crypto.randomUUID()

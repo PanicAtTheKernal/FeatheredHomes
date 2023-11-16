@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://d16nu7pd4eseh"]
 
 [ext_resource type="Script" path="res://Scripts/Bird/bird_gen_test.gd" id="1_nkdvh"]
-[ext_resource type="SpriteFrames" uid="uid://dutx302fjtpvt" path="res://Assets/eurasian-blue-tit.tres" id="2_a1xxj"]
+[ext_resource type="SpriteFrames" uid="uid://bod74p3fnpyxm" path="res://Assets/eurasian-blue-tit.tres" id="2_a1xxj"]
 [ext_resource type="Texture2D" uid="uid://b48rnqvop6mju" path="res://Assets/Download/eurasian-blue-tit.png" id="3_80ykn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vlv4d"]

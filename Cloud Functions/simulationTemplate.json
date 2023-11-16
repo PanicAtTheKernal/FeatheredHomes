@@ -1,0 +1,9 @@
+{
+    "birdRange": 90,
+    "birdStamina": 2000,
+    "birdTakeOffCost": 100,
+    "birdGroundCost": 50,
+    "birdFlightCost": 20,
+    "birdMaxStamina": 4000,
+    "birdTraits": ["Can't walk long distances"]
+}

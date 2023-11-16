@@ -41,7 +41,10 @@ func _ready():
 	#$NavigationTimer.start()
 
 func _process(delta):
-	pass
+	var result = find_children("GroundSequence")
+	for node in result:
+		node.queue_free()
+	print_tree_pretty()
 
 func _physics_process(_delta: float)->void:
 	# If no path was found skip the update
@@ -75,30 +78,40 @@ func build_traits():
 		global_traits = Database.traits
 	
 	var test_trait = bird_traits[0]
-	var test_trait_rule: Dictionary = global_traits[test_trait]["trait_rule"]
+	#var test_trait_rules = ["FreeRoamSequence", "CalculateDistances", "MovementSelector", "GroundSequence"]
+	var test_trait_rules = global_traits[test_trait]["trait_rule"]
 	var target_node: Node
 	var target_found: bool = false
-	var current_node_name: String = test_trait_rule.keys()[0]
-	print(test_trait_rule.keys())
+	var current_node_name: String = test_trait_rules.keys()[0]
+	var current_dict = test_trait_rules
+	var current_node = find_children(current_node_name)
+	var next_node = current_dict.get(current_node_name).keys()[0]
+	#print(test_trait_rule.keys())
 	#for bird_trait in bird_traits:
 	while !target_found:
 		print(current_node_name)
-		var current_node = find_children(current_node_name)
+		print(next_node)	
+	
+		current_dict = current_dict.get(current_node_name)
+		current_node = find_children(current_node_name)
 		if current_node.size() == 0:
-			print("Rule not found")
 			break
-		var next_node_name = current_node.keys()[0]
-		var next_node = current_node.get(next_node_name)
-		match typeof(next_node):
+		current_node_name = next_node
+		var next_node_value = current_dict.get(current_node_name)
+		match typeof(next_node_value):
 			TYPE_DICTIONARY:
-				current_node_name = next_node.keys()[0]
+				next_node = next_node_value.keys()[0]
 			TYPE_ARRAY:
 				target_found = true
-				print("Found target node")
-				target_node = current_node
+				current_node = find_children(current_node_name)
+				#target_node = current_node[0]
 				break
+
 	if target_node != null:
 		print(target_node)
+		print_tree_pretty()
+		remove_child(target_node)
+		target_node.free()
 
 func check_target()->void:
 	# Don't update the preferred_agent if destination is reached

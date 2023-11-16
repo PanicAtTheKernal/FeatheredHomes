@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cv0t0stbv53hr"]
+[gd_scene load_steps=19 format=3 uid="uid://cv0t0stbv53hr"]
 
 [ext_resource type="Texture2D" uid="uid://cnuew56xuo5jv" path="res://Assets/Titlemap/roguelikeSheet_transparent.png" id="1_d3jjw"]
 [ext_resource type="Script" path="res://Scripts/World/world_navigation.gd" id="1_n72i0"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/Player/player_cam.gd" id="2_wbf6d"]
 [ext_resource type="Resource" uid="uid://lbomgeivl84f" path="res://Scripts/Food/ProtoFood.tres" id="3_4j6hx"]
 [ext_resource type="PackedScene" uid="uid://cquo65bvi3v3n" path="res://BirdNavTest.tscn" id="5_6m27p"]
+[ext_resource type="Resource" uid="uid://x1v6f8nk08mm" path="res://Assets/Birds/NewBird/BirdNavTestSpecies.tres" id="7_b1nkj"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_hewmo"]
 vertices = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -9389,4 +9390,5 @@ script = ExtResource("2_wbf6d")
 position = Vector2(79, 370)
 target = Vector2i(11, 5)
 tile_map = NodePath("../TileMap")
+bird_species = ExtResource("7_b1nkj")
 world_resources = NodePath("../WorldResources")

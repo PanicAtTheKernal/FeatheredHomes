@@ -12,7 +12,7 @@ const VERSION = Deno.env.get("VERSION") as string;
 const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY") as string;
 const birdSpeciesTable = "BirdSpecies";
 const nameCol = "birdName"
-const pontentialDietHeadings = ["Diet", "Behaviour and ecology"];
+const pontentialDietHeadings = ["Diet", "Behaviour and ecology", "Diet and feeding"];
 const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -120,18 +120,36 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
 
     newBirdInfo.birdScientificName = scientificNameResult[1];
 
-    const wikiTextHtml = content.body.getElementsByClassName("mw-parser-output")[0];
+    const wikiTextHtml = content.body.getElementsByClassName("mw-content-ltr")[0];
 
-    wikiTextHtml.getElementsByClassName("infobox biota")[0].remove();
-    // Remove any non p tag from the top of the wiki page
-    while (wikiTextHtml.firstElementChild?.tagName != "P") {
-    wikiTextHtml.firstElementChild?.remove()
+    // Remove infobox if exits
+    if (wikiTextHtml.getElementsByClassName("infobox biota").length > 0) {
+        wikiTextHtml.getElementsByClassName("infobox biota")[0].remove();
     }
-    const referencesIndex = wikiTextHtml.innerText.indexOf("References[edit]");
+
+    // Remove any non p tag from the top of the wiki page. It doesn't 
+    while (wikiTextHtml.firstElementChild?.tagName != "P") {
+        wikiTextHtml.firstElementChild?.remove();
+    }
+
+    const referencesIndex = wikiTextHtml.innerText.indexOf("References");
     const wikiText = wikiTextHtml.innerText.substring(0, referencesIndex).trim()
     const paragraphs: Map<string, string> = new Map();
     let lastIndex = 0;
-    const headingResults = wikiText.match(/\n([a-zA-Z ]+)\[edit\]\n/g)
+
+    const headings = wikiTextHtml.getElementsByTagName("H2");
+    const headings2 = wikiTextHtml.getElementsByTagName("H3");
+    // const headingResults = wikiText.match(/\n([a-zA-Z ]+)\[edit\]\n/g)
+    let headingResults = headings.map(header => header.innerText)
+    const headingResults2 = headings2.map(header => header.innerText);
+
+    // Remove references from the headings
+    const referenceIndex = headingResults.indexOf("References")
+    headingResults.splice(referenceIndex, headingResults.length - referenceIndex);
+
+    // Merge heading together
+    headingResults = headingResults.concat(headingResults2)
+
 
     if (headingResults == null) {
         return new Response(JSON.stringify({ error: "Unable to parse wiki" }), {
@@ -163,6 +181,8 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
     newBirdInfo.birdDescription = paragraphs.get("Description") as string
     newBirdInfo.birdDiet = paragraphs.get(pontentialDietHeading) as string
     newBirdInfo.birdSummary = paragraphs.get("Summary") as string
+
+    console.log(newBirdInfo);
 
     // Call the staging function
     return await stageData(newBirdInfo, client);

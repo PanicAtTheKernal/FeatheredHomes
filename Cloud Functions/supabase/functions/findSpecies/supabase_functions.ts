@@ -1,31 +1,30 @@
 import { BirdSpeciesTable, BirdWikiPage, BirdHelperFunctions } from "./supabase_helper_functions.ts"
-import { OpenAI } from "https://esm.sh/openai@4.11.1";
 import { SupabaseClient, createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
-import { DOMParser, Element, HTMLDocument } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
-import { format } from "https://deno.land/std@0.202.0/datetime/mod.ts";
+import { DOMParser, HTMLDocument, NodeList } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 
-
-// Temp for local testing
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY") as string;
 const SUPABASE_URL = Deno.env.get("HOST_URL") as string;
 const VERSION = Deno.env.get("VERSION") as string;
 const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY") as string;
 const birdSpeciesTable = "BirdSpecies";
 const nameCol = "birdName"
-const pontentialDietHeadings = ["Diet", "Behaviour and ecology"];
+const potentialDietHeadings = ["Diet", "Behaviour and ecology", "Diet and feeding", "Feeding", "Distribution"];
+const potentialReferenceHeadings = ["References", "References[edit]"]
+const potentialDescriptionHeadings = ["Male", "Description"]
 const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     'Content-Type': 'application/json'
   };
+const supabaseAdminClient: SupabaseClient = createClient(
+    SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY
+);
+const helperFunctions: BirdHelperFunctions = new BirdHelperFunctions(supabaseAdminClient, OPENAI_API_KEY, VERSION);
 
 export async function findSpecies(request: Request): Promise<Response> {
     const requestUrl = new URL(request.url)
     const speciesName = requestUrl.searchParams.get("species")?.toLowerCase();
-    const supabaseAdminClient: SupabaseClient = createClient(
-        SUPABASE_URL,
-        SUPABASE_SERVICE_ROLE_KEY
-    );
 
     if (speciesName == null) {
         return new Response(JSON.stringify({ error: "Parameter 'species' is missing" }), {
@@ -120,18 +119,47 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
 
     newBirdInfo.birdScientificName = scientificNameResult[1];
 
-    const wikiTextHtml = content.body.getElementsByClassName("mw-parser-output")[0];
+    const wikiTextHtml = content.body.getElementsByClassName("mw-content-ltr")[0];
 
-    wikiTextHtml.getElementsByClassName("infobox biota")[0].remove();
-    // Remove any non p tag from the top of the wiki page
-    while (wikiTextHtml.firstElementChild?.tagName != "P") {
-    wikiTextHtml.firstElementChild?.remove()
+    // Remove infobox if exits
+    if (wikiTextHtml.getElementsByClassName("infobox biota").length > 0) {
+        wikiTextHtml.getElementsByClassName("infobox biota")[0].remove();
     }
-    const referencesIndex = wikiTextHtml.innerText.indexOf("References[edit]");
+
+    // Remove any non p tag from the top of the wiki page. It doesn't 
+    while (wikiTextHtml.firstElementChild?.tagName != "P") {
+        wikiTextHtml.firstElementChild?.remove();
+    }
+
+    // Remove the reference section from the text if there is one
+    const referencesIndex = wikiTextHtml.innerText.indexOf("References");
     const wikiText = wikiTextHtml.innerText.substring(0, referencesIndex).trim()
-    const paragraphs: Map<string, string> = new Map();
+    const paragraphs: Map<string, string[]> = new Map();
     let lastIndex = 0;
-    const headingResults = wikiText.match(/\n([a-zA-Z ]+)\[edit\]\n/g)
+
+    // const headingResults = wikiText.match(/\n([a-zA-Z ]+)\[edit\]\n/g);
+    const headingResults: string[] = [];
+    wikiTextHtml.querySelectorAll("h2, h3").forEach(node => headingResults.push(node.textContent));
+    // const headings2 = wikiTextHtml.getElementsByTagName("H3");
+    // const headingResults = wikiText.match(/\n([a-zA-Z ]+)\[edit\]\n/g)
+
+    // Remove references from the headings
+    const referenceHeading = potentialReferenceHeadings.find(heading => {
+        if(headingResults.includes(heading)) {
+            return heading;
+        }
+    }) as string
+
+    const referenceIndex = headingResults.findIndex((header, index) => {
+        if (header == referenceHeading) {
+            return true;
+        }
+    });
+
+    
+    if (referenceIndex != -1) {
+        headingResults.splice(referenceIndex, headingResults.length - referenceIndex);
+    }
 
     if (headingResults == null) {
         return new Response(JSON.stringify({ error: "Unable to parse wiki" }), {
@@ -140,36 +168,78 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
         });
     }
 
-    headingResults.unshift("\nSummary[edit]\n");
-    for (let i = 0; i < headingResults.length-1; i++) {
-        const index = wikiText.indexOf(headingResults[i+1])
-        const paragraph = wikiText.substring(lastIndex, index)
-            .replace(headingResults[i], "")
-            .replaceAll(/\[[0-9]+\]/g, "")
-            .replaceAll("\n", " ")
-            .trim();
-        const trimmedHeading = headingResults[i].trim().replace("[edit]", "")
-        paragraphs.set(trimmedHeading, paragraph);
-        lastIndex = index;
+    if (headingResults.length > 1) {
+        headingResults.unshift("\nSummary[edit]\n");
+        for (let i = 0; i < headingResults.length; i++) {
+            const index = (i != headingResults.length-1) ? wikiText.indexOf(headingResults[i+1]) : wikiText.length;
+            const paragraph = wikiText.substring(lastIndex, index)
+                .replace(headingResults[i], "")
+                .replaceAll(/\[[0-9]+\]/g, "")
+                .trim()
+                .split("\n\n")
+                .map(p => p.replace("\n", ""));
+            const trimmedHeading = headingResults[i].trim().replace("[edit]", "");
+            paragraphs.set(trimmedHeading, paragraph);
+            lastIndex = index;
+        }
+
+        const potentialDietHeading = potentialDietHeadings.find((value) => {
+            const data = paragraphs.get(value);
+            if (data != undefined) {
+                return data;
+            }
+        }) as string
+    
+        console.log(paragraphs)
+
+        // Reduce the description if it too big
+        const potentialDescriptionHeading = potentialDescriptionHeadings.find((value) => {
+            const data = paragraphs.get(value);
+            if (data != undefined) {
+                return data;
+            }
+        }) as string
+
+        const description = paragraphs.get(potentialDescriptionHeading) as string[]
+        if (description.join().length > 3500) {
+            newBirdInfo.birdDescription = await helperFunctions.summariseDescription(description)
+        } else {
+            newBirdInfo.birdDescription = description.join()
+        }
+    
+        newBirdInfo.birdDiet = (paragraphs.get(potentialDietHeading) as string[]).join()
+        newBirdInfo.birdSummary = (paragraphs.get("Summary") as string[]).join()
+    
+
+    } else {
+        // Special logic for handling wiki pages with no headings
+        const text = wikiText.replaceAll(/\[[0-9]+\]/g, "")
+            .trim()
+            .split("\n\n")
+            .map(p => p.replace("\n", ""));
+        paragraphs.set("Summary", text);
+
+        const allOfTextArr = (paragraphs.get("Summary") as string[])
+        let allOfText: string;
+        // Summarise a bit if too long
+        if (allOfTextArr.join().length > 3500) {
+            allOfText = await helperFunctions.summariseDescription(allOfTextArr);
+        } else {
+            allOfText = allOfTextArr.join();
+        }
+
+        newBirdInfo.birdDescription = allOfText;
+        newBirdInfo.birdDiet = allOfText;
+        newBirdInfo.birdSummary = allOfText;
     }
 
-    const pontentialDietHeading = pontentialDietHeadings.find((value) => {
-        const data = paragraphs.get(value);
-        if (data != undefined) {
-            return data;
-        }
-    }) as string
 
-    newBirdInfo.birdDescription = paragraphs.get("Description") as string
-    newBirdInfo.birdDiet = paragraphs.get(pontentialDietHeading) as string
-    newBirdInfo.birdSummary = paragraphs.get("Summary") as string
-
+    console.log(newBirdInfo);
     // Call the staging function
     return await stageData(newBirdInfo, client);
 }
 
 async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Promise<Response> {
-    const helperFunctions: BirdHelperFunctions = new BirdHelperFunctions(client, OPENAI_API_KEY, VERSION);
     const newSpecies: BirdSpeciesTable = new BirdSpeciesTable()
     const date = new Date();
 

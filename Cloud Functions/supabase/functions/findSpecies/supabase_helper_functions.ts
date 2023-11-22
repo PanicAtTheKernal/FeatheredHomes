@@ -269,4 +269,16 @@ export class BirdHelperFunctions {
 
         return imageJson;
     }
+
+    public async summariseDescription(text: string[]): Promise<string> {
+        const result: string[] = [];
+        for(let i = 0; i< text.length; i++) {
+            const summary = await this.getSummary(text[0])
+            result.push(summary);
+        }
+
+        console.log(`Reduced block of text by ${(result.join().length/text.length)*100}%`)
+
+        return result.join()
+    }
 }

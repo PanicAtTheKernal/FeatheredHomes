@@ -3,7 +3,11 @@ import { findSpecies } from "./supabase_functions.ts"
 console.log("Started function: findSpecies")
 
 Deno.serve(async (req) => {
-  return await findSpecies(req);
+  try {
+    return await findSpecies(req);
+  } catch (error) {
+    return new Response(error);
+  }
 })
 
 // To invoke:

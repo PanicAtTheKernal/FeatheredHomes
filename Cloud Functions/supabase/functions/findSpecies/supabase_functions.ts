@@ -1,17 +1,16 @@
 import { BirdSpeciesTable, BirdWikiPage, BirdHelperFunctions } from "./supabase_helper_functions.ts"
 import { SupabaseClient, createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
-import { DOMParser, HTMLDocument } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
+import { DOMParser, HTMLDocument, NodeList } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 
-
-// Temp for local testing
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY") as string;
 const SUPABASE_URL = Deno.env.get("HOST_URL") as string;
 const VERSION = Deno.env.get("VERSION") as string;
 const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY") as string;
 const birdSpeciesTable = "BirdSpecies";
 const nameCol = "birdName"
-const potentialDietHeadings = ["Diet", "Behaviour and ecology", "Diet and feeding"];
-const _potentialReferenceHeadings = ["References", "References[edit]"]
+const potentialDietHeadings = ["Diet", "Behaviour and ecology", "Diet and feeding", "Feeding", "Distribution"];
+const potentialReferenceHeadings = ["References", "References[edit]"]
+const potentialDescriptionHeadings = ["Male", "Description"]
 const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -132,29 +131,35 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
         wikiTextHtml.firstElementChild?.remove();
     }
 
+    // Remove the reference section from the text if there is one
     const referencesIndex = wikiTextHtml.innerText.indexOf("References");
     const wikiText = wikiTextHtml.innerText.substring(0, referencesIndex).trim()
     const paragraphs: Map<string, string[]> = new Map();
     let lastIndex = 0;
 
-    const headings = wikiTextHtml.getElementsByTagName("H2");
-    const headings2 = wikiTextHtml.getElementsByTagName("H3");
+    // const headingResults = wikiText.match(/\n([a-zA-Z ]+)\[edit\]\n/g);
+    const headingResults: string[] = [];
+    wikiTextHtml.querySelectorAll("h2, h3").forEach(node => headingResults.push(node.textContent));
+    // const headings2 = wikiTextHtml.getElementsByTagName("H3");
     // const headingResults = wikiText.match(/\n([a-zA-Z ]+)\[edit\]\n/g)
-    let headingResults = headings.map(header => header.innerText)
-    const headingResults2 = headings2.map(header => header.innerText);
 
     // Remove references from the headings
-    const referenceIndex = _potentialReferenceHeadings.findIndex(referenceHeading => {
-        const loc = wikiText.indexOf(referenceHeading);
-        if (loc != -1) {
-            return loc
+    const referenceHeading = potentialReferenceHeadings.find(heading => {
+        if(headingResults.includes(heading)) {
+            return heading;
         }
-        return -1;
-    })
-    headingResults.splice(referenceIndex, headingResults.length - referenceIndex);
+    }) as string
 
-    // Merge heading together
-    headingResults = headingResults.concat(headingResults2)
+    const referenceIndex = headingResults.findIndex((header, index) => {
+        if (header == referenceHeading) {
+            return true;
+        }
+    });
+
+    
+    if (referenceIndex != -1) {
+        headingResults.splice(referenceIndex, headingResults.length - referenceIndex);
+    }
 
     if (headingResults == null) {
         return new Response(JSON.stringify({ error: "Unable to parse wiki" }), {
@@ -165,8 +170,8 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
 
     if (headingResults.length > 1) {
         headingResults.unshift("\nSummary[edit]\n");
-        for (let i = 0; i < headingResults.length-1; i++) {
-            const index = wikiText.indexOf(headingResults[i+1])
+        for (let i = 0; i < headingResults.length; i++) {
+            const index = (i != headingResults.length-1) ? wikiText.indexOf(headingResults[i+1]) : wikiText.length;
             const paragraph = wikiText.substring(lastIndex, index)
                 .replace(headingResults[i], "")
                 .replaceAll(/\[[0-9]+\]/g, "")
@@ -185,8 +190,17 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
             }
         }) as string
     
+        console.log(paragraphs)
+
         // Reduce the description if it too big
-        const description = paragraphs.get("Description") as string[]
+        const potentialDescriptionHeading = potentialDescriptionHeadings.find((value) => {
+            const data = paragraphs.get(value);
+            if (data != undefined) {
+                return data;
+            }
+        }) as string
+
+        const description = paragraphs.get(potentialDescriptionHeading) as string[]
         if (description.join().length > 3500) {
             newBirdInfo.birdDescription = await helperFunctions.summariseDescription(description)
         } else {
@@ -219,6 +233,8 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
         newBirdInfo.birdSummary = allOfText;
     }
 
+
+    console.log(newBirdInfo);
     // Call the staging function
     return await stageData(newBirdInfo, client);
 }

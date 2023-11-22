@@ -1,8 +1,6 @@
 import { BirdSpeciesTable, BirdWikiPage, BirdHelperFunctions } from "./supabase_helper_functions.ts"
-import { OpenAI } from "https://esm.sh/openai@4.11.1";
 import { SupabaseClient, createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
-import { DOMParser, Element, HTMLDocument } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
-import { format } from "https://deno.land/std@0.202.0/datetime/mod.ts";
+import { DOMParser, HTMLDocument } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 
 
 // Temp for local testing
@@ -12,7 +10,8 @@ const VERSION = Deno.env.get("VERSION") as string;
 const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY") as string;
 const birdSpeciesTable = "BirdSpecies";
 const nameCol = "birdName"
-const pontentialDietHeadings = ["Diet", "Behaviour and ecology", "Diet and feeding"];
+const potentialDietHeadings = ["Diet", "Behaviour and ecology", "Diet and feeding"];
+const _potentialReferenceHeadings = ["References", "References[edit]"]
 const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -145,12 +144,17 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
     const headingResults2 = headings2.map(header => header.innerText);
 
     // Remove references from the headings
-    const referenceIndex = headingResults.indexOf("References")
+    const referenceIndex = _potentialReferenceHeadings.findIndex(referenceHeading => {
+        const loc = wikiText.indexOf(referenceHeading);
+        if (loc != -1) {
+            return loc
+        }
+        return -1;
+    })
     headingResults.splice(referenceIndex, headingResults.length - referenceIndex);
 
     // Merge heading together
     headingResults = headingResults.concat(headingResults2)
-
 
     if (headingResults == null) {
         return new Response(JSON.stringify({ error: "Unable to parse wiki" }), {
@@ -159,30 +163,61 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
         });
     }
 
-    headingResults.unshift("\nSummary[edit]\n");
-    for (let i = 0; i < headingResults.length-1; i++) {
-        const index = wikiText.indexOf(headingResults[i+1])
-        const paragraph = wikiText.substring(lastIndex, index)
-            .replace(headingResults[i], "")
-            .replaceAll(/\[[0-9]+\]/g, "")
+    if (headingResults.length > 1) {
+        headingResults.unshift("\nSummary[edit]\n");
+        for (let i = 0; i < headingResults.length-1; i++) {
+            const index = wikiText.indexOf(headingResults[i+1])
+            const paragraph = wikiText.substring(lastIndex, index)
+                .replace(headingResults[i], "")
+                .replaceAll(/\[[0-9]+\]/g, "")
+                .trim()
+                .split("\n\n")
+                .map(p => p.replace("\n", ""));
+            const trimmedHeading = headingResults[i].trim().replace("[edit]", "");
+            paragraphs.set(trimmedHeading, paragraph);
+            lastIndex = index;
+        }
+
+        const potentialDietHeading = potentialDietHeadings.find((value) => {
+            const data = paragraphs.get(value);
+            if (data != undefined) {
+                return data;
+            }
+        }) as string
+    
+        // Reduce the description if it too big
+        const description = paragraphs.get("Description") as string[]
+        if (description.join().length > 3500) {
+            newBirdInfo.birdDescription = await helperFunctions.summariseDescription(description)
+        } else {
+            newBirdInfo.birdDescription = description.join()
+        }
+    
+        newBirdInfo.birdDiet = (paragraphs.get(potentialDietHeading) as string[]).join()
+        newBirdInfo.birdSummary = (paragraphs.get("Summary") as string[]).join()
+    
+
+    } else {
+        // Special logic for handling wiki pages with no headings
+        const text = wikiText.replaceAll(/\[[0-9]+\]/g, "")
             .trim()
             .split("\n\n")
             .map(p => p.replace("\n", ""));
-        const trimmedHeading = headingResults[i].trim().replace("[edit]", "");
-        paragraphs.set(trimmedHeading, paragraph);
-        lastIndex = index;
-    }
+        paragraphs.set("Summary", text);
 
-    const pontentialDietHeading = pontentialDietHeadings.find((value) => {
-        const data = paragraphs.get(value);
-        if (data != undefined) {
-            return data;
+        const allOfTextArr = (paragraphs.get("Summary") as string[])
+        let allOfText: string;
+        // Summarise a bit if too long
+        if (allOfTextArr.join().length > 3500) {
+            allOfText = await helperFunctions.summariseDescription(allOfTextArr);
+        } else {
+            allOfText = allOfTextArr.join();
         }
-    }) as string
 
-    newBirdInfo.birdDescription = await helperFunctions.summariseDescription(paragraphs.get("Description") as string[]);
-    newBirdInfo.birdDiet = (paragraphs.get(pontentialDietHeading) as string[]).join()
-    newBirdInfo.birdSummary = (paragraphs.get("Summary") as string[]).join()
+        newBirdInfo.birdDescription = allOfText;
+        newBirdInfo.birdDiet = allOfText;
+        newBirdInfo.birdSummary = allOfText;
+    }
 
     // Call the staging function
     return await stageData(newBirdInfo, client);

@@ -1,8 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://cc7jo7b3cgbem"]
+[gd_scene load_steps=8 format=3 uid="uid://cc7jo7b3cgbem"]
 
 [ext_resource type="Script" path="res://AddBird.gd" id="1_tseot"]
 [ext_resource type="Script" path="res://FPS.gd" id="2_bh3mf"]
 [ext_resource type="Texture2D" uid="uid://b7a6fk0fwanx8" path="res://Assets/crosshair.png" id="3_48hw7"]
+[ext_resource type="Texture2D" uid="uid://8tx3qcoltkgt" path="res://Assets/loading-screen.png" id="4_h3nv2"]
+[ext_resource type="Script" path="res://Scripts/World/CircleProgress.gd" id="5_blxf1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_55m4q"]
+atlas = ExtResource("4_h3nv2")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lwoqc"]
+atlas = ExtResource("4_h3nv2")
+region = Rect2(100, 0, 100, 100)
 
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource("1_tseot")
@@ -14,30 +24,6 @@ offset_right = 101.0
 offset_bottom = 39.0
 text = "Hello world"
 script = ExtResource("2_bh3mf")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -193.0
-offset_top = 15.0
-offset_right = -64.0
-offset_bottom = 46.0
-grow_horizontal = 2
-scale = Vector2(3, 3)
-size_flags_vertical = 0
-
-[node name="BirdNameLineEdit" type="LineEdit" parent="HBoxContainer"]
-layout_mode = 2
-placeholder_text = "Name of bird"
-caret_blink = true
-
-[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-text = "Enter"
 
 [node name="TextureRect" type="TextureRect" parent="."]
 anchors_preset = 8
@@ -55,4 +41,48 @@ texture = ExtResource("3_48hw7")
 
 [node name="FindSpeciesRequest" type="HTTPRequest" parent="."]
 
-[connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_button_pressed"]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 10.0
+offset_right = -67.0
+offset_bottom = 41.0
+grow_horizontal = 2
+scale = Vector2(3, 3)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="BirdNameLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+placeholder_text = "Name of bird"
+caret_blink = true
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Enter"
+
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="VBoxContainer/HBoxContainer/Control"]
+custom_minimum_size = Vector2(40, 40)
+offset_right = 100.0
+offset_bottom = 100.0
+scale = Vector2(0.31, 0.31)
+value = 20.0
+fill_mode = 4
+texture_under = SubResource("AtlasTexture_55m4q")
+texture_progress = SubResource("AtlasTexture_lwoqc")
+radial_initial_angle = 360.0
+script = ExtResource("5_blxf1")
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]

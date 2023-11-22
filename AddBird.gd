@@ -11,10 +11,14 @@ var player_cam: Camera2D
 var tile_map: TileMap
 
 @onready
-var line_edit := $HBoxContainer/BirdNameLineEdit as LineEdit
-
+var line_edit := $VBoxContainer/HBoxContainer/BirdNameLineEdit as LineEdit
 @onready
 var find_species_request := $FindSpeciesRequest as HTTPRequest
+@onready
+var progress_bar := $VBoxContainer/HBoxContainer/Control/TextureProgressBar as TextureProgressBar
+@onready
+var submit_button := $VBoxContainer/HBoxContainer/Button as Button
+
 var config
 
 const ASSET_PATH = "user://Assets/Download/"
@@ -24,6 +28,7 @@ const ENVIRONMENT_VARIABLES = "environment"
 func _ready():
 	config = Database.config
 	
+	progress_bar.hide()
 	# TEMP
 	if !DirAccess.dir_exists_absolute(ASSET_PATH):
 		DirAccess.make_dir_recursive_absolute(ASSET_PATH)
@@ -33,7 +38,11 @@ func _on_button_pressed():
 	var users_bird_name = line_edit.text
 	if users_bird_name == "":
 		print("User didn't enter bird name")
-		
+	
+	# Disable the form until the bird spawns
+	progress_bar.show()
+	line_edit.editable = false
+	submit_button.hide()
 	var bird_species_file = find_potential_files(line_edit.text)
 	line_edit.clear()
 	if bird_species_file != "":
@@ -78,6 +87,10 @@ func find_species_request_result(result: int, response_code: int, headers: Packe
 	if response_code == 200:
 		build_simulation(JSON.parse_string(body.get_string_from_ascii()))
 	else:
+		line_edit.editable = true
+		line_edit.placeholder_text = "Error. Please try again"
+		progress_bar.hide()
+		submit_button.show()
 		print("There was an error retriving the data")
 
 func build_simulation(request_body: Dictionary):
@@ -168,3 +181,8 @@ func add_bird_to_scene(file_name: String):
 		bird.world_resources = world_rescources
 		
 		get_parent().add_child(bird)
+		# Reset the form
+		line_edit.editable = true
+		line_edit.placeholder_text = "Name"
+		progress_bar.hide()
+		submit_button.show()

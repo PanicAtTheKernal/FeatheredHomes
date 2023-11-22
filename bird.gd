@@ -21,7 +21,6 @@ var fly_agent:= $FlightAgent as NavigationAgent2D
 @onready
 var animatated_spite := $AnimatedSprite2D as AnimatedSprite2D
 
-
 var proper_target: Vector2
 var current_ground: String = "Ground"
 var is_flying: bool = false
@@ -38,7 +37,7 @@ func _ready():
 	$NavigationTimer.autostart = true
 	# Start the navaiagation timer at differnet times for each bird
 	await get_tree().create_timer(randf_range(0.5, 3.0)).timeout
-	#$NavigationTimer.start()
+	$NavigationTimer.start()
 
 func _process(delta):
 	var result = find_children("GroundSequence")

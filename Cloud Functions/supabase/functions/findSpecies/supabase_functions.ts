@@ -18,14 +18,15 @@ const headers = {
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     'Content-Type': 'application/json'
   };
+const supabaseAdminClient: SupabaseClient = createClient(
+    SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY
+);
+const helperFunctions: BirdHelperFunctions = new BirdHelperFunctions(supabaseAdminClient, OPENAI_API_KEY, VERSION);
 
 export async function findSpecies(request: Request): Promise<Response> {
     const requestUrl = new URL(request.url)
     const speciesName = requestUrl.searchParams.get("species")?.toLowerCase();
-    const supabaseAdminClient: SupabaseClient = createClient(
-        SUPABASE_URL,
-        SUPABASE_SERVICE_ROLE_KEY
-    );
 
     if (speciesName == null) {
         return new Response(JSON.stringify({ error: "Parameter 'species' is missing" }), {
@@ -134,7 +135,7 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
 
     const referencesIndex = wikiTextHtml.innerText.indexOf("References");
     const wikiText = wikiTextHtml.innerText.substring(0, referencesIndex).trim()
-    const paragraphs: Map<string, string> = new Map();
+    const paragraphs: Map<string, string[]> = new Map();
     let lastIndex = 0;
 
     const headings = wikiTextHtml.getElementsByTagName("H2");
@@ -164,9 +165,10 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
         const paragraph = wikiText.substring(lastIndex, index)
             .replace(headingResults[i], "")
             .replaceAll(/\[[0-9]+\]/g, "")
-            .replaceAll("\n", " ")
-            .trim();
-        const trimmedHeading = headingResults[i].trim().replace("[edit]", "")
+            .trim()
+            .split("\n\n")
+            .map(p => p.replace("\n", ""));
+        const trimmedHeading = headingResults[i].trim().replace("[edit]", "");
         paragraphs.set(trimmedHeading, paragraph);
         lastIndex = index;
     }
@@ -178,18 +180,15 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
         }
     }) as string
 
-    newBirdInfo.birdDescription = paragraphs.get("Description") as string
-    newBirdInfo.birdDiet = paragraphs.get(pontentialDietHeading) as string
-    newBirdInfo.birdSummary = paragraphs.get("Summary") as string
-
-    console.log(newBirdInfo);
+    newBirdInfo.birdDescription = await helperFunctions.summariseDescription(paragraphs.get("Description") as string[]);
+    newBirdInfo.birdDiet = (paragraphs.get(pontentialDietHeading) as string[]).join()
+    newBirdInfo.birdSummary = (paragraphs.get("Summary") as string[]).join()
 
     // Call the staging function
     return await stageData(newBirdInfo, client);
 }
 
 async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Promise<Response> {
-    const helperFunctions: BirdHelperFunctions = new BirdHelperFunctions(client, OPENAI_API_KEY, VERSION);
     const newSpecies: BirdSpeciesTable = new BirdSpeciesTable()
     const date = new Date();
 

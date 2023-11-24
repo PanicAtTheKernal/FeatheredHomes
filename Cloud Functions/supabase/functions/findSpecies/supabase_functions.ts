@@ -1,4 +1,4 @@
-import { BirdSpeciesTable, BirdWikiPage, BirdHelperFunctions } from "./supabase_helper_functions.ts"
+import { BirdSpeciesTable, BirdWikiPage, BirdHelperFunctions, _webFunctions } from "./supabase_helper_functions.ts"
 import { SupabaseClient, createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
 import { DOMParser, HTMLDocument, NodeList } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 
@@ -16,13 +16,16 @@ const headers = {
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     'Content-Type': 'application/json'
   };
-const supabaseAdminClient: SupabaseClient = createClient(
-    SUPABASE_URL,
-    SUPABASE_SERVICE_ROLE_KEY
-);
-const helperFunctions: BirdHelperFunctions = new BirdHelperFunctions(supabaseAdminClient, OPENAI_API_KEY, VERSION);
+let supabaseAdminClient: SupabaseClient;
+let helperFunctions: BirdHelperFunctions;
+const webFunctions = _webFunctions;
 
 export async function findSpecies(request: Request): Promise<Response> {
+    supabaseAdminClient = createClient(
+        SUPABASE_URL,
+        SUPABASE_SERVICE_ROLE_KEY
+    );
+    helperFunctions = new BirdHelperFunctions(supabaseAdminClient, OPENAI_API_KEY, VERSION);
     const requestUrl = new URL(request.url)
     const speciesName = requestUrl.searchParams.get("species")?.toLowerCase();
 
@@ -75,17 +78,17 @@ async function findWikiPage(species: string, client: SupabaseClient): Promise<Re
 
     // console.log(searchBody);
     const speciesUrl: URL = new URL(urls[0]);
-    return await parseWikiPage(speciesUrl, client);
+    return await parseWikiPage(speciesUrl);
 }
 
-async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<Response> {
-    const wikiPageResult = await fetch(speciesUrl);
-    const wikiPageBody = await wikiPageResult.text();
+export async function parseWikiPage(speciesUrl: URL): Promise<Response> {
+    const wikiPageBody = await _webFunctions.fetchText(speciesUrl);   
     const domParser = new DOMParser();
     const newBirdInfo: BirdWikiPage = new BirdWikiPage();
+
     const content: HTMLDocument | null = domParser.parseFromString(wikiPageBody, "text/html");
     
-    if (content == null) {
+    if (content == null || wikiPageBody == "") {
         return new Response(JSON.stringify({ error: "Unable to get HTML body" }), {
             headers: headers,
             status: 501
@@ -102,6 +105,13 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
         return new Response(JSON.stringify({ error: "Unable to find family name" }), {
             headers: headers,
             status: 501
+        });
+    }
+
+    if (familyNameResult != null) {
+        return new Response(JSON.stringify({ error: "Unable to find family name" }), {
+            headers: headers,
+            status: 200
         });
     }
 
@@ -236,10 +246,10 @@ async function parseWikiPage(speciesUrl: URL, client: SupabaseClient): Promise<R
 
     console.log(newBirdInfo);
     // Call the staging function
-    return await stageData(newBirdInfo, client);
+    return await stageData(newBirdInfo);
 }
 
-async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Promise<Response> {
+async function stageData(wikiPageInfo: BirdWikiPage): Promise<Response> {
     const newSpecies: BirdSpeciesTable = new BirdSpeciesTable()
     const date = new Date();
 
@@ -266,14 +276,14 @@ async function stageData(wikiPageInfo: BirdWikiPage, client: SupabaseClient): Pr
             "birdGroundCost": 50,
             "birdFlightCost": 20,
             "birdMaxStamina": 4000,
-            "birdTraits": ["Can't walk long distances"]
+            "birdTraits": ["Can not walk long distances"]
         }
 
-        const response = await client.from(birdSpeciesTable).insert(newSpecies);
+        const response = await supabaseAdminClient.from(birdSpeciesTable).insert(newSpecies);
 
         if (response.error) throw response.error;
 
-        const { data, error } = await client.from(birdSpeciesTable).select().eq("birdId", newSpecies.birdId);
+        const { data, error } = await supabaseAdminClient.from(birdSpeciesTable).select().eq("birdId", newSpecies.birdId);
 
         if (error) throw error;
 

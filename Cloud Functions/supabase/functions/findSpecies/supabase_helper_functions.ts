@@ -282,3 +282,9 @@ export class BirdHelperFunctions {
         return result.join()
     }
 }
+
+async function fetchText(url: string | URL): Promise<string> {
+    const result = await fetch(url);
+    return await result.text();
+}
+export const _webFunctions = { fetchText }

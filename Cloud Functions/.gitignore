@@ -1,3 +1,7 @@
 *.png
 .env
 *.import
+
+# Generated coverage report from the unit testing
+cov_profile/
+cov_profile.lcov

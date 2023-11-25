@@ -25,7 +25,7 @@ export async function findSpecies(request: Request): Promise<Response> {
         SUPABASE_URL,
         SUPABASE_SERVICE_ROLE_KEY
     );
-    helperFunctions = new BirdHelperFunctions(supabaseAdminClient, OPENAI_API_KEY, VERSION);
+    helperFunctions = new BirdHelperFunctions(OPENAI_API_KEY, VERSION);
     const requestUrl = new URL(request.url)
     const speciesName = requestUrl.searchParams.get("species")?.toLowerCase();
 
@@ -78,16 +78,16 @@ async function findWikiPage(species: string, client: SupabaseClient): Promise<Re
 
     // console.log(searchBody);
     const speciesUrl: URL = new URL(urls[0]);
-    return await parseWikiPage(speciesUrl);
+    return await parseWikiPage(speciesUrl, helperFunctions);
 }
 
-export async function parseWikiPage(speciesUrl: URL): Promise<Response> {
+export async function parseWikiPage(speciesUrl: URL, birdHelperFunctions: BirdHelperFunctions): Promise<Response> {
     const wikiPageBody = await _webFunctions.fetchText(speciesUrl);   
     const domParser = new DOMParser();
     const newBirdInfo: BirdWikiPage = new BirdWikiPage();
 
     const content: HTMLDocument | null = domParser.parseFromString(wikiPageBody, "text/html");
-    
+
     if (content == null || wikiPageBody == "") {
         return new Response(JSON.stringify({ error: "Unable to get HTML body" }), {
             headers: headers,
@@ -105,13 +105,6 @@ export async function parseWikiPage(speciesUrl: URL): Promise<Response> {
         return new Response(JSON.stringify({ error: "Unable to find family name" }), {
             headers: headers,
             status: 501
-        });
-    }
-
-    if (familyNameResult != null) {
-        return new Response(JSON.stringify({ error: "Unable to find family name" }), {
-            headers: headers,
-            status: 200
         });
     }
 
@@ -147,12 +140,8 @@ export async function parseWikiPage(speciesUrl: URL): Promise<Response> {
     const paragraphs: Map<string, string[]> = new Map();
     let lastIndex = 0;
 
-    // const headingResults = wikiText.match(/\n([a-zA-Z ]+)\[edit\]\n/g);
     const headingResults: string[] = [];
     wikiTextHtml.querySelectorAll("h2, h3").forEach(node => headingResults.push(node.textContent));
-    // const headings2 = wikiTextHtml.getElementsByTagName("H3");
-    // const headingResults = wikiText.match(/\n([a-zA-Z ]+)\[edit\]\n/g)
-
     // Remove references from the headings
     const referenceHeading = potentialReferenceHeadings.find(heading => {
         if(headingResults.includes(heading)) {
@@ -160,27 +149,20 @@ export async function parseWikiPage(speciesUrl: URL): Promise<Response> {
         }
     }) as string
 
-    const referenceIndex = headingResults.findIndex((header, index) => {
+    const referenceIndex = headingResults.findIndex((header) => {
         if (header == referenceHeading) {
             return true;
         }
     });
 
-    
     if (referenceIndex != -1) {
         headingResults.splice(referenceIndex, headingResults.length - referenceIndex);
-    }
-
-    if (headingResults == null) {
-        return new Response(JSON.stringify({ error: "Unable to parse wiki" }), {
-            headers: headers,
-            status: 501
-        });
     }
 
     if (headingResults.length > 1) {
         headingResults.unshift("\nSummary[edit]\n");
         for (let i = 0; i < headingResults.length; i++) {
+            //Get all the text from the current header to the next one
             const index = (i != headingResults.length-1) ? wikiText.indexOf(headingResults[i+1]) : wikiText.length;
             const paragraph = wikiText.substring(lastIndex, index)
                 .replace(headingResults[i], "")
@@ -188,7 +170,7 @@ export async function parseWikiPage(speciesUrl: URL): Promise<Response> {
                 .trim()
                 .split("\n\n")
                 .map(p => p.replace("\n", ""));
-            const trimmedHeading = headingResults[i].trim().replace("[edit]", "");
+            const trimmedHeading = headingResults[i].replace("[edit]", "").replace("\n", "").trim();
             paragraphs.set(trimmedHeading, paragraph);
             lastIndex = index;
         }
@@ -200,8 +182,6 @@ export async function parseWikiPage(speciesUrl: URL): Promise<Response> {
             }
         }) as string
     
-        console.log(paragraphs)
-
         // Reduce the description if it too big
         const potentialDescriptionHeading = potentialDescriptionHeadings.find((value) => {
             const data = paragraphs.get(value);
@@ -211,14 +191,16 @@ export async function parseWikiPage(speciesUrl: URL): Promise<Response> {
         }) as string
 
         const description = paragraphs.get(potentialDescriptionHeading) as string[]
+
+
         if (description.join().length > 3500) {
-            newBirdInfo.birdDescription = await helperFunctions.summariseDescription(description)
+            newBirdInfo.birdDescription = await birdHelperFunctions.summariseDescription(description)
         } else {
             newBirdInfo.birdDescription = description.join()
         }
     
-        newBirdInfo.birdDiet = (paragraphs.get(potentialDietHeading) as string[]).join()
-        newBirdInfo.birdSummary = (paragraphs.get("Summary") as string[]).join()
+        newBirdInfo.birdDiet = (paragraphs.get(potentialDietHeading) as string[]).join();
+        newBirdInfo.birdSummary = (paragraphs.get("Summary") as string[]).join();
     
 
     } else {
@@ -233,7 +215,7 @@ export async function parseWikiPage(speciesUrl: URL): Promise<Response> {
         let allOfText: string;
         // Summarise a bit if too long
         if (allOfTextArr.join().length > 3500) {
-            allOfText = await helperFunctions.summariseDescription(allOfTextArr);
+            allOfText = await birdHelperFunctions.summariseDescription(allOfTextArr);
         } else {
             allOfText = allOfTextArr.join();
         }
@@ -243,10 +225,8 @@ export async function parseWikiPage(speciesUrl: URL): Promise<Response> {
         newBirdInfo.birdSummary = allOfText;
     }
 
-
-    console.log(newBirdInfo);
     // Call the staging function
-    return await stageData(newBirdInfo);
+    return await _functions.stageData(newBirdInfo);
 }
 
 async function stageData(wikiPageInfo: BirdWikiPage): Promise<Response> {
@@ -300,3 +280,5 @@ async function stageData(wikiPageInfo: BirdWikiPage): Promise<Response> {
         });
     }
 }
+
+export const _functions = { stageData };

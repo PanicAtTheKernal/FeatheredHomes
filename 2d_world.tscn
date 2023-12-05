@@ -9133,7 +9133,4 @@ world_rescources = NodePath("../WorldResources")
 player_cam = NodePath("../PlayerCam")
 tile_map = NodePath("../TileMap")
 
-[node name="Bird" parent="." instance=ExtResource("6_pqj27")]
-position = Vector2(255, 216)
-
 [connection signal="timeout" from="RegenFood" to="WorldResources" method="_on_regen_food_timeout"]

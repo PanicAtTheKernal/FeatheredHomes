@@ -1,3 +1,5 @@
+# Code based from https://gdscript.com/solutions/godot-behaviour-tree/
+
 extends Node
 
 class_name Task

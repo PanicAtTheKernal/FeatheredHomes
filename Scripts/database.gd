@@ -1,3 +1,6 @@
+# WORK IN PROGRESS
+# Code for the trait system
+
 extends Node
 
 var config: ConfigFile

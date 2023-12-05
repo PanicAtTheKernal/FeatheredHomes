@@ -37,7 +37,11 @@ supabaseUrl="<Replace with your Supabase instance url>"
 supabaseKey="<Replace with your Supabase service key>"
 
 ```
-6. Open Godot
+6. Open Godot and load the project
+7. Click **Project** in the top
+8. Click **Project Settings**
+9. Click **Plugins** 
+10. Enable the Supabase plugin 
 
 ## Deploying the Supabase functions
 1. Create an .env file in "Cloud Functions/supabase"

@@ -1,5 +1,5 @@
 import { crypto } from "https://deno.land/std@0.202.0/crypto/crypto.ts";
-import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
+import { SupabaseClient, createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
 import OpenAI from 'https://deno.land/x/openai@v4.16.1/mod.ts';
 import { Image } from 'https://deno.land/x/imagescript@1.2.15/mod.ts';
 
@@ -35,14 +35,31 @@ export class BirdWikiPage {
     public birdSummary = "";
 }
 
+export class SupabaseFunctions{
+    private static client: any;
+
+    public static createClient() {
+        if (this.client != null) {
+            return this.client;
+        }
+
+        console.log("Here");
+        const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY") as string;
+        const SUPABASE_URL = Deno.env.get("HOST_URL") as string;
+        this.client = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+        return this.client;
+    }
+}
+
 export class BirdHelperFunctions {
-    private _adminClient: SupabaseClient
+    private _adminClient: SupabaseClient;
     private _openAIClient: OpenAI
     private _version: string
     private _dietMap: Map<string, string>
+    public _functions = { getSummary: this.getSummary, summariseDescription: this.summariseDescription }
 
-    constructor (adminClient: SupabaseClient, openAiKey: string, version: string) {
-        this._adminClient = adminClient;
+    constructor (openAiKey: string, version: string) {
+        this._adminClient = SupabaseFunctions.createClient();
         this._openAIClient = new OpenAI({
             apiKey: openAiKey,
         });
@@ -282,3 +299,9 @@ export class BirdHelperFunctions {
         return result.join()
     }
 }
+
+async function fetchText(url: string | URL): Promise<string> {
+    const result = await fetch(url);
+    return await result.text();
+}
+export const _webFunctions = { fetchText }

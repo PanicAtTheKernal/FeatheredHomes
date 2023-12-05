@@ -1,10 +1,10 @@
 [gd_scene load_steps=8 format=3 uid="uid://cc7jo7b3cgbem"]
 
-[ext_resource type="Script" path="res://AddBird.gd" id="1_tseot"]
-[ext_resource type="Script" path="res://FPS.gd" id="2_bh3mf"]
+[ext_resource type="Script" path="res://Scripts/AddBird.gd" id="1_dkje7"]
+[ext_resource type="Script" path="res://Scripts/UI/FPS.gd" id="2_00lqe"]
 [ext_resource type="Texture2D" uid="uid://b7a6fk0fwanx8" path="res://Assets/crosshair.png" id="3_48hw7"]
 [ext_resource type="Texture2D" uid="uid://8tx3qcoltkgt" path="res://Assets/loading-screen.png" id="4_h3nv2"]
-[ext_resource type="Script" path="res://Scripts/World/CircleProgress.gd" id="5_blxf1"]
+[ext_resource type="Script" path="res://Scripts/UI/CircleProgress.gd" id="5_afy4f"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_55m4q"]
 atlas = ExtResource("4_h3nv2")
@@ -15,7 +15,7 @@ atlas = ExtResource("4_h3nv2")
 region = Rect2(100, 0, 100, 100)
 
 [node name="CanvasLayer" type="CanvasLayer"]
-script = ExtResource("1_tseot")
+script = ExtResource("1_dkje7")
 
 [node name="Label" type="Label" parent="."]
 offset_left = 12.0
@@ -23,7 +23,7 @@ offset_top = 13.0
 offset_right = 101.0
 offset_bottom = 39.0
 text = "Hello world"
-script = ExtResource("2_bh3mf")
+script = ExtResource("2_00lqe")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 anchors_preset = 8
@@ -75,6 +75,7 @@ layout_mode = 2
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="VBoxContainer/HBoxContainer/Control"]
 custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 scale = Vector2(0.31, 0.31)
@@ -83,6 +84,6 @@ fill_mode = 4
 texture_under = SubResource("AtlasTexture_55m4q")
 texture_progress = SubResource("AtlasTexture_lwoqc")
 radial_initial_angle = 360.0
-script = ExtResource("5_blxf1")
+script = ExtResource("5_afy4f")
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]

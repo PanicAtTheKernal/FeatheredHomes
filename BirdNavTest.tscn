@@ -1,7 +1,7 @@
-[gd_scene load_steps=19 format=3 uid="uid://cquo65bvi3v3n"]
+[gd_scene load_steps=18 format=3 uid="uid://cquo65bvi3v3n"]
 
-[ext_resource type="Script" path="res://bird.gd" id="1_h23r3"]
-[ext_resource type="SpriteFrames" uid="uid://bod74p3fnpyxm" path="res://Assets/eurasian-blue-tit.tres" id="2_i3dmd"]
+[ext_resource type="Script" path="res://Scripts/Bird/bird.gd" id="1_pemh6"]
+[ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="2_fcsa4"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_animation.gd" id="3_u2c0p"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="6_lv1sx"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/selector.gd" id="7_7tjyf"]
@@ -10,7 +10,6 @@
 [ext_resource type="Script" path="res://Scripts/Bird/Conditions/find_nearest_food.gd" id="10_e2vsf"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/calculate_distances.gd" id="11_cigv8"]
 [ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_ground_is_efficient.gd" id="12_7233k"]
-[ext_resource type="Script" path="res://Scripts/Behaviour Tree/leaf.gd" id="13_4ayn2"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/move_on_ground.gd" id="13_gm3ge"]
 [ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_flying_is_efficient.gd" id="14_nx48i"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/fly_to_target.gd" id="15_mdxmt"]
@@ -26,11 +25,11 @@ z_index = 2
 collision_layer = 0
 motion_mode = 1
 wall_min_slide_angle = 0.0
-script = ExtResource("1_h23r3")
+script = ExtResource("1_pemh6")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.15, 0.15)
-sprite_frames = ExtResource("2_i3dmd")
+sprite_frames = ExtResource("2_fcsa4")
 animation = &"Flight"
 autoplay = "default"
 script = ExtResource("3_u2c0p")
@@ -145,12 +144,6 @@ script = ExtResource("14_nx48i")
 
 [node name="FlyToTarget" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector/FlightSequence"]
 script = ExtResource("15_mdxmt")
-
-[node name="Ingored2" type="Node" parent="BirdBehaviouralTree/Selector"]
-script = ExtResource("13_4ayn2")
-
-[node name="Ingored" type="Node" parent="BirdBehaviouralTree/Selector/Ingored2"]
-script = ExtResource("13_4ayn2")
 
 [connection signal="change_state" from="." to="AnimatedSprite2D" method="_on_bird_change_state"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_animation_finished"]

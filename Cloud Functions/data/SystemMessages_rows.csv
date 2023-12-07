@@ -1,0 +1,8 @@
+SystemMessageId,SystemMessageName,SystemMessageContent
+4bd16ee8-8daa-4301-bc06-21df16687887,Diet,"You will be given a description of a bird's diet. Your role is to find the most common food and return the answer using only the values in the list below. Do no include any other text just the value from the list below. 
+
+The list: 
+<>"
+2356ca00-1215-4eed-b80f-eeb1d4cf5f2b,DietSummary,"Your role is to extract all information about the diet and return that as the result. Any information about that not about how it feeds is ignored "
+8e42e02f-9ea6-483c-b24a-daf8ed2d33c8,Summary,Your role is to create a basic summary for people who have a basic understanding of birds
+18774e36-7fc7-4a11-9164-2a27c480b34f,BodyDescription,"The user will provide a text description of a bird and a template. Your role is to extract colour information from the description of the various parts of the bird and then store the RGB value as an array in the corresponding body part in the JSON structure defined here, which corresponds with the given image ""<>"". If the description does not specify the colour, you can use the colour of the closest body part instead within reason. No null values. Print the JSON in the exact order given to you."

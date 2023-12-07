@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BirdSpecies" load_steps=3 format=3 uid="uid://x1v6f8nk08mm"]
+
+[ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="1_dibdc"]
+[ext_resource type="Script" path="res://Scripts/Bird/bird_species_info.gd" id="2_c702t"]
+
+[resource]
+script = ExtResource("2_c702t")
+bird_animations = ExtResource("1_dibdc")
+bird_range = 90.0
+bird_max_stamina = 28019.7
+bird_stamina = 1000.0
+bird_ground_cost = 50.0
+bird_take_off_cost = 100.0
+bird_flight_cost = 20.0
+bird_traits = Array[String](["Can not walk long distances"])

@@ -1,0 +1,2 @@
+traitId,traitName,traitRule,traitPattern
+26118393-ba5c-4bcb-a87e-7f64364982ce,Can not walk long distances,"{""FreeRoamSequence"":{""CalculateDistances"":{""MovementSelector"":{""GroundSequence"":[]}}}}",{}

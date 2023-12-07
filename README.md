@@ -1,3 +1,7 @@
+C20456964 Daniel Kondabarov Final Year Project
+
+Github: https://github.com/PanicAtTheKernal/FinalYearProject
+
 # Notes
 - All code files end with .ts or .gd
 - .tcsn are scene files for Godot

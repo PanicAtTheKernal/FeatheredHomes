@@ -1,0 +1,77 @@
+[gd_resource type="SpriteFrames" load_steps=10 format=3 uid="uid://bn5ofc4v5g8hy"]
+
+[ext_resource type="Texture2D" uid="uid://cne3fb0hrlhbh" path="res://Assets/Birds/chickadees-sprite-sheet.png" id="1_lkjom"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_20rqj"]
+atlas = ExtResource("1_lkjom")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g1agn"]
+atlas = ExtResource("1_lkjom")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o0dw7"]
+atlas = ExtResource("1_lkjom")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27ed2"]
+atlas = ExtResource("1_lkjom")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uukff"]
+atlas = ExtResource("1_lkjom")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oo4hw"]
+atlas = ExtResource("1_lkjom")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nd14d"]
+atlas = ExtResource("1_lkjom")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rvlq8"]
+atlas = ExtResource("1_lkjom")
+region = Rect2(0, 0, 64, 64)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_20rqj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g1agn")
+}],
+"loop": true,
+"name": &"Flight",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o0dw7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_27ed2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uukff")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oo4hw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nd14d")
+}],
+"loop": false,
+"name": &"Take-off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rvlq8")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]

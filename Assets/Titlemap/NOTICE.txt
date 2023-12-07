@@ -1,0 +1,5 @@
+roguelikeSheet_magenta.png and roguelikeSheet_transparent.png are form
+https://kenney.nl/assets/roguelike-rpg-pack
+
+Licenced under Creative Commons Zero (CC0)
+Licence: https://creativecommons.org/publicdomain/zero/1.0/

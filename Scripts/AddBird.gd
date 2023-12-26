@@ -29,7 +29,7 @@ func _ready():
 	config = Database.config
 	
 	progress_bar.hide()
-	# TEMP
+	# TEMP. This is more of a feature now rather than a temp fix
 	if !DirAccess.dir_exists_absolute(ASSET_PATH):
 		DirAccess.make_dir_recursive_absolute(ASSET_PATH)
 
@@ -127,7 +127,7 @@ func build_animation(shape_id: String, template_url: String) -> SpriteFrames:
 	
 	var animationTemplateQuery: SupabaseQuery = SupabaseQuery.new().from("BirdShape").select().eq("BirdShapeId", shape_id)
 	var animationTemplateResult = await Supabase.database.query(animationTemplateQuery).completed
-	var animatinoTemplate = animationTemplateResult.data[0]["BirdShapeAnimationTemplate"]
+	var animationTemplate = animationTemplateResult.data[0]["BirdShapeAnimationTemplate"]
 	
 	# TODO CHECK IF IMAGE EXISTS ALREADY
 	var storageResult: StorageTask = await Supabase.storage.from("BirdAssets").download(image_name, ASSET_PATH + image_file_name).completed
@@ -144,16 +144,17 @@ func build_animation(shape_id: String, template_url: String) -> SpriteFrames:
 	var size = height
 	# Each frame is equal in size and the sprite sheet is in a 1x? configuration therefore to get 
 	# the amount of frame is to divide the width by the height
-	var amount_of_frames = floor(width/height)
+	var sprite_width = animationTemplate["spriteWidth"]
+	var amount_of_frames = floor(width/sprite_width)
 	var frames: Array[AtlasTexture] = []
 	for i in range(0, amount_of_frames):
 		var newFrame = AtlasTexture.new()
 		newFrame.atlas = image
-		newFrame.region = Rect2(size*i, 0, size, size)
+		newFrame.region = Rect2(sprite_width*i, 0, sprite_width, height)
 		frames.push_back(newFrame)
 	
 	var sprite_frames = SpriteFrames.new()
-	var animations = animatinoTemplate["animation"]
+	var animations = animationTemplate["animation"]
 	var animation_names = animations.keys()
 	print(animation_names)
 	for animation_name in animation_names:

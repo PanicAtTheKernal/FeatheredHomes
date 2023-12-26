@@ -12,13 +12,14 @@ config_version=5
 
 config/name="Fyp Prototype 1"
 run/main_scene="res://2d_world.tscn"
-config/features=PackedStringArray("4.1", "Mobile")
+config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Supabase="*res://addons/supabase/Supabase/supabase.gd"
 Database="*res://Scripts/database.gd"
+Startup="*res://Scripts/startup.gd"
 
 [dotnet]
 

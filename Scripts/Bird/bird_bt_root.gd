@@ -2,6 +2,10 @@ extends Task
 
 class_name BirdBehaviouralTree
 
+@export_category("Nodes")
+@export
+var navigation_data: NavigationData
+
 var is_ground_agent_updated: bool = false
 var is_flight_agent_updated: bool = false
 
@@ -10,9 +14,8 @@ func _ready():
 	var species: BirdSpecies = parent.bird_species
 	self.data = {
 		"tile_map": parent.tile_map,
-		"ground_agent": parent.find_child("GroundAgent"),
-		"flight_agent": parent.find_child("FlightAgent"),
-		"target": BirdHelperFunctions.calculate_tile_position(parent.target),
+		"species": species,
+		"target": parent.target.position,
 		"target_reached": false,
 		"character_body": parent,
 		"world_resources": parent.world_resources,
@@ -29,11 +32,11 @@ func _ready():
 	}
 	super.start()
 	# Don't start processing the AI until the nav_agents have updated
-	set_physics_process(false)
+	#set_physics_process(false)
 
 #
 func _process(_delta):
-	if is_ground_agent_updated and is_flight_agent_updated:
+	if is_ground_agent_updated:
 		set_physics_process(true)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -43,16 +46,17 @@ func _physics_process(delta):
 
 func _on_navigation_update_timeout():
 	# If flight_agent is not set then none of the data is set
-	if self.data["flight_agent"] == null:
-		return
-	if data["ground_agent"].target_position != data["target"]:
-		self.data["flight_agent"].set_navigation_map(data["tile_map"].get_navigation_map(1))
-		self.data["flight_agent"].target_position = data["target"]
-		self.data["ground_agent"].target_position = data["target"]
-		self.data["flight_agent"].get_next_path_position()
-		self.data["ground_agent"].get_next_path_position()
-		self.data["ground_path"] = self.data["ground_agent"].get_current_navigation_result().path
-	self.data["calculate_distances"] = true
+	#if self.data["flight_agent"] == null:
+		#return
+	#if data["ground_agent"].target_position != data["target"]:
+		#self.data["flight_agent"].set_navigation_map(data["tile_map"].get_navigation_map(1))
+		#self.data["flight_agent"].target_position = data["target"]
+		#self.data["ground_agent"].target_position = data["target"]
+		#self.data["flight_agent"].get_next_path_position()
+		#self.data["ground_agent"].get_next_path_position()
+		#self.data["ground_path"] = self.data["ground_agent"].get_current_navigation_result().path
+	#self.data["calculate_distances"] = true
+	pass
 
 func run():
 	for child in get_children():

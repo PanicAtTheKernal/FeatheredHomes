@@ -9,8 +9,8 @@
 [ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_stamina.gd" id="9_2lpgj"]
 [ext_resource type="Script" path="res://Scripts/Bird/Conditions/find_nearest_food.gd" id="10_e2vsf"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/calculate_distances.gd" id="11_cigv8"]
+[ext_resource type="Script" path="res://Scripts/Bird/Navigation/move.gd" id="11_latg4"]
 [ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_ground_is_efficient.gd" id="12_7233k"]
-[ext_resource type="Script" path="res://Scripts/Bird/Actions/move_on_ground.gd" id="13_gm3ge"]
 [ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_flying_is_efficient.gd" id="14_nx48i"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/fly_to_target.gd" id="15_mdxmt"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/consume_food.gd" id="16_uergt"]
@@ -86,7 +86,7 @@ script = ExtResource("8_eo2tt")
 script = ExtResource("12_7233k")
 
 [node name="MoveOnGround" type="Node" parent="BirdBehaviouralTree/Selector/Sequence/CalculateDistances/MovementSelector/GroundSequence"]
-script = ExtResource("13_gm3ge")
+script = ExtResource("11_latg4")
 
 [node name="FlightSequence" type="Node" parent="BirdBehaviouralTree/Selector/Sequence/CalculateDistances/MovementSelector"]
 script = ExtResource("8_eo2tt")
@@ -134,7 +134,7 @@ script = ExtResource("8_eo2tt")
 script = ExtResource("12_7233k")
 
 [node name="MoveOnGround" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector/GroundSequence"]
-script = ExtResource("13_gm3ge")
+script = ExtResource("11_latg4")
 
 [node name="FlightSequence" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector"]
 script = ExtResource("8_eo2tt")

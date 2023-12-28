@@ -3,16 +3,16 @@ extends Task
 class_name FindNearestFood
 
 var world_resources: WorldResources
-var character_body: CharacterBody2D
-var bird_range: float
+@export
+var navigation_data: NavigationData
 var min_distance: float = 5
 
-# TODO look at the perfromance under load, also there is an issue where the shortest distance may be to 
+# TODO look at the perfromance under load
 func run():
 	var food_sources = world_resources.food_sources
 	var distances: Array[float] = []
 	var list_sources: Dictionary = {}
-	var character_position: Vector2 = character_body.position
+	var character_position: Vector2 = navigation_data.character_body.global_position
 	for food_source in food_sources:
 		# Only add resouce that are full
 		if food_source.current_state == "Empty":
@@ -28,12 +28,9 @@ func run():
 		super.fail()
 		return
 
-	#if shortest_distance <= min_distance:
-	#	super.fail()
-	#	return
 	var new_target = list_sources[shortest_distance]
 	print("New_target" + str(new_target))
-	data["target"] = new_target
+	navigation_data.calulate_distance.update_target(new_target)
 	# Disable the physics process until the navagation agents updated
 	set_physics_process(false)
 	super.success()
@@ -41,5 +38,3 @@ func run():
 
 func start():
 	world_resources = data["world_resources"]
-	character_body = data["character_body"]
-	bird_range = data["range"]

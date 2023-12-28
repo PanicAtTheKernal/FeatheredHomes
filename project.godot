@@ -54,7 +54,7 @@ pointing/emulate_touch_from_mouse=true
 [layer_names]
 
 2d_navigation/layer_1="Ground"
-2d_navigation/layer_2="Sky"
+2d_navigation/layer_2="Water"
 2d_navigation/layer_3="Birds"
 
 [rendering]

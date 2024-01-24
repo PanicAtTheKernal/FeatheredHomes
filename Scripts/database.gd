@@ -13,6 +13,8 @@ func _ready():
 	is_connected_to_db = false
 	config = load_env_file() 
 	await login()
+	if not is_connected_to_db:
+		return
 	await load_traits()
 	print(traits)
 
@@ -29,7 +31,7 @@ func login():
 	var password = config.get_value(ENVIRONMENT_VARIABLES, "PASSWORD")
 	var sign_result: AuthTask = await Supabase.auth.sign_in(email, password).completed
 	if sign_result.user == null:
-		print("Failed to sign in")
+		print("Database: Failed to sign in")
 		is_connected_to_db = false
 	else: 
 		is_connected_to_db = true

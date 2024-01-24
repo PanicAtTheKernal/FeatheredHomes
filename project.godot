@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 Supabase="*res://addons/supabase/Supabase/supabase.gd"
 Database="*res://Scripts/database.gd"
 Startup="*res://Scripts/startup.gd"
+CameraNode="*res://Scripts/Camera.gd"
 
 [dotnet]
 
@@ -27,7 +28,7 @@ project/assembly_name="Fyp Prototype 1"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/supabase/plugin.cfg")
+enabled=PackedStringArray("res://addons/GodotGetImage/plugin.cfg", "res://addons/supabase/plugin.cfg")
 
 [input]
 

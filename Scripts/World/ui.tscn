@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://cc7jo7b3cgbem"]
+[gd_scene load_steps=13 format=3 uid="uid://cc7jo7b3cgbem"]
 
 [ext_resource type="Script" path="res://Scripts/AddBird.gd" id="1_dkje7"]
 [ext_resource type="Script" path="res://Scripts/UI/FPS.gd" id="2_00lqe"]
 [ext_resource type="Texture2D" uid="uid://b7a6fk0fwanx8" path="res://Assets/crosshair.png" id="3_48hw7"]
 [ext_resource type="Texture2D" uid="uid://8tx3qcoltkgt" path="res://Assets/loading-screen.png" id="4_h3nv2"]
 [ext_resource type="Script" path="res://Scripts/UI/CircleProgress.gd" id="5_afy4f"]
+[ext_resource type="Texture2D" uid="uid://bessgbje7wc4q" path="res://Assets/CameraButtonSprite.png" id="6_y6sqt"]
+[ext_resource type="Script" path="res://Scripts/UI/CameraButton.gd" id="7_v6h0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_55m4q"]
 atlas = ExtResource("4_h3nv2")
@@ -13,6 +15,21 @@ region = Rect2(0, 0, 100, 100)
 [sub_resource type="AtlasTexture" id="AtlasTexture_lwoqc"]
 atlas = ExtResource("4_h3nv2")
 region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fa66v"]
+atlas = ExtResource("6_y6sqt")
+region = Rect2(0, 0, 32, 32)
+margin = Rect2(0, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ytwla"]
+atlas = ExtResource("6_y6sqt")
+region = Rect2(64, 0, 32, 32)
+margin = Rect2(0, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvfbh"]
+atlas = ExtResource("6_y6sqt")
+region = Rect2(32, 0, 32, 32)
+margin = Rect2(0, 0, 10, 10)
 
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource("1_dkje7")
@@ -25,7 +42,7 @@ offset_bottom = 39.0
 text = "Hello world"
 script = ExtResource("2_00lqe")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="Crosshair" type="TextureRect" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -86,4 +103,23 @@ texture_progress = SubResource("AtlasTexture_lwoqc")
 radial_initial_angle = 360.0
 script = ExtResource("5_afy4f")
 
+[node name="TextureButton" type="TextureButton" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -42.0
+offset_top = -42.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(2.5, 2.5)
+pivot_offset = Vector2(48, 48)
+texture_normal = SubResource("AtlasTexture_fa66v")
+texture_pressed = SubResource("AtlasTexture_ytwla")
+texture_hover = SubResource("AtlasTexture_kvfbh")
+stretch_mode = 0
+script = ExtResource("7_v6h0r")
+
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="TextureButton" to="TextureButton" method="_on_pressed"]

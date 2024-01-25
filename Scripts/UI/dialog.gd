@@ -8,7 +8,7 @@ var dialog_text : Label = $NinePatchRect/Text
 var dialog: Control = $"."
 
 func _ready():
-	dialog.visible = true
+	dialog.visible = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

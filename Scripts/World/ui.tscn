@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cc7jo7b3cgbem"]
+[gd_scene load_steps=22 format=3 uid="uid://cc7jo7b3cgbem"]
 
 [ext_resource type="Script" path="res://Scripts/AddBird.gd" id="1_dkje7"]
 [ext_resource type="Script" path="res://Scripts/UI/FPS.gd" id="2_00lqe"]
@@ -9,7 +9,9 @@
 [ext_resource type="Script" path="res://Scripts/UI/CameraButton.gd" id="7_v6h0r"]
 [ext_resource type="PackedScene" uid="uid://d2vy7b25mpbee" path="res://Scripts/UI/dialog.tscn" id="8_q6ckc"]
 [ext_resource type="Texture2D" uid="uid://bxdhaypp45ddw" path="res://Assets/big-button-sprite.png" id="9_8lhek"]
+[ext_resource type="Script" path="res://Scripts/World/zoom_out_button.gd" id="9_l2jun"]
 [ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="10_jdn2f"]
+[ext_resource type="Script" path="res://Scripts/World/zoom_in_button.gd" id="11_7ymrx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_55m4q"]
 atlas = ExtResource("4_h3nv2")
@@ -50,7 +52,7 @@ region = Rect2(32, 0, 32, 32)
 font_size = 32
 font_color = Color(0, 0, 0, 1)
 
-[node name="CanvasLayer" type="CanvasLayer"]
+[node name="UI" type="CanvasLayer"]
 script = ExtResource("1_dkje7")
 
 [node name="Label" type="Label" parent="."]
@@ -62,6 +64,7 @@ text = "Hello world"
 script = ExtResource("2_00lqe")
 
 [node name="Crosshair" type="TextureRect" parent="."]
+unique_name_in_owner = true
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -156,16 +159,17 @@ text = "Debug Label
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -136.0
-offset_top = 160.0
-offset_right = -96.0
-offset_bottom = 200.0
+offset_left = -152.0
+offset_top = 184.0
+offset_right = -112.0
+offset_bottom = 224.0
 grow_horizontal = 0
 scale = Vector2(3, 3)
 texture_normal = SubResource("AtlasTexture_xd3k8")
 texture_pressed = SubResource("AtlasTexture_148hh")
 texture_hover = SubResource("AtlasTexture_614tu")
 stretch_mode = 0
+script = ExtResource("9_l2jun")
 
 [node name="Label" type="Label" parent="ZoomOutButton"]
 layout_mode = 1
@@ -191,16 +195,17 @@ vertical_alignment = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -136.0
-offset_top = 16.0
-offset_right = -96.0
-offset_bottom = 56.0
+offset_left = -152.0
+offset_top = 32.0
+offset_right = -112.0
+offset_bottom = 72.0
 grow_horizontal = 0
 scale = Vector2(3, 3)
 texture_normal = SubResource("AtlasTexture_xd3k8")
 texture_pressed = SubResource("AtlasTexture_148hh")
 texture_hover = SubResource("AtlasTexture_614tu")
 stretch_mode = 0
+script = ExtResource("11_7ymrx")
 
 [node name="Label" type="Label" parent="ZoomInButton"]
 layout_mode = 1
@@ -221,9 +226,12 @@ label_settings = SubResource("LabelSettings_bx2qb")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Dialog" parent="." instance=ExtResource("8_q6ckc")]
+[node name="Dialog" parent="." groups=["Dialog"] instance=ExtResource("8_q6ckc")]
+unique_name_in_owner = true
 visible = false
 offset_left = -0.00012207
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="CameraButton" to="CameraButton" method="_on_pressed"]
+[connection signal="pressed" from="ZoomOutButton" to="ZoomOutButton" method="_on_pressed"]
+[connection signal="pressed" from="ZoomInButton" to="ZoomInButton" method="_on_pressed"]

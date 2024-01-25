@@ -7,7 +7,7 @@ const MAX_ZOOM_VEC: Vector2 = Vector2(MAX_ZOOM, MAX_ZOOM)
 const MIN_ZOOM_VEC: Vector2 = Vector2(MIN_ZOOM, MIN_ZOOM)
 
 @export
-var zoom_increment: float = 0.2
+var zoom_increment: float = 1.0
 @export
 var tile_map: TileMap
 
@@ -32,13 +32,15 @@ func _input(event):
 				dragging = true
 			elif dragging and not event.pressed:
 				dragging = false
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP and zoom < MAX_ZOOM_VEC:
-			zoom += Vector2(zoom_increment, zoom_increment) 
-		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and zoom > MIN_ZOOM_VEC:
-			zoom -= Vector2(zoom_increment, zoom_increment) 
-		
 	
 	# Move the camera
 	if event is InputEventMouseMotion and dragging:
 		position -= event.relative / zoom
 
+func zoom_in():
+	if zoom < MAX_ZOOM_VEC:
+		zoom += Vector2(zoom_increment, zoom_increment) 
+
+func zoom_out():
+	if zoom > MIN_ZOOM_VEC:
+		zoom -= Vector2(zoom_increment, zoom_increment) 

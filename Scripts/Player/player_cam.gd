@@ -1,7 +1,8 @@
 extends Camera2D
 
-const MIN_ZOOM: float = 5.0
+const MIN_ZOOM: float = 6.0
 const MAX_ZOOM: float = 9.0
+const TILE_SIZE: int = 16
 const MAX_ZOOM_VEC: Vector2 = Vector2(MAX_ZOOM, MAX_ZOOM)
 const MIN_ZOOM_VEC: Vector2 = Vector2(MIN_ZOOM, MIN_ZOOM)
 
@@ -13,6 +14,16 @@ var tile_map: TileMap
 var dragging: bool = false
 
 var current_state: String
+	
+func _ready():
+	# Create the camera limits
+	var map_size = tile_map.get_used_rect()
+	var start = Vector2(map_size.position * TILE_SIZE)
+	var end = Vector2((map_size.size + map_size.position) * TILE_SIZE)
+	limit_top = start.y
+	limit_left = start.x
+	limit_bottom = end.y
+	limit_right = end.x - 16
 	
 func _input(event):
 	if event is InputEventMouseButton:
@@ -27,5 +38,7 @@ func _input(event):
 			zoom -= Vector2(zoom_increment, zoom_increment) 
 		
 	
+	# Move the camera
 	if event is InputEventMouseMotion and dragging:
 		position -= event.relative / zoom
+

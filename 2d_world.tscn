@@ -99,10 +99,7 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(-8, -8, 8, -8, 8, 8, -8
 source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 0.0
 
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_436i0"]
-vertices = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)])
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_pcs0s"]
 source_geometry_group_name = &"navigation_polygon_source_group"
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_v8e8n"]
@@ -8991,37 +8988,37 @@ separation = Vector2i(1, 1)
 56:25/0/physics_layer_0/angular_velocity = 0.0
 56:25/0/physics_layer_1/linear_velocity = Vector2(0, 0)
 56:25/0/physics_layer_1/angular_velocity = 0.0
-56:25/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_436i0")
+56:25/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_pcs0s")
 56:26/0 = 0
 56:26/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 56:26/0/physics_layer_0/angular_velocity = 0.0
 56:26/0/physics_layer_1/linear_velocity = Vector2(0, 0)
 56:26/0/physics_layer_1/angular_velocity = 0.0
-56:26/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_436i0")
+56:26/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_pcs0s")
 56:27/0 = 0
 56:27/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 56:27/0/physics_layer_0/angular_velocity = 0.0
 56:27/0/physics_layer_1/linear_velocity = Vector2(0, 0)
 56:27/0/physics_layer_1/angular_velocity = 0.0
-56:27/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_436i0")
+56:27/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_pcs0s")
 56:28/0 = 0
 56:28/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 56:28/0/physics_layer_0/angular_velocity = 0.0
 56:28/0/physics_layer_1/linear_velocity = Vector2(0, 0)
 56:28/0/physics_layer_1/angular_velocity = 0.0
-56:28/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_436i0")
+56:28/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_pcs0s")
 56:29/0 = 0
 56:29/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 56:29/0/physics_layer_0/angular_velocity = 0.0
 56:29/0/physics_layer_1/linear_velocity = Vector2(0, 0)
 56:29/0/physics_layer_1/angular_velocity = 0.0
-56:29/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_436i0")
+56:29/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_pcs0s")
 56:30/0 = 0
 56:30/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 56:30/0/physics_layer_0/angular_velocity = 0.0
 56:30/0/physics_layer_1/linear_velocity = Vector2(0, 0)
 56:30/0/physics_layer_1/angular_velocity = 0.0
-56:30/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_436i0")
+56:30/0/navigation_layer_1/polygon = SubResource("NavigationPolygon_pcs0s")
 56:0/0 = 0
 56:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 56:0/0/physics_layer_0/angular_velocity = 0.0

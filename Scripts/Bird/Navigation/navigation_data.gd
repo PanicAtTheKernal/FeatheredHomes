@@ -22,6 +22,11 @@ func run():
 func child_success():
 	super.success()
 
+func child_fail():
+	super.fail()
+	
+func child_running():
+	super.running()
 	
 func start():
 	bird_species_info = data["species"]

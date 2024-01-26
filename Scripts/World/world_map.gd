@@ -2,10 +2,12 @@ extends Node2D
 
 class_name WorldResources
 
+const TILE_SIZE = 16
+
 @export
 var food_resources: ProtoFood
-@export
-var tile_map: TileMap
+@onready
+var tile_map: TileMap = %TileMap
 var food_sources: Array[FoodSource]
 
 func _ready():

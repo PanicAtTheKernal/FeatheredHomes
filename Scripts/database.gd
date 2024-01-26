@@ -52,23 +52,16 @@ func load_traits()->Dictionary:
 		traits[trait_name] = trait_entry
 	return traits
 
-func prep_image_request(image: Image):
-	# Convert the image into base64 to send over http
-	var base64_image = Marshalls.raw_to_base64(image.get_data())
-	var request_data = {
-		"data": base64_image
-	}
-	return JSON.stringify(request_data)
-
-func send_image_request(image: Image):
-	var data = prep_image_request(image)
+func send_image_request(image: PackedByteArray):
 	var auth_header = "Authorization: Bearer " + config.get_value(ENVIRONMENT_VARIABLES, "ANON_TOKEN", "")
-	var content_type_header = "Content-Type: application/json"
+	var content_type_header = "Content-Type: application/octet-stream"
 	var headers = [auth_header, content_type_header]
-	var url = config.get_value(ENVIRONMENT_VARIABLES, "FIND_SPECIES_URL", "")
+	var url = config.get_value(ENVIRONMENT_VARIABLES, "URL", "") + config.get_value(ENVIRONMENT_VARIABLES, "IMAGE_ENDPOINT", "")
 	var http_request: HTTPRequest = HTTPRequest.new()
 	http_request.request_completed.connect(on_image_request_complete)
-	http_request.request(url, headers, HTTPClient.METHOD_POST, data)
+	add_child(http_request)
+	http_request.request_raw(url, headers, HTTPClient.METHOD_POST, image)
+	get_tree().call_group("Dialog", "display", "The image has been sent")
 	
 func on_image_request_complete(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray):
 	pass

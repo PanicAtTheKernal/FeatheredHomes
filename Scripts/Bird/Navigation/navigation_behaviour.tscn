@@ -24,6 +24,7 @@ calulate_distance = NodePath("NavigationSequence/CalculateDistance")
 script = ExtResource("2_a4ouu")
 
 [node name="CalculateDistance" type="Node" parent="NavigationSequence" node_paths=PackedStringArray("navigation_data")]
+unique_name_in_owner = true
 script = ExtResource("3_e24xc")
 navigation_data = NodePath("../..")
 

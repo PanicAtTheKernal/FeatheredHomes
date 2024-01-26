@@ -9451,10 +9451,9 @@ sources/0 = SubResource("TileSetAtlasSource_8cjnl")
 script = ExtResource("1_n72i0")
 tile_map = NodePath("../TileMap")
 
-[node name="WorldResources" type="Node2D" parent="." node_paths=PackedStringArray("tile_map")]
+[node name="WorldResources" type="Node2D" parent="."]
 script = ExtResource("2_a1pwr")
 food_resources = ExtResource("3_4j6hx")
-tile_map = NodePath("../TileMap")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_vurad")
@@ -9469,10 +9468,9 @@ layer_1/tile_data = PackedInt32Array(0, 3670016, 27, 65536, 3670016, 27, 131072,
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("2_wbf6d")
 
-[node name="Bird" parent="." node_paths=PackedStringArray("target", "tile_map", "world_resources") instance=ExtResource("8_bkcdb")]
+[node name="Bird" parent="." node_paths=PackedStringArray("target", "world_resources") instance=ExtResource("8_bkcdb")]
 position = Vector2(88, 72)
 target = NodePath("../Marker2D")
-tile_map = NodePath("../TileMap")
 bird_species = ExtResource("8_vs5eu")
 world_resources = NodePath("../WorldResources")
 

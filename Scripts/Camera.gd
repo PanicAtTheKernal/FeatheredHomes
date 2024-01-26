@@ -21,12 +21,7 @@ func _ready():
 			setup_camera_andorid()
 
 func _on_image_request_completed(image_buffers):
-	var image = Image.new()
-	var error = image.load_jpg_from_buffer(image_buffers.values()[0])
-
-	if error != OK:
-		get_tree().call_group("Dialog", "display", "Error loading the image")		
-		
+	var image = image_buffers.values()[0]
 	Database.send_image_request(image)
 
 func _on_error(e):

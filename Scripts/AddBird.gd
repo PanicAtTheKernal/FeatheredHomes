@@ -28,7 +28,7 @@ const ENVIRONMENT_VARIABLES = "environment"
 func _ready():
 	config = Database.config
 	
-	progress_bar.hide()
+	#progress_bar.hide()
 	# TEMP. This is more of a feature now rather than a temp fix
 	if !DirAccess.dir_exists_absolute(ASSET_PATH):
 		DirAccess.make_dir_recursive_absolute(ASSET_PATH)

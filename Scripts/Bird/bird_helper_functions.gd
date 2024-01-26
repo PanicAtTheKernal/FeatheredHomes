@@ -40,8 +40,11 @@ static func add_caloires(amount:float, data: Dictionary):
 
 # Function to make sure the bird is at the target
 static func character_at_target(character_pos: Vector2, target: Vector2)->bool:
-	var distance = target.distance_to(character_pos)
-	if distance < 5.0:
+	# Round the number to the nearest whole number because float precision was causing accuracy issues 
+	var character_pos_rounded = round(character_pos)
+	var target_rounded = round(target)
+	var test = (character_pos_rounded - target_rounded).length()
+	if test < 5.0:
 		return true
 	else:
 		return false

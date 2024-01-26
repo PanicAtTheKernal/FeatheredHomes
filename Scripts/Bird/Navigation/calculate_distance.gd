@@ -24,6 +24,7 @@ var is_standing_on_branch: bool = false
 @export
 var state: States = States.air
 
+@export
 var is_distance_calculated: bool = false
 
 func run():
@@ -33,9 +34,9 @@ func run():
 		super.success()
 		return
 	
-	# TODO remove hardcoding, 16.0 is the tile size, goal is to get the tile distance
+	# 16.0 is the tile size, goal is to get the tile distance
 	target = data["target"]
-	distance = character_body.global_position.distance_to(target)/16.0
+	distance = character_body.global_position.distance_to(target)/WorldResources.TILE_SIZE
 	print("Distance: " + str(distance))
 	
 	if (distance < bird_species_info.bird_ground_max_distance) and (not is_standing_on_branch):

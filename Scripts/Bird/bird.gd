@@ -2,12 +2,6 @@ extends CharacterBody2D
 
 class_name Bird
 
-const TILE_SIZE = 16
-const SPEED = 1500
-const GROUND_COST = 50
-const TAKE_OFF_COST = 100
-const FLIGHT_COST = 20
-
 @export
 var target: Marker2D
 @export

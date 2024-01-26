@@ -19,19 +19,19 @@ var data = null
 
 func running()->void:
 	status = RUNNING
-	#print(self.name + "RUNNING")
+	print(self.name + "RUNNING")
 	if parent != null:
 		parent.child_running()
 
 func success()->void:
 	status = SUCCEEDED
-	#print(self.name + "SUCCEEDED")
+	print(self.name + "SUCCEEDED")
 	if parent != null:
 		parent.child_success()
 
 func fail()->void:
 	status = FAILED
-	#print(self.name + "FAILED")
+	print(self.name + "FAILED")
 	if parent != null:
 		parent.child_fail()
 

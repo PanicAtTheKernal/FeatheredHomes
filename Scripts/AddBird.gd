@@ -15,8 +15,6 @@ var line_edit := $VBoxContainer/HBoxContainer/BirdNameLineEdit as LineEdit
 @onready
 var find_species_request := $FindSpeciesRequest as HTTPRequest
 @onready
-var progress_bar := $VBoxContainer/HBoxContainer/Control/TextureProgressBar as TextureProgressBar
-@onready
 var submit_button := $VBoxContainer/HBoxContainer/Button as Button
 
 var config
@@ -40,7 +38,7 @@ func _on_button_pressed():
 		print("User didn't enter bird name")
 	
 	# Disable the form until the bird spawns
-	progress_bar.show()
+	#progress_bar.show()
 	line_edit.editable = false
 	submit_button.hide()
 	var bird_species_file = find_potential_files(line_edit.text)
@@ -89,7 +87,7 @@ func find_species_request_result(result: int, response_code: int, headers: Packe
 	else:
 		line_edit.editable = true
 		line_edit.placeholder_text = "Error. Please try again"
-		progress_bar.hide()
+		#progress_bar.hide()
 		submit_button.show()
 		print("There was an error retriving the data")
 
@@ -185,5 +183,5 @@ func add_bird_to_scene(file_name: String):
 		# Reset the form
 		line_edit.editable = true
 		line_edit.placeholder_text = "Name"
-		progress_bar.hide()
+		#progress_bar.hide()
 		submit_button.show()

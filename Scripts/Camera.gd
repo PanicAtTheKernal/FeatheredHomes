@@ -6,13 +6,12 @@ class_name Camera
 var plugin
 var plugin_name = "GodotGetImage"
 var options = {
-	"image_height" : 200,
-	"image_width" : 100,
+	"image_height" : 1920,
+	"image_width" : 1080,
 	"keep_aspect" : true,
 	"image_format" : "jpg"
 }
 
-var temp_node: TextureRect
 
 func _ready():
 	var os_name = OS.get_name()
@@ -20,8 +19,10 @@ func _ready():
 		"Android":
 			setup_camera_andorid()
 
+
 func _on_image_request_completed(image_buffers):
 	var image = image_buffers.values()[0]
+	get_tree().call_group("LoadingButton", "show_loading")
 	Database.send_image_request(image)
 
 func _on_error(e):
@@ -42,7 +43,7 @@ func take_picture():
 
 func take_picture_andorid():
 	if plugin:
-		plugin.getCameraImage()
+		plugin.getGalleryImage()
 	else:
 		print(plugin_name, " plugin not loaded!")
 	

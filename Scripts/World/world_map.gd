@@ -36,6 +36,7 @@ func _input(event):
 		"Empty": "Full",
 		"Full": "Empty"
 	}
+	# TODO Need to move this to player cam
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
 			var mouse_position = get_global_mouse_position()

@@ -61,7 +61,11 @@ func send_image_request(image: PackedByteArray):
 	http_request.request_completed.connect(on_image_request_complete)
 	add_child(http_request)
 	http_request.request_raw(url, headers, HTTPClient.METHOD_POST, image)
-	get_tree().call_group("Dialog", "display", "The image has been sent")
 	
 func on_image_request_complete(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray):
-	pass
+	if result != HTTPClient.RESPONSE_OK:
+		printerr(body.get_string_from_utf8())
+	var result_body = JSON.parse_string(body.get_string_from_ascii())
+	get_tree().call_group("Dialog", "display", ("You found a "+result_body.get("birdSpecies")))
+	get_tree().call_group("LoadingButton", "hide_loading")
+	

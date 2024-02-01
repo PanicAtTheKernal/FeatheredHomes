@@ -69,29 +69,34 @@ export class LabelSorter {
 
     private async sortUnknownLabel(label: string) {
         const wikiPage: BirdWikiPage = new BirdWikiPage(label);
-        await wikiPage.setupParser();
-        if(!(await wikiPage.isPageAboutBirds())) {
-            await Supabase.instantiate().addBlacklistLabel({
-                Label: label
-            })
-            this._blacklistedLabels.push(label);
-        } else if(await wikiPage.isBirdSpecies()) {
-            await Supabase.instantiate().addBirdLabel({
-                Label: label,
-                IsSpecific: true,
-                DefaultBird: null
-            })
-            this._birdSpeciesLabels.push(label);
-        } else if(await wikiPage.isBirdFamily()) {
-            const defaultBirdName = await wikiPage.getDefaultBirdName();
-            await Supabase.instantiate().addBirdLabel({
-                Label: label,
-                IsSpecific: false,
-                DefaultBird: defaultBirdName
-            })
-            this._birdFamilyLabels.set(label, defaultBirdName);
-        } else {
-            // This is the case if the bird wiki page is missing important information that make it unviable for the bird asset generator
+        try {
+            await wikiPage.setupParser();
+            if(!(await wikiPage.isPageAboutBirds())) {
+                await Supabase.instantiate().addBlacklistLabel({
+                    Label: label
+                })
+                this._blacklistedLabels.push(label);
+            } else if(await wikiPage.isBirdSpecies()) {
+                await Supabase.instantiate().addBirdLabel({
+                    Label: label,
+                    IsSpecific: true,
+                    DefaultBird: null
+                })
+                this._birdSpeciesLabels.push(label);
+            } else if(await wikiPage.isBirdFamily()) {
+                const defaultBirdName = await wikiPage.getDefaultBirdName();
+                await Supabase.instantiate().addBirdLabel({
+                    Label: label,
+                    IsSpecific: false,
+                    DefaultBird: defaultBirdName
+                })
+                this._birdFamilyLabels.set(label, defaultBirdName);
+            } else {
+                // This is the case if the bird wiki page is missing important information that make it unviable for the bird asset generator
+            }
+        } catch (error) {
+            console.log(`LabelSorter (${label}): ${error}`);
+            // There is no wiki page for it then it gets add to the blacklist
             await Supabase.instantiate().addBlacklistLabel({
                 Label: label
             })

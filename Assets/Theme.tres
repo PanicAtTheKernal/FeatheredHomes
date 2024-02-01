@@ -1,0 +1,9 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://sct70k5b8gxf"]
+
+[ext_resource type="FontFile" uid="uid://c4xvfnmsiyw7t" path="res://Assets/Silkscreen/Silkscreen-Regular.ttf" id="1_b40rr"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dtxb1"]
+
+[resource]
+default_font = ExtResource("1_b40rr")
+Button/styles/disabled = SubResource("StyleBoxTexture_dtxb1")

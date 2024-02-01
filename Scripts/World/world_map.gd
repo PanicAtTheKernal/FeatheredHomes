@@ -2,10 +2,12 @@ extends Node2D
 
 class_name WorldResources
 
+const TILE_SIZE = 16
+
 @export
 var food_resources: ProtoFood
-@export
-var tile_map: TileMap
+@onready
+var tile_map: TileMap = %TileMap
 var food_sources: Array[FoodSource]
 
 func _ready():
@@ -28,12 +30,13 @@ func _ready():
 		if food_source.current_state == "Empty":
 			food_source.update_state("Full")
 
-# This is only prototype code. It's not up to my standard
+# This is only prototype code.
 func _input(event):
 	var update_states = {
 		"Empty": "Full",
 		"Full": "Empty"
 	}
+	# TODO Need to move this to player cam
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
 			var mouse_position = get_global_mouse_position()
@@ -48,9 +51,16 @@ func update_food_state(loc: Vector2i, new_state: String)->FoodSource:
 	for food_source in food_sources:
 		if food_source.position == loc:
 			food_source.update_state(new_state)
+			# TODO Why? Food source will just be whatever the new_state is
 			return food_source
 	return null
 
+func has_food(loc: Vector2i)->bool:
+	for food_source in food_sources:
+		if food_source.position == loc:
+			if food_source.current_state == "Full":
+				return true
+	return false
 
 func _on_regen_food_timeout():
 	print(len(self.get_parent().find_children("", "CharacterBody2D")))

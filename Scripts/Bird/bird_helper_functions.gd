@@ -6,6 +6,9 @@ const SPEED = 75**2
 static func calculate_tile_position(target: Vector2i)->Vector2:
 	return Vector2(target)*TILE_SIZE+(Vector2(TILE_SIZE/2.0, TILE_SIZE/2.0))
 
+static func calculate_map_position(target: Vector2)->Vector2i:
+	return Vector2i(target/TILE_SIZE-(Vector2(TILE_SIZE/2.0, TILE_SIZE/2.0)))
+
 static func total_distance_vect(path: Array[Vector2])->Vector2:
 	var total: Vector2 =  Vector2(0,0)
 	for path_node in path:
@@ -37,8 +40,11 @@ static func add_caloires(amount:float, data: Dictionary):
 
 # Function to make sure the bird is at the target
 static func character_at_target(character_pos: Vector2, target: Vector2)->bool:
-	var distance = target.distance_to(character_pos)
-	if distance < 5.0:
+	# Round the number to the nearest whole number because float precision was causing accuracy issues 
+	var character_pos_rounded = round(character_pos)
+	var target_rounded = round(target)
+	var test = (character_pos_rounded - target_rounded).length()
+	if test < 5.0:
 		return true
 	else:
 		return false
@@ -66,12 +72,19 @@ static func check_if_within_bounds(loc: Vector2, tile_map:TileMap)->bool:
 	else:
 		return false
 
-static func find_random_point_within_tile_map(tile_map:TileMap)->Vector2:
+static func find_random_point_within_tile_map(tile_map:TileMap, starting_loc: Vector2, range: float)->Vector2:
 	var tile_map_rect: Rect2i = tile_map.get_used_rect()
-	# Take account of  the position of the tile map instead of just checking if the location is within the size
+	var tile_range: float = range/2
+	var tile_start_loc: Vector2i = calculate_map_position(starting_loc)
 	var start = tile_map_rect.position
 	var end = tile_map_rect.size + tile_map_rect.position 
-	var point_x = randi_range(start.x, end.x)
-	var point_y = randi_range(start.y, end.y)
+	# Make the range is within the bounds of the map, add/sub one to each edge bound to prevent the target being on the edge
+	var min_x = tile_start_loc.x-tile_range if (tile_start_loc.x-tile_range) > (start.x+1) else start.x+1
+	var max_x = tile_start_loc.x+tile_range if (tile_start_loc.x+tile_range) < (end.x-1) else end.x-1
+	var min_y = tile_start_loc.y-tile_range if (tile_start_loc.y-tile_range) > (start.y+1) else start.y+1
+	var max_y = tile_start_loc.y+tile_range if (tile_start_loc.y+tile_range) < (end.y-1) else end.y-1
+
+	var point_x = randi_range(min_x, max_x)
+	var point_y = randi_range(min_y, max_y)
 	var tile_loc = Vector2i(point_x, point_y)
 	return tile_loc

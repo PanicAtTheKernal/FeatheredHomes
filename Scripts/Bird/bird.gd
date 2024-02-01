@@ -1,13 +1,9 @@
 extends CharacterBody2D
 
-const TILE_SIZE = 16
-const SPEED = 1500
-const GROUND_COST = 50
-const TAKE_OFF_COST = 100
-const FLIGHT_COST = 20
+class_name Bird
 
 @export
-var target: Vector2i
+var target: Marker2D
 @export
 var tile_map: TileMap
 @export
@@ -40,31 +36,12 @@ func _ready():
 	$NavigationTimer.start()
 
 func _process(delta):
-	var result = find_children("GroundSequence")
-	for node in result:
-		node.queue_free()
-	print_tree_pretty()
+	pass
+	#var result = find_children("GroundSequence")
+	#for node in result:
+		#node.queue_free()
 
 func _physics_process(_delta: float)->void:
-	# If no path was found skip the update
-	# TODO FIX THIS
-	#if prefered_agent.get_next_path_position() == Vector2(0,0):
-	#	return
-	
-	#print(is_flying)
-	
-	#if is_flying == false:
-	#	check_ground()
-		
-	#check_target()
-	
-	#var direction = to_local(prefered_agent.get_next_path_position()).normalized()
-	#velocity = direction * SPEED * delta
-	
-	#if prefered_agent.is_target_reached() == false:
-	#	move_and_slide()
-	#else:
-	#	is_flying = false
 	pass
 
 func build_traits():

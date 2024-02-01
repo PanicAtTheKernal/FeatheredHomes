@@ -15,8 +15,6 @@ var line_edit := $VBoxContainer/HBoxContainer/BirdNameLineEdit as LineEdit
 @onready
 var find_species_request := $FindSpeciesRequest as HTTPRequest
 @onready
-var progress_bar := $VBoxContainer/HBoxContainer/Control/TextureProgressBar as TextureProgressBar
-@onready
 var submit_button := $VBoxContainer/HBoxContainer/Button as Button
 
 var config
@@ -28,8 +26,8 @@ const ENVIRONMENT_VARIABLES = "environment"
 func _ready():
 	config = Database.config
 	
-	progress_bar.hide()
-	# TEMP
+	#progress_bar.hide()
+	# TEMP. This is more of a feature now rather than a temp fix
 	if !DirAccess.dir_exists_absolute(ASSET_PATH):
 		DirAccess.make_dir_recursive_absolute(ASSET_PATH)
 
@@ -40,7 +38,7 @@ func _on_button_pressed():
 		print("User didn't enter bird name")
 	
 	# Disable the form until the bird spawns
-	progress_bar.show()
+	#progress_bar.show()
 	line_edit.editable = false
 	submit_button.hide()
 	var bird_species_file = find_potential_files(line_edit.text)
@@ -89,7 +87,7 @@ func find_species_request_result(result: int, response_code: int, headers: Packe
 	else:
 		line_edit.editable = true
 		line_edit.placeholder_text = "Error. Please try again"
-		progress_bar.hide()
+		#progress_bar.hide()
 		submit_button.show()
 		print("There was an error retriving the data")
 
@@ -127,7 +125,7 @@ func build_animation(shape_id: String, template_url: String) -> SpriteFrames:
 	
 	var animationTemplateQuery: SupabaseQuery = SupabaseQuery.new().from("BirdShape").select().eq("BirdShapeId", shape_id)
 	var animationTemplateResult = await Supabase.database.query(animationTemplateQuery).completed
-	var animatinoTemplate = animationTemplateResult.data[0]["BirdShapeAnimationTemplate"]
+	var animationTemplate = animationTemplateResult.data[0]["BirdShapeAnimationTemplate"]
 	
 	# TODO CHECK IF IMAGE EXISTS ALREADY
 	var storageResult: StorageTask = await Supabase.storage.from("BirdAssets").download(image_name, ASSET_PATH + image_file_name).completed
@@ -144,16 +142,17 @@ func build_animation(shape_id: String, template_url: String) -> SpriteFrames:
 	var size = height
 	# Each frame is equal in size and the sprite sheet is in a 1x? configuration therefore to get 
 	# the amount of frame is to divide the width by the height
-	var amount_of_frames = floor(width/height)
+	var sprite_width = animationTemplate["spriteWidth"]
+	var amount_of_frames = floor(width/sprite_width)
 	var frames: Array[AtlasTexture] = []
 	for i in range(0, amount_of_frames):
 		var newFrame = AtlasTexture.new()
 		newFrame.atlas = image
-		newFrame.region = Rect2(size*i, 0, size, size)
+		newFrame.region = Rect2(sprite_width*i, 0, sprite_width, height)
 		frames.push_back(newFrame)
 	
 	var sprite_frames = SpriteFrames.new()
-	var animations = animatinoTemplate["animation"]
+	var animations = animationTemplate["animation"]
 	var animation_names = animations.keys()
 	print(animation_names)
 	for animation_name in animation_names:
@@ -184,5 +183,5 @@ func add_bird_to_scene(file_name: String):
 		# Reset the form
 		line_edit.editable = true
 		line_edit.placeholder_text = "Name"
-		progress_bar.hide()
+		#progress_bar.hide()
 		submit_button.show()

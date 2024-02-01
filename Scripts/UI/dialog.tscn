@@ -1,0 +1,128 @@
+[gd_scene load_steps=11 format=3 uid="uid://d2vy7b25mpbee"]
+
+[ext_resource type="Script" path="res://Scripts/UI/dialog.gd" id="1_6thm6"]
+[ext_resource type="Texture2D" uid="uid://mflsr74fmyc" path="res://Assets/background.png" id="1_eeyfq"]
+[ext_resource type="Texture2D" uid="uid://hkjk1matijex" path="res://Assets/frame.png" id="2_dld5x"]
+[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="3_2eewb"]
+[ext_resource type="Texture2D" uid="uid://c42m0suj2ll7j" path="res://Assets/button-sprite.png" id="4_3iuta"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4408x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_44upk"]
+atlas = ExtResource("4_3iuta")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yoxdl"]
+atlas = ExtResource("4_3iuta")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x5t5d"]
+atlas = ExtResource("4_3iuta")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="LabelSettings" id="LabelSettings_humn0"]
+line_spacing = 1.0
+font_size = 8
+shadow_size = 0
+
+[node name="Dialog" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6thm6")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eeyfq")
+expand_mode = 4
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -328.0
+offset_top = -156.0
+offset_right = -64.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_dld5x")
+region_rect = Rect2(0, 0, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Notice" type="Label" parent="NinePatchRect"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 78.0
+offset_bottom = 31.0
+theme = ExtResource("3_2eewb")
+text = "Notice:"
+
+[node name="Text" type="Label" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 8.0
+offset_top = -28.0
+offset_right = 256.0
+offset_bottom = 24.0
+grow_vertical = 2
+theme = ExtResource("3_2eewb")
+text = "Placeholder text"
+label_settings = SubResource("LabelSettings_4408x")
+autowrap_mode = 2
+
+[node name="OkButton" type="TextureButton" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -56.0
+offset_top = -32.0
+offset_right = -24.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1.5, 1.5)
+texture_normal = SubResource("AtlasTexture_44upk")
+texture_pressed = SubResource("AtlasTexture_yoxdl")
+texture_hover = SubResource("AtlasTexture_x5t5d")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="NinePatchRect/OkButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -6.66667
+offset_right = 6.0
+offset_bottom = 4.33333
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_2eewb")
+text = "OK"
+label_settings = SubResource("LabelSettings_humn0")
+
+[connection signal="pressed" from="NinePatchRect/OkButton" to="." method="_on_ok_pressed"]

@@ -7,3 +7,8 @@ func _process(delta):
 	current_value = (current_value + 5) % 360
 	radial_initial_angle = current_value
 
+func hide_loading():
+	hide()
+
+func show_loading():
+	show()

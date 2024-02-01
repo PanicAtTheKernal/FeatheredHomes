@@ -12,3 +12,6 @@ icon.svg
 icon.svg.import
 
 *.import
+*.translation
+
+android

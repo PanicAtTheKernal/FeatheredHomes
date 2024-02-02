@@ -1,13 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://p8xqyx3jr7kg"]
+[gd_scene load_steps=5 format=3 uid="uid://p8xqyx3jr7kg"]
 
 [ext_resource type="Script" path="res://Scripts/UI/bird_history.gd" id="1_qlrfw"]
-[ext_resource type="Texture2D" uid="uid://hkjk1matijex" path="res://Assets/frame.png" id="2_1duac"]
 [ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="2_8oloa"]
 [ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="4_wtagk"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_in7vh"]
-atlas = ExtResource("2_1duac")
-region = Rect2(3, 3, 26, 26)
 
 [sub_resource type="LabelSettings" id="LabelSettings_3vxmj"]
 font_size = 96
@@ -20,15 +15,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qlrfw")
-
-[node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("AtlasTexture_in7vh")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1

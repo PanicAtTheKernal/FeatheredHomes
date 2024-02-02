@@ -1,34 +1,19 @@
-[gd_scene load_steps=24 format=3 uid="uid://cc7jo7b3cgbem"]
+[gd_scene load_steps=17 format=3 uid="uid://cc7jo7b3cgbem"]
 
 [ext_resource type="Script" path="res://Scripts/AddBird.gd" id="1_dkje7"]
-[ext_resource type="Script" path="res://Scripts/UI/FPS.gd" id="2_00lqe"]
 [ext_resource type="Texture2D" uid="uid://b7a6fk0fwanx8" path="res://Assets/crosshair.png" id="3_48hw7"]
+[ext_resource type="Texture2D" uid="uid://ccuajxhacsxoy" path="res://Assets/camera.png" id="3_r2s6u"]
 [ext_resource type="Texture2D" uid="uid://8tx3qcoltkgt" path="res://Assets/loading-screen.png" id="4_h3nv2"]
-[ext_resource type="Script" path="res://Scripts/UI/CircleProgress.gd" id="5_afy4f"]
-[ext_resource type="Texture2D" uid="uid://bessgbje7wc4q" path="res://Assets/CameraButtonSprite.png" id="6_y6sqt"]
-[ext_resource type="Script" path="res://Scripts/UI/LoadingButton.gd" id="7_dmda8"]
-[ext_resource type="Script" path="res://Scripts/UI/CameraButton.gd" id="7_v6h0r"]
+[ext_resource type="Script" path="res://Scripts/UI/circle_progress.gd" id="5_afy4f"]
+[ext_resource type="Script" path="res://Scripts/UI/zoom_out_button.gd" id="5_igraa"]
+[ext_resource type="Script" path="res://Scripts/UI/zoom_in_button.gd" id="7_7goe6"]
+[ext_resource type="Script" path="res://Scripts/UI/loading_button.gd" id="7_dmda8"]
+[ext_resource type="Script" path="res://Scripts/UI/camera_button.gd" id="7_v6h0r"]
 [ext_resource type="PackedScene" uid="uid://d2vy7b25mpbee" path="res://Scripts/UI/dialog.tscn" id="8_q6ckc"]
-[ext_resource type="Texture2D" uid="uid://bxdhaypp45ddw" path="res://Assets/big-button-sprite.png" id="9_8lhek"]
-[ext_resource type="Script" path="res://Scripts/World/zoom_out_button.gd" id="9_l2jun"]
-[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="10_jdn2f"]
-[ext_resource type="Script" path="res://Scripts/World/zoom_in_button.gd" id="11_7ymrx"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fa66v"]
-atlas = ExtResource("6_y6sqt")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ytwla"]
-atlas = ExtResource("6_y6sqt")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kvfbh"]
-atlas = ExtResource("6_y6sqt")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7ef3s"]
-atlas = ExtResource("9_8lhek")
-region = Rect2(0, 0, 32, 32)
+[ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="9_xomvi"]
+[ext_resource type="Texture2D" uid="uid://gnvcs6o4qapv" path="res://Assets/bird-history.png" id="12_mo8vx"]
+[ext_resource type="PackedScene" uid="uid://p8xqyx3jr7kg" path="res://Scripts/UI/birdHistory.tscn" id="13_owhgl"]
+[ext_resource type="Script" path="res://Scripts/World/bird_history_button.gd" id="14_iyxci"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_55m4q"]
 atlas = ExtResource("4_h3nv2")
@@ -38,32 +23,8 @@ region = Rect2(0, 0, 100, 100)
 atlas = ExtResource("4_h3nv2")
 region = Rect2(100, 0, 100, 100)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xd3k8"]
-atlas = ExtResource("9_8lhek")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_148hh"]
-atlas = ExtResource("9_8lhek")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_614tu"]
-atlas = ExtResource("9_8lhek")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="LabelSettings" id="LabelSettings_bx2qb"]
-font_size = 32
-font_color = Color(0, 0, 0, 1)
-
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_dkje7")
-
-[node name="Label" type="Label" parent="."]
-offset_left = 12.0
-offset_top = 13.0
-offset_right = 101.0
-offset_bottom = 39.0
-text = "Hello world"
-script = ExtResource("2_00lqe")
 
 [node name="Crosshair" type="TextureRect" parent="."]
 unique_name_in_owner = true
@@ -115,135 +76,110 @@ text = "Enter"
 [node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="CameraButton" type="TextureButton" parent="." groups=["LoadingButton"]]
+[node name="CameraButton" type="Button" parent="." groups=["LoadingButton"]]
+custom_minimum_size = Vector2(192, 192)
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -87.9999
-offset_top = -96.0
-offset_right = -45.9999
-offset_bottom = -54.0
+offset_left = -224.0
+offset_top = -256.0
+offset_right = -32.0
+offset_bottom = -64.0
 grow_horizontal = 0
 grow_vertical = 0
-scale = Vector2(5, 5)
-pivot_offset = Vector2(48, 48)
-texture_normal = SubResource("AtlasTexture_fa66v")
-texture_pressed = SubResource("AtlasTexture_ytwla")
-texture_hover = SubResource("AtlasTexture_kvfbh")
-stretch_mode = 0
+theme = ExtResource("9_xomvi")
+icon = ExtResource("3_r2s6u")
+expand_icon = true
 script = ExtResource("7_v6h0r")
 
-[node name="LoadingButton" type="TextureRect" parent="." groups=["LoadingButton"]]
-visible = false
+[node name="ZoomInButton" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -160.0
+offset_top = 64.0
+offset_right = -32.0
+offset_bottom = 192.0
+grow_horizontal = 0
+theme = ExtResource("9_xomvi")
+theme_override_font_sizes/font_size = 80
+text = "+"
+script = ExtResource("7_7goe6")
+
+[node name="ZoomOutButton" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -160.0
+offset_top = 208.0
+offset_right = -32.0
+offset_bottom = 336.0
+grow_horizontal = 0
+theme = ExtResource("9_xomvi")
+theme_override_font_sizes/font_size = 80
+text = "-"
+script = ExtResource("5_igraa")
+
+[node name="LoadingButton" type="Button" parent="." groups=["LoadingButton"]]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -288.0
-offset_right = -238.0
-offset_bottom = -246.0
+offset_left = -224.0
+offset_top = -256.0
+offset_right = -32.0
+offset_bottom = -64.0
 grow_horizontal = 0
 grow_vertical = 0
-scale = Vector2(5, 5)
-texture = SubResource("AtlasTexture_7ef3s")
+theme = ExtResource("9_xomvi")
+disabled = true
 script = ExtResource("7_dmda8")
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="LoadingButton" groups=["LoadingButton"]]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -15.4
-offset_top = -15.4
-offset_right = 84.6
-offset_bottom = 84.6
+offset_left = -80.0
+offset_top = -80.0
+offset_right = 80.0
+offset_bottom = 80.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.3, 0.3)
 value = 20.0
 fill_mode = 4
+nine_patch_stretch = true
 texture_under = SubResource("AtlasTexture_55m4q")
 texture_progress = SubResource("AtlasTexture_lwoqc")
 radial_initial_angle = 360.0
 script = ExtResource("5_afy4f")
 
-[node name="ZoomOutButton" type="TextureButton" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -192.0
-offset_top = 224.0
-offset_right = -152.0
-offset_bottom = 264.0
-grow_horizontal = 0
-scale = Vector2(3, 3)
-texture_normal = SubResource("AtlasTexture_xd3k8")
-texture_pressed = SubResource("AtlasTexture_148hh")
-texture_hover = SubResource("AtlasTexture_614tu")
-stretch_mode = 0
-script = ExtResource("9_l2jun")
+[node name="BirdHistoryButton" type="Button" parent="."]
+offset_left = 32.0
+offset_top = 64.0
+offset_right = 160.0
+offset_bottom = 192.0
+theme = ExtResource("9_xomvi")
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 80
+icon = ExtResource("12_mo8vx")
+expand_icon = true
+script = ExtResource("14_iyxci")
 
-[node name="Label" type="Label" parent="ZoomOutButton"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("10_jdn2f")
-text = "-
-"
-label_settings = SubResource("LabelSettings_bx2qb")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ZoomInButton" type="TextureButton" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -192.0
-offset_top = 72.0
-offset_right = -152.0
-offset_bottom = 112.0
-grow_horizontal = 0
-scale = Vector2(3, 3)
-texture_normal = SubResource("AtlasTexture_xd3k8")
-texture_pressed = SubResource("AtlasTexture_148hh")
-texture_hover = SubResource("AtlasTexture_614tu")
-stretch_mode = 0
-script = ExtResource("11_7ymrx")
-
-[node name="Label" type="Label" parent="ZoomInButton"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("10_jdn2f")
-text = "+"
-label_settings = SubResource("LabelSettings_bx2qb")
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="BirdHistory" parent="." instance=ExtResource("13_owhgl")]
+unique_name_in_owner = true
+visible = false
 
 [node name="Dialog" parent="." groups=["Dialog"] instance=ExtResource("8_q6ckc")]
 unique_name_in_owner = true
@@ -251,5 +187,6 @@ visible = false
 offset_left = -0.00012207
 
 [connection signal="pressed" from="CameraButton" to="CameraButton" method="_on_pressed"]
-[connection signal="pressed" from="ZoomOutButton" to="ZoomOutButton" method="_on_pressed"]
 [connection signal="pressed" from="ZoomInButton" to="ZoomInButton" method="_on_pressed"]
+[connection signal="pressed" from="ZoomOutButton" to="ZoomOutButton" method="_on_pressed"]
+[connection signal="pressed" from="BirdHistoryButton" to="BirdHistoryButton" method="_on_pressed"]

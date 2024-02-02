@@ -1,7 +1,5 @@
 extends Node
 
-class_name Camera
-
 # Android camera variables
 var plugin
 var plugin_name = "GodotGetImage"
@@ -13,44 +11,47 @@ var options = {
 }
 
 
-func _ready():
+func _ready()->void:
 	var os_name = OS.get_name()
 	match os_name:
 		"Android":
-			setup_camera_andorid()
+			_setup_camera_andorid()
 
 
-func _on_image_request_completed(image_buffers):
+func _on_image_request_completed(image_buffers)->void:
 	var image = image_buffers.values()[0]
 	get_tree().call_group("LoadingButton", "show_loading")
-	Database.send_image_request(image)
+	var image_identification = ImageIdentification.new(image)
+	add_child(image_identification)
+	image_identification.send_request()
 
 func _on_error(e):
 	get_tree().call_group("Dialog", "display", e)
 
 func _on_permission_not_granted_by_user():
+	get_tree().call_group("Dialog", "display", "You need to allow the camera for the app")
 	plugin.resendPermission()
 
-func take_picture():
+func take_picture()->void:
 	var os_name = OS.get_name()
 	match os_name:
 		"Android":
-			take_picture_andorid()	
+			_take_picture_andorid()	
 		"iOS":
-			take_picture_ios()
+			_take_picture_ios()
 		_:
 			get_tree().call_group("Dialog", "display", ("Platform "+os_name+" is not supported"))
 
-func take_picture_andorid():
+func _take_picture_andorid()->void:
 	if plugin:
 		plugin.getGalleryImage()
 	else:
 		print(plugin_name, " plugin not loaded!")
 	
-func take_picture_ios():
+func _take_picture_ios()->void:
 	pass
 
-func setup_camera_andorid():
+func _setup_camera_andorid()->void:
 	if Engine.has_singleton(plugin_name):
 		plugin = Engine.get_singleton(plugin_name)
 	else:

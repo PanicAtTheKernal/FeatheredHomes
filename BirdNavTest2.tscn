@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b0r1g32c1xayf"]
+[gd_scene load_steps=20 format=3 uid="uid://b0r1g32c1xayf"]
 
 [ext_resource type="Script" path="res://Scripts/Bird/bird.gd" id="1_ou60c"]
 [ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="2_xqklm"]
@@ -13,6 +13,16 @@
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Decorators/inverter.gd" id="11_u4n4o"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/find_random_spot.gd" id="12_44fqo"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/reached_target.gd" id="13_t35c5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qhqa7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t1wr8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hcbt1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fwpsk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q0nww"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2ghpp"]
 radius = 6.0
@@ -30,6 +40,17 @@ sprite_frames = ExtResource("2_xqklm")
 animation = &"Flight"
 autoplay = "default"
 script = ExtResource("3_xjd46")
+
+[node name="Button" type="Button" parent="."]
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_qhqa7")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_t1wr8")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hcbt1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_fwpsk")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_q0nww")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2ghpp")
@@ -117,6 +138,7 @@ navigation_data = NodePath("../Navigation")
 [connection signal="change_state" from="." to="AnimatedSprite2D" method="_on_bird_change_state"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_animation_finished"]
 [connection signal="play_new_animation" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_play_new_animation"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="navigation_finished" from="GroundAgent" to="BirdBehaviouralTree" method="_on_ground_agent_navigation_finished"]
 [connection signal="path_changed" from="GroundAgent" to="BirdBehaviouralTree" method="_on_ground_agent_path_changed"]
 [connection signal="path_changed" from="FlightAgent" to="BirdBehaviouralTree" method="_on_flight_agent_path_changed"]

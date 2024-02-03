@@ -1,7 +1,7 @@
 extends Control
 
 @onready
-var list: ItemList = $Panel/ItemList
+var list: ItemList = %ItemList
 
 var logger_key = {
 	"type": Logger.LogType.UI,
@@ -16,10 +16,6 @@ func _ready()->void:
 func _process(delta)->void:
 	pass
 
-
-func _on_item_list_item_clicked(index, at_position, mouse_button_index)->void:
-	print("You clicked on "+list.get_item_text(index))
-
 func _on_close_button_pressed()->void:
 	hide()
 
@@ -33,3 +29,10 @@ func setup_list(items: PackedStringArray)->void:
 	list.clear()
 	for item in items:
 		list.add_item(item)
+
+
+func _on_item_list_item_selected(index: int)->void:
+	var bird_info: BirdInfo = BirdResourceManager.get_bird(index)
+	list.deselect(index)
+	get_tree().call_group("BirdStat", "show")	
+	get_tree().call_group("BirdStat", "load_new_bird", bird_info)

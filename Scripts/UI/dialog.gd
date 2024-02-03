@@ -3,9 +3,9 @@ extends Control
 class_name Dialog
 
 @onready 
-var dialog_text : RichTextLabel = $Panel/Text
+var dialog_text : RichTextLabel = %Text
 @onready
-var heading_text : Label = $Panel/Notice
+var heading_text : Label = %Notice
 @onready
 var dialog: Control = $"."
 

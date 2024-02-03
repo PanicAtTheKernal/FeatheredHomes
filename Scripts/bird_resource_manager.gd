@@ -16,6 +16,9 @@ var logger_key = {
 func _ready()->void:
 	_initalise_bird_data()
 	_create_birds_folder()
+	# TODO TEMP
+	var temp_bird: BirdInfo = ResourceLoader.load("res://Assets/Birds/NewBird/sample_bird_info.tres")
+	birds.push_back(temp_bird)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta)->void:
@@ -50,6 +53,7 @@ func add_bird(bird_species: String)->void:
 		new_entry.species = importer.get_bird()
 		importer.queue_free()
 	Logger.print_debug("Added new bird", logger_key)
+	birds.push_back(new_entry)
 	new_bird.emit(new_entry)
 
 func get_bird_list_items()->PackedStringArray:
@@ -57,3 +61,6 @@ func get_bird_list_items()->PackedStringArray:
 	for bird in birds:
 		bird_list_items.push_back(bird.species.bird_name)
 	return bird_list_items
+
+func get_bird(index: int)->BirdInfo:
+	return birds[index]

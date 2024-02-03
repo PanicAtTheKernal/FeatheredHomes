@@ -26,62 +26,87 @@ grow_vertical = 2
 texture = ExtResource("1_eeyfq")
 expand_mode = 4
 
-[node name="Panel" type="Panel" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
-anchors_preset = 14
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 32.0
-offset_top = -200.0
-offset_right = -32.0
-offset_bottom = 200.0
+offset_left = -556.0
+offset_top = -304.0
+offset_right = 556.0
+offset_bottom = 304.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CenterContainer"]
+custom_minimum_size = Vector2(900, 500)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource("3_2eewb")
 
-[node name="Notice" type="Label" parent="Panel"]
-layout_mode = 0
-offset_left = 24.0
-offset_top = 16.0
-offset_right = 304.0
-offset_bottom = 98.0
-theme = ExtResource("3_2eewb")
-text = "Notice:"
-label_settings = SubResource("LabelSettings_dts7m")
-
-[node name="Text" type="RichTextLabel" parent="Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 24.0
-offset_top = 112.0
-offset_right = -24.0
-offset_bottom = -126.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Notice" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_2eewb")
+text = "Notice:"
+label_settings = SubResource("LabelSettings_dts7m")
+
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Text" type="RichTextLabel" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("3_2eewb")
 theme_override_font_sizes/normal_font_size = 48
 text = "Place Holder"
 
-[node name="OkButton" type="Button" parent="Panel"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -153.0
-offset_top = -119.0
-offset_right = -25.0
-offset_bottom = -23.0
-grow_horizontal = 0
-grow_vertical = 0
+[node name="HBoxContainer3" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+
+[node name="OkButton" type="Button" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3/AspectRatioContainer"]
+custom_minimum_size = Vector2(128, 96)
+layout_mode = 2
 focus_mode = 0
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 56
 text = "OK"
 clip_text = true
 
-[connection signal="pressed" from="Panel/OkButton" to="." method="_on_ok_button_pressed"]
+[connection signal="pressed" from="CenterContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3/AspectRatioContainer/OkButton" to="." method="_on_ok_button_pressed"]

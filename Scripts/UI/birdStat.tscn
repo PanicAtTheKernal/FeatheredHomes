@@ -1,0 +1,210 @@
+[gd_scene load_steps=12 format=3 uid="uid://u8lx2vqcwq0k"]
+
+[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="1_1q51l"]
+[ext_resource type="Script" path="res://Scripts/UI/bird_stat.gd" id="1_xo3ow"]
+[ext_resource type="SpriteFrames" uid="uid://nogep5revgt0" path="res://Assets/Birds/default-bird.tres" id="2_7dend"]
+[ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="2_k7s8g"]
+[ext_resource type="Texture2D" uid="uid://dgjcs16mhihwj" path="res://Assets/Birds/NewBird/eurasian-blue-tit.png" id="3_6i1ga"]
+[ext_resource type="Texture2D" uid="uid://dngsxba5ow8ep" path="res://Assets/theme-frame.png" id="4_jq3py"]
+[ext_resource type="Texture2D" uid="uid://b6vrw8xc5pxjb" path="res://Assets/theme-topbar.png" id="6_wm1b5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_itgj4"]
+atlas = ExtResource("3_6i1ga")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ck5gq"]
+atlas = ExtResource("4_jq3py")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vige3"]
+atlas = ExtResource("6_wm1b5")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0p0h4"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+texture = SubResource("AtlasTexture_vige3")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+region_rect = Rect2(0, 9, 64, 46)
+
+[node name="BirdStat" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xo3ow")
+default_frames = ExtResource("2_7dend")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 700.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_1q51l")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Content" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="HeadingContainer" type="HBoxContainer" parent="Panel/MarginContainer/Content"]
+layout_mode = 2
+alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/MarginContainer/Content/HeadingContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/Content/HeadingContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+
+[node name="ColorRect" type="ColorRect" parent="Panel/MarginContainer/Content/HeadingContainer/MarginContainer"]
+custom_minimum_size = Vector2(320, 320)
+layout_direction = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_k7s8g")
+
+[node name="BirdImage" type="TextureRect" parent="Panel/MarginContainer/Content/HeadingContainer/MarginContainer/ColorRect"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -128.0
+offset_right = 128.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_itgj4")
+
+[node name="TextureRect" type="TextureRect" parent="Panel/MarginContainer/Content/HeadingContainer/MarginContainer/ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -160.0
+offset_right = 160.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_ck5gq")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/Content/HeadingContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/Content/HeadingContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="Panel/MarginContainer/Content/HeadingContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme = ExtResource("2_k7s8g")
+theme_override_font_sizes/font_size = 80
+text = "X"
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/Content"]
+layout_mode = 2
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Seperator" type="Panel" parent="Panel/MarginContainer/Content/MarginContainer"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+theme = ExtResource("2_k7s8g")
+theme_override_styles/panel = SubResource("StyleBoxTexture_0p0h4")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Name" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BirdNameHeading" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Name"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+text = "Bird Name: "
+
+[node name="BirdNameData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Name"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+text = "Blue tit"
+autowrap_mode = 2
+
+[node name="DateFound" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DateFoundHeading" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/DateFound"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+text = "Date Found: "
+
+[node name="DateFoundData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/DateFound"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+text = "2/2/2024"
+
+[node name="Status" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="StatusHeading" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Status"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+text = "Status: "
+
+[node name="StatusData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Status"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+text = "Not Generated"
+
+[node name="NewFrameTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.3
+autostart = true
+
+[connection signal="pressed" from="Panel/MarginContainer/Content/HeadingContainer/HBoxContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="timeout" from="NewFrameTimer" to="." method="_on_new_frame_timer_timeout"]

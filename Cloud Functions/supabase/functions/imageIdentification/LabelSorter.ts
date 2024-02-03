@@ -107,8 +107,7 @@ export class LabelSorter {
     public async sort(labels: string[]) {
         this._labels = labels;
         if (!this.isBird()) {
-            this._sortedLabels.isBird = false;
-            return;
+            throw new Error("No bird");
         }
         await this.fetchLabelLists();
         for(let i=0; i<this._labels.length; i++) {

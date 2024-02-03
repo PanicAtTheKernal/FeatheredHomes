@@ -24,9 +24,6 @@ func run():
 		data["target_reached"] = true
 		super.success()
 	elif not nav_agent.is_target_reachable():
-		var k = nav_agent.target_position
-		var i = nav_agent.is_navigation_finished()
-		var e = nav_agent.is_target_reached()
 		super.fail()
 	
 func start():

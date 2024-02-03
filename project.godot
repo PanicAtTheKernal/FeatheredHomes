@@ -17,10 +17,13 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+Logger="*res://Scripts/logger.gd"
+Startup="*res://Scripts/startup.gd"
 Supabase="*res://addons/supabase/Supabase/supabase.gd"
 Database="*res://Scripts/database.gd"
-Startup="*res://Scripts/startup.gd"
-CameraNode="*res://Scripts/Camera.gd"
+PlayerResourceManager="*res://Scripts/player_resource_manager.gd"
+BirdResourceManager="*res://Scripts/bird_resource_manager.gd"
+Camera="*res://Scripts/camera.gd"
 
 [dotnet]
 

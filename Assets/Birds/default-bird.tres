@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://nogep5revgt0"]
+
+[ext_resource type="Texture2D" uid="uid://dddljq4v1i86u" path="res://Assets/Birds/unknown-bird.png" id="1_04dd4"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_04dd4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

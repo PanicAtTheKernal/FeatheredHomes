@@ -15,3 +15,4 @@ icon.svg.import
 *.translation
 
 android
+.vscode/settings.json

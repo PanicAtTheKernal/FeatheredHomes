@@ -2,6 +2,10 @@ extends Resource
 
 class_name BirdSpecies
 
+@export_group("GeneralBirdInfo")
+@export
+var bird_name: String
+
 @export 
 var bird_animations: SpriteFrames
 

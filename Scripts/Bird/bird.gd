@@ -2,6 +2,13 @@ extends CharacterBody2D
 
 class_name Bird
 
+@onready
+var nav_agent:= $GroundAgent as NavigationAgent2D
+@onready
+var fly_agent:= $FlightAgent as NavigationAgent2D
+@onready
+var animatated_spite := $AnimatedSprite2D as AnimatedSprite2D
+
 @export
 var target: Marker2D
 @export
@@ -10,12 +17,8 @@ var tile_map: TileMap
 var bird_species: BirdSpecies
 @export
 var world_resources: WorldResources
-@onready
-var nav_agent:= $GroundAgent as NavigationAgent2D
-@onready
-var fly_agent:= $FlightAgent as NavigationAgent2D
-@onready
-var animatated_spite := $AnimatedSprite2D as AnimatedSprite2D
+@export
+var bird_info: BirdInfo
 
 var proper_target: Vector2
 var current_ground: String = "Ground"
@@ -131,3 +134,8 @@ func check_ground():
 
 func _on_wait_timeout():
 	pass # Replace with function body.
+
+
+func _on_button_pressed():
+	get_tree().call_group("BirdStat", "show")	
+	get_tree().call_group("BirdStat", "load_new_bird", bird_info)

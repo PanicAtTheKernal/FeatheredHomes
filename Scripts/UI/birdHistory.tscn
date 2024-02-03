@@ -1,0 +1,141 @@
+[gd_scene load_steps=8 format=3 uid="uid://p8xqyx3jr7kg"]
+
+[ext_resource type="Script" path="res://Scripts/UI/bird_history.gd" id="1_qlrfw"]
+[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="2_8oloa"]
+[ext_resource type="Texture2D" uid="uid://b6vrw8xc5pxjb" path="res://Assets/theme-topbar.png" id="4_35nqc"]
+[ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="4_wtagk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_3vxmj"]
+font_size = 96
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vige3"]
+atlas = ExtResource("4_35nqc")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y7q2j"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+texture = SubResource("AtlasTexture_vige3")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+region_rect = Rect2(0, 9, 64, 46)
+
+[node name="BirdHistory" type="Control" groups=["BirdHistory"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qlrfw")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_8oloa")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+theme = ExtResource("2_8oloa")
+text = "Bird History"
+label_settings = SubResource("LabelSettings_3vxmj")
+vertical_alignment = 2
+autowrap_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme = ExtResource("4_wtagk")
+theme_override_font_sizes/font_size = 80
+text = "X"
+
+[node name="Seperator" type="Panel" parent="Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(2, 8)
+layout_mode = 2
+theme = ExtResource("4_wtagk")
+theme_override_styles/panel = SubResource("StyleBoxTexture_y7q2j")
+
+[node name="ItemList" type="ItemList" parent="Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_8oloa")
+theme_override_font_sizes/font_size = 80
+allow_reselect = true
+allow_rmb_select = true
+max_text_lines = 2
+item_count = 31
+item_0/text = "Test"
+item_0/selectable = false
+item_1/text = "test"
+item_1/selectable = false
+item_2/text = "1"
+item_2/selectable = false
+item_3/text = "2"
+item_3/selectable = false
+item_4/text = "3"
+item_4/selectable = false
+item_5/text = "4"
+item_5/selectable = false
+item_6/text = "5"
+item_6/selectable = false
+item_7/text = "6"
+item_8/text = "7"
+item_9/text = "8"
+item_10/text = "8"
+item_11/text = "8"
+item_12/text = "8"
+item_13/text = "9"
+item_14/text = "9"
+item_15/text = "9"
+item_16/text = "9"
+item_17/text = "9"
+item_18/text = "9"
+item_19/text = "9"
+item_20/text = "9"
+item_21/text = "9"
+item_22/text = "9"
+item_23/text = "9"
+item_24/text = "9"
+item_25/text = "9"
+item_26/text = "9"
+item_27/text = "9"
+item_28/text = "9"
+item_29/text = "9"
+item_30/text = ""
+
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="item_selected" from="Panel/MarginContainer/VBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]

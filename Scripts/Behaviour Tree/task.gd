@@ -16,22 +16,27 @@ var parent = null
 var tree = null
 var status = LOADED
 var data = null
+var logger_key = {
+	"type": Logger.LogType.AI,
+	"obj": self.name
+}
+
 
 func running()->void:
 	status = RUNNING
-	print(self.name + "RUNNING")
+	Logger.print_debug("Status: RUNNING", logger_key)
 	if parent != null:
 		parent.child_running()
 
 func success()->void:
 	status = SUCCEEDED
-	print(self.name + "SUCCEEDED")
+	Logger.print_debug("Status: SUCCEEDED", logger_key)
 	if parent != null:
 		parent.child_success()
 
 func fail()->void:
 	status = FAILED
-	print(self.name + "FAILED")
+	Logger.print_debug("Status: FAILED", logger_key)	
 	if parent != null:
 		parent.child_fail()
 

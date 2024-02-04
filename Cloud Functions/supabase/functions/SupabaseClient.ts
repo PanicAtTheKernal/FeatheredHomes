@@ -99,25 +99,25 @@ export class Supabase {
         });
     }
 
-    public async fetchDefaultBirdName(label: string) {
+    public async fetchDefaultBirdName(label: string): Promise<string> {
         const { data, error } = await this._supabaseAdminClient.from(this._birdLabelsTable)
-        .select("DefaultBird")
-        .eq("Label", label);
+            .select("DefaultBird")
+            .eq("Label", label);
         if (error != null) {
             throw new Error(`Supabase: ${error.message}`);
         }
         return data[0].DefaultBird;
     }
 
-    public addBlacklistLabel(label: BlacklistLabel) {
-        this.addLabel({
+    public async addBlacklistLabel(label: BlacklistLabel): Promise<void> {
+        await this.addLabel({
             table: this._blacklistTable,
             label: label
         })
     }
 
-    public addBirdLabel(label: BirdLabel) {
-        this.addLabel({
+    public async addBirdLabel(label: BirdLabel): Promise<void> {
+        await this.addLabel({
             table: this._birdLabelsTable,
             label: label
         })

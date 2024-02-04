@@ -1,4 +1,4 @@
-import { BirdWikiPage } from "./../WikiPage.ts";
+import { BirdWikiPage, ReferralWikiPage } from "./../WikiPage.ts";
 import { Supabase } from "./../SupabaseClient.ts";
 
 export type SortedLabels = {
@@ -13,6 +13,7 @@ export class LabelSorter {
     private _birdSpeciesLabels: string[];
     private _blacklistedLabels: string[];
     private _sortedLabels: SortedLabels;
+    private _birdReferralSections: string[];
 
     constructor() {
         this._labels = [];
@@ -24,6 +25,7 @@ export class LabelSorter {
             birdFamilyLabels: [],
             birdSpeciesLabels: [],
         };
+        this._birdReferralSections = ["Birds","Species"];
     }
     
     private async fetchLabelLists() {
@@ -51,7 +53,7 @@ export class LabelSorter {
         return this._labels.includes(birdLabel);
     }
 
-    private async sortLabel(label: string) {
+    private async sortLabel(label: string): Promise<void> {
         if (this.isLabelBlacklisted(label)) {
             return;
         }
@@ -67,16 +69,22 @@ export class LabelSorter {
         }
     }
 
-    private async sortUnknownLabel(label: string) {
-        const wikiPage: BirdWikiPage = new BirdWikiPage(label);
+    private async sortUnknownLabel(label: string): Promise<void> {
+        let wikiPage: BirdWikiPage = new BirdWikiPage(label);
         try {
             await wikiPage.setupParser();
             if(!(await wikiPage.isPageAboutBirds())) {
-                await Supabase.instantiate().addBlacklistLabel({
-                    Label: label
-                })
-                this._blacklistedLabels.push(label);
-            } else if(await wikiPage.isBirdSpecies()) {
+                const referralPage = new ReferralWikiPage(label, this._birdReferralSections);
+                await referralPage.setupParser();
+                if (!referralPage.isReferralPage()) {
+                    throw new Error("Not a bird page");
+                } else {
+                    wikiPage = referralPage.getFirstBirdReferralPage();
+                    // Need to call it again if the referral page return a new bird wiki page
+                    await wikiPage.setupParser();
+                }
+            } 
+            if(await wikiPage.isBirdSpecies()) {
                 await Supabase.instantiate().addBirdLabel({
                     Label: label,
                     IsSpecific: true,
@@ -104,11 +112,10 @@ export class LabelSorter {
         }
     }
 
-    public async sort(labels: string[]) {
+    public async sort(labels: string[]): Promise<void> {
         this._labels = labels;
         if (!this.isBird()) {
-            this._sortedLabels.isBird = false;
-            return;
+            throw new Error("No bird");
         }
         await this.fetchLabelLists();
         for(let i=0; i<this._labels.length; i++) {

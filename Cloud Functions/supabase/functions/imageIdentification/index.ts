@@ -5,6 +5,7 @@
 import { Buffer } from "node:buffer";
 import { LabelSorter, SortedLabels } from "./LabelSorter.ts";
 import { Supabase } from "../SupabaseClient.ts";
+import { ReferralWikiPage } from "../WikiPage.ts";
 
 const CONTENT_TYPE = "application/json; charset=utf-8";
 const HEADERS = { "Content-Type": CONTENT_TYPE };
@@ -13,7 +14,7 @@ type ImageIdentificationResponse = {
   isBird: boolean,
   birdSpecies?: string,
   approximate?: boolean,
-  error?: string 
+  error: string 
 }
 
 type LabelDetectionRequest = {
@@ -40,17 +41,47 @@ type LabelAnnotations = {
 }
 
 Deno.serve(async (req: Request) => {  
+  if (req.method != "POST") {
+    return new Response(
+      JSON.stringify({
+        error: "Request must be a POST"
+      }),
+      { headers: HEADERS,
+        status: 400 },
+    );
+  }
   try {
     const imageIdentification = new ImageIdentification(await req.arrayBuffer());
     await imageIdentification.identifyLabelsInImage();
-    const response = await imageIdentification.determineIfImageHasBird();
+    const birdName = await imageIdentification.getBirdName();
+    // const wikiPage = new ReferralWikiPage("Sparrow");
+    // await wikiPage.setupParser();
+    // wikiPage.hasReferralSections(["Birds", "Species"]);
+    // console.log("Here")
+    // const e =wikiPage.getFirstBirdReferralPage();
+    // await e.setupParser()
+    // console.log(await e.isPageAboutBirds());
+    // const birdName = {
+    //   name: "test",
+    //   approximate: false
+    // }
+    const response: ImageIdentificationResponse = {
+      isBird: true,
+      birdSpecies: birdName.name,
+      approximate: birdName.approximate,
+      error: ""
+    } 
     return new Response(
       JSON.stringify(response),
       { headers: HEADERS },
     );
   } catch(error) {
+    const response: ImageIdentificationResponse = {
+      isBird: false,
+      error: error.message
+    } 
     return new Response(
-      JSON.stringify({error: error.message}),
+      JSON.stringify(response),
       { headers: HEADERS,
         status: 500 },
     ); 
@@ -141,31 +172,23 @@ class ImageIdentification {
     this._labels = this._labelDetection.getLabelDetectionResults();
   } 
 
-  public async determineIfImageHasBird(): Promise<ImageIdentificationResponse> {
+  public async getBirdName(): Promise<{ name: string, approximate: boolean}> {
     const labels = Array.from(this._labels.keys());
     await this._labelSoter.sort(labels);
     const sortedLabels: SortedLabels = this._labelSoter.sortedLabels;
-    if(!sortedLabels.isBird && (sortedLabels.birdFamilyLabels.length == 0 && sortedLabels.birdSpeciesLabels.length == 0)) {
-      return {
-        isBird: false
-      }
-    } else if (sortedLabels.isBird && (sortedLabels.birdFamilyLabels.length == 0 && sortedLabels.birdSpeciesLabels.length == 0)) {
-      return {
-        isBird: false,
-        error: "Couldn't detect the species of the bird. Please try to upload a clearer image."
-      }
+    if (sortedLabels.birdFamilyLabels.length == 0 && sortedLabels.birdSpeciesLabels.length == 0) {
+      throw new Error("Blurry bird");
     }
     if(sortedLabels.birdSpeciesLabels.length == 0) {
       const defaultBirdName = await Supabase.instantiate().fetchDefaultBirdName(sortedLabels.birdFamilyLabels[0]);
       return {
-        isBird: true,
-        birdSpecies: defaultBirdName,
-        approximate: true
+        name: defaultBirdName,
+        approximate: true,
       } 
     }
     return {
-      isBird: true,
-      birdSpecies: sortedLabels.birdSpeciesLabels[0],
+      name: sortedLabels.birdSpeciesLabels[0],
+      approximate: false,
     }
   }
 }

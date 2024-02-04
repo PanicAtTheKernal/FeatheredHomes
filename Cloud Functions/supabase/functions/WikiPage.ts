@@ -7,7 +7,7 @@ export class WikiPage {
     protected readonly _wikiPageRequest: WikiPageRequest;
     protected _wikiParser!: WikiParser;
 
-    constructor(pageName: string) {
+    constructor(pageName: string | URL) {
         this._wikiPageRequest = new WikiPageRequest(pageName);
     }
 
@@ -16,14 +16,20 @@ export class WikiPage {
             throw new Error("The setupParser method wasn't called");
         }
     }
+
+    public async setupParser(): Promise<void> {
+        if(this._wikiParser != undefined) return;
+        await this._wikiPageRequest.search();
+        this._wikiParser = new WikiParser(await this._wikiPageRequest.fetch());
+    }
 }
 
 // Extends the wikiPage class with bird wiki page specific functions
 export class BirdWikiPage extends WikiPage {
-    private _isSummaryAboutBirds;
-    private _hasSummaryBeenChecked;
+    private _isSummaryAboutBirds: boolean;
+    private _hasSummaryBeenChecked: boolean;
 
-    constructor(pageName: string) {
+    constructor(pageName: string | URL) {
         super(pageName);
         this._isSummaryAboutBirds = false;
         this._hasSummaryBeenChecked = false;
@@ -36,12 +42,6 @@ export class BirdWikiPage extends WikiPage {
         this._isSummaryAboutBirds = await ChatGPT.instantiate().checkIfSummaryIsAboutBirds(summary);
         this._hasSummaryBeenChecked = true;
         return this._isSummaryAboutBirds;
-    }
-    
-    public async setupParser(): Promise<void> {
-        if(this._wikiParser != undefined) return;
-        await this._wikiPageRequest.search();
-        this._wikiParser = new WikiParser(await this._wikiPageRequest.fetch());
     }
 
     public getBirdFamily(): string {
@@ -74,16 +74,68 @@ export class BirdWikiPage extends WikiPage {
         return true;
     }
 
+    public hasTheWordBird(): boolean {
+        if (!this._wikiParser.hasWord("bird")) return false;
+        return this._wikiParser.hasWord("Bird");
+    }
+
     public async isPageAboutBirds(): Promise<boolean> {
         this.isParserSetup();
         if(!this._wikiParser.hasInfoBoxProperty("Family") && !this._wikiParser.hasInfoBoxProperty("Species")) {
+            console.log(this._wikiParser.hasInfoBoxProperty("Family"));
+            console.log(this._wikiParser.hasInfoBoxProperty("Species"));
+
             return false;
         }
         if(!(await this.isSummaryAboutBirds())) {
+            // console.log(await this.isSummaryAboutBirds());
             return false;
         }
         return true;
     }
+
+
+
 }
 
-export default { BirdWikiPage, WikiPage };
+export class ReferralWikiPage extends WikiPage {
+    private _present_section: string | undefined;
+    private _sections: string[];
+
+    constructor(pageName: string, sections: string[]) {
+        super(pageName);
+        this._sections = sections;
+    }
+    
+
+    private getReferralSection(): string {
+        this.isParserSetup();
+        const present_section = this._sections.find(section => {
+            return this._wikiParser.hasSection(section);
+        });
+        if (present_section == undefined) {
+            throw new Error("There is no referral section");
+        }
+        return present_section;
+    }
+
+    public isReferralPage(): boolean {
+        this.isParserSetup();
+        return this._sections.some(section => {
+            return this._wikiParser.hasSection(section);
+        })
+    }
+
+    public getFirstBirdReferralPage(): BirdWikiPage {
+        this.isParserSetup();
+        this._present_section = this.getReferralSection();
+        const links: string[] =  this._wikiParser.getLinksFromSection(this._present_section);
+        if (links.length == 0) {
+            throw new Error("The referral page section didn't have any links");
+        }
+        const birdWikiPageUrl: URL = new URL(links[0]);
+        return new BirdWikiPage(birdWikiPageUrl);
+    }
+}
+
+export default { BirdWikiPage, WikiPage, ReferralWikiPage };

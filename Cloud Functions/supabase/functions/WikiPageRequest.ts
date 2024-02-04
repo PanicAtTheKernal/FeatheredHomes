@@ -1,14 +1,19 @@
 // Facade pattern
 export class WikiPageRequest {
-    public static readonly wikiApi: string = "https://en.wikipedia.org/w/api.php";
-    private readonly _wikiPageName: string;
-    private readonly _searchRequest: URL;  
+    public static readonly wikiUrl: string = "https://en.wikipedia.org"
+    public static readonly wikiApi: string = this.wikiUrl + "/w/api.php";
+    private readonly _wikiPageName!: string;
+    private readonly _searchRequest!: URL;  
     private _request: URL | undefined;  
 
-    constructor(wikiPageName: string) {
-        this._wikiPageName = wikiPageName;
-        this._searchRequest = new URL(WikiPageRequest.wikiApi);
-        this.prepareSearchRequest();
+    constructor(wikiPageName: string | URL) {
+        if ((typeof wikiPageName) == "string") {
+            this._wikiPageName = wikiPageName as string;
+            this._searchRequest = new URL(WikiPageRequest.wikiApi);
+            this.prepareSearchRequest();
+        } else {
+            this._request = wikiPageName as URL;
+        }
     }
 
     private prepareSearchRequest(): void {

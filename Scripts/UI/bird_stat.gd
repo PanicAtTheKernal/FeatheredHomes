@@ -25,7 +25,7 @@ var logger_key = {
 	"obj": "BirdStat"
 }
 
-func _ready():
+func _ready()->void:
 	if not is_visible_in_tree():
 		new_frame_timer.stop()
 

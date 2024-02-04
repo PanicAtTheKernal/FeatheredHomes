@@ -9,7 +9,10 @@ var options = {
 	"keep_aspect" : true,
 	"image_format" : "jpg"
 }
-
+var logger_key = {
+	"type": Logger.LogType.CAMERA,
+	"obj": ""
+}
 
 func _ready()->void:
 	var os_name = OS.get_name()
@@ -20,15 +23,16 @@ func _ready()->void:
 
 func _on_image_request_completed(image_buffers)->void:
 	var image = image_buffers.values()[0]
+	Logger.print_debug("Creating a image request", logger_key)
 	get_tree().call_group("LoadingButton", "show_loading")
 	var image_identification = ImageIdentification.new(image)
 	add_child(image_identification)
 	image_identification.send_request()
 
-func _on_error(e):
+func _on_error(e)->void:
 	get_tree().call_group("Dialog", "display", e)
 
-func _on_permission_not_granted_by_user():
+func _on_permission_not_granted_by_user()->void:
 	get_tree().call_group("Dialog", "display", "You need to allow the camera for the app")
 	plugin.resendPermission()
 
@@ -44,7 +48,7 @@ func take_picture()->void:
 
 func _take_picture_andorid()->void:
 	if plugin:
-		plugin.getGalleryImage()
+		plugin.getCameraImage()
 	else:
 		print(plugin_name, " plugin not loaded!")
 	

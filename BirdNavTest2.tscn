@@ -59,7 +59,6 @@ shape = SubResource("CircleShape2D_2ghpp")
 navigation_layers = 3
 avoidance_enabled = true
 avoidance_mask = 3
-debug_enabled = true
 debug_use_custom = true
 
 [node name="FlightAgent" type="NavigationAgent2D" parent="."]
@@ -67,7 +66,6 @@ navigation_layers = 2
 avoidance_enabled = true
 avoidance_layers = 2
 avoidance_mask = 3
-debug_enabled = true
 debug_use_custom = true
 debug_path_custom_color = Color(0, 1, 1, 1)
 

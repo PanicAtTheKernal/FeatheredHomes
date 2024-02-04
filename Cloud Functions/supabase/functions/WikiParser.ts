@@ -1,4 +1,5 @@
 import { CheerioAPI, Cheerio, Element, load } from "npm:cheerio";
+import { WikiPageRequest } from "./WikiPageRequest.ts";
 
 // Facade pattern
 export class WikiParser {
@@ -72,6 +73,17 @@ export class WikiParser {
         const imageText = this.getInfoBox().find(`tr:has(img):first`)
             .nextAll("tr:not(:has(img)):first");
         return imageText.text();
+    }
+
+    public getLinksFromSection(section: string): string[] {
+        const sectionContent = this.$page(`#content .mw-headline:contains(\"${section}\")`).parent()
+            .nextUntil("h2:first, h3:first")
+            .filter("p, ul, ol, table");
+        const links: string[] = [];
+        sectionContent.find("a").each((_, element) => {
+            links.push(WikiPageRequest.wikiUrl + element.attribs["href"])
+        })
+        return links;
     }
 
     public hasInfoBoxProperty(property: string): boolean {

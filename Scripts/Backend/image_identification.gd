@@ -21,7 +21,7 @@ func _init(image: PackedByteArray)->void:
 	headers = [auth_header, content_type_header]
 	url = Database.get_image_endpoint()
 
-func _ready():
+func _ready()->void:
 	_create_http_request()
 
 func _create_http_request()->void:
@@ -29,23 +29,32 @@ func _create_http_request()->void:
 	http_request.request_completed.connect(_on_image_request_complete)
 	add_child(http_request)
 	
-func _notify_user(message:String)->void:
-	get_tree().call_group("Dialog", "display", message)
+func _notify_user(message:String, bird:String="")->void:
+	var user_message:String = ""
+	match message:
+		"No bird":
+			user_message = "We couldn't find any bird in the photo you took. Please take another photo and try again"
+		"Blurry bird":
+			user_message = "We couldn't figure out the bird species. Please take another photo at a different angle"
+		"bird":
+			user_message = "You found a "+bird+"!"
+		_:
+			user_message = "There was an error processing the image"
+	get_tree().call_group("Dialog", "display", user_message)
 	get_tree().call_group("LoadingButton", "hide_loading")
 
 func _on_image_request_complete(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray)->void:
+	var result_body = JSON.parse_string(body.get_string_from_ascii())
 	if response_code != HTTPClient.RESPONSE_OK:
-		Logger.print_debug("Error retrieving bird: (Status) "+str(result)+" (Response Code) "+str(response_code)+" (Body) "+body.get_string_from_ascii(), logger_key)
-		_notify_user("Unable to process image")
+		Logger.print_debug("Error retrieving bird: (Response Code) "+str(response_code)+" (Body) "+result_body.get("error"), logger_key)
+		_notify_user(result_body.get("error"))
 		_cleanup()
 		return
-	var result_body = JSON.parse_string(body.get_string_from_ascii())
 	var bird_species = result_body.get("birdSpecies")
-	_notify_user(("You found a "+bird_species))
+	var approximate = result_body.get("approximate")
+	_notify_user("bird", bird_species)
 	BirdResourceManager.add_bird(bird_species)
 	await BirdResourceManager.new_bird
-	# Add the bird importer
-	# TODO fix the response, as in the thing should throw an error if there are not bird labels or there is not bird 
 	_cleanup()
 
 func _cleanup()->void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cc7jo7b3cgbem"]
+[gd_scene load_steps=21 format=3 uid="uid://cc7jo7b3cgbem"]
 
 [ext_resource type="Script" path="res://Scripts/AddBird.gd" id="1_dkje7"]
 [ext_resource type="Texture2D" uid="uid://b7a6fk0fwanx8" path="res://Assets/crosshair.png" id="3_48hw7"]
@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://p8xqyx3jr7kg" path="res://Scripts/UI/birdHistory.tscn" id="13_owhgl"]
 [ext_resource type="PackedScene" uid="uid://u8lx2vqcwq0k" path="res://Scripts/UI/birdStat.tscn" id="14_fq8rw"]
 [ext_resource type="Script" path="res://Scripts/World/bird_history_button.gd" id="14_iyxci"]
+[ext_resource type="Script" path="res://Scripts/World/pre_alpha_password.gd" id="16_hv13r"]
+[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="17_2pay1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_55m4q"]
 atlas = ExtResource("4_h3nv2")
@@ -23,6 +25,9 @@ region = Rect2(0, 0, 100, 100)
 [sub_resource type="AtlasTexture" id="AtlasTexture_lwoqc"]
 atlas = ExtResource("4_h3nv2")
 region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gvja"]
+bg_color = Color(0.227451, 0.227451, 0.227451, 1)
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_dkje7")
@@ -190,6 +195,48 @@ visible = false
 [node name="BirdStat" parent="." groups=["BirdStat"] instance=ExtResource("14_fq8rw")]
 visible = false
 
+[node name="PreAlphaKey" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("16_hv13r")
+
+[node name="Panel" type="Panel" parent="PreAlphaKey"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("17_2pay1")
+
+[node name="CenterContainer" type="CenterContainer" parent="PreAlphaKey/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PreAlphaKey/Panel/CenterContainer"]
+custom_minimum_size = Vector2(900, 300)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PreAlphaKey/Panel/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Enter invite code"
+
+[node name="LineEdit" type="LineEdit" parent="PreAlphaKey/Panel/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_1gvja")
+placeholder_text = "Code"
+virtual_keyboard_type = 2
+
 [node name="Dialog" parent="." groups=["Dialog"] instance=ExtResource("8_q6ckc")]
 unique_name_in_owner = true
 visible = false
@@ -199,3 +246,4 @@ offset_left = -0.00012207
 [connection signal="pressed" from="ZoomInButton" to="ZoomInButton" method="_on_pressed"]
 [connection signal="pressed" from="ZoomOutButton" to="ZoomOutButton" method="_on_pressed"]
 [connection signal="pressed" from="CameraButton" to="CameraButton" method="_on_pressed"]
+[connection signal="text_submitted" from="PreAlphaKey/Panel/CenterContainer/VBoxContainer/LineEdit" to="PreAlphaKey" method="_on_line_edit_text_submitted"]

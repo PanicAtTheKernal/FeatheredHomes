@@ -62,7 +62,7 @@ grow_vertical = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 80
 theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_bottom = 80
 
 [node name="Content" type="VBoxContainer" parent="Panel/MarginContainer"]
 layout_mode = 2
@@ -162,7 +162,7 @@ text = "Bird Name: "
 
 [node name="BirdNameData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Name"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 0)
+custom_minimum_size = Vector2(300, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 56

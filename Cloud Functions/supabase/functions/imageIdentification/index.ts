@@ -180,7 +180,6 @@ class ImageIdentification {
       throw new Error("Blurry bird");
     }
     if(sortedLabels.birdSpeciesLabels.length == 0) {
-      console.log("Here");
       const defaultBirdName = await Supabase.instantiate().fetchDefaultBirdName(sortedLabels.birdFamilyLabels[0]);
       return {
         name: defaultBirdName,

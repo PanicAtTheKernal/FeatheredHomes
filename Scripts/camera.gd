@@ -9,7 +9,10 @@ var options = {
 	"keep_aspect" : true,
 	"image_format" : "jpg"
 }
-
+var logger_key = {
+	"type": Logger.LogType.CAMERA,
+	"obj": ""
+}
 
 func _ready()->void:
 	var os_name = OS.get_name()
@@ -20,6 +23,7 @@ func _ready()->void:
 
 func _on_image_request_completed(image_buffers)->void:
 	var image = image_buffers.values()[0]
+	Logger.print_debug("Creating a image request", logger_key)
 	get_tree().call_group("LoadingButton", "show_loading")
 	var image_identification = ImageIdentification.new(image)
 	add_child(image_identification)

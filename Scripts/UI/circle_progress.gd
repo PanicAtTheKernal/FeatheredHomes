@@ -1,6 +1,5 @@
 extends TextureProgressBar
 
-
 var current_value = 0
 
 func _process(delta)->void:

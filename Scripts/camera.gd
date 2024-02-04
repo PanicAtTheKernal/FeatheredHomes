@@ -25,10 +25,10 @@ func _on_image_request_completed(image_buffers)->void:
 	add_child(image_identification)
 	image_identification.send_request()
 
-func _on_error(e):
+func _on_error(e)->void:
 	get_tree().call_group("Dialog", "display", e)
 
-func _on_permission_not_granted_by_user():
+func _on_permission_not_granted_by_user()->void:
 	get_tree().call_group("Dialog", "display", "You need to allow the camera for the app")
 	plugin.resendPermission()
 
@@ -44,7 +44,7 @@ func take_picture()->void:
 
 func _take_picture_andorid()->void:
 	if plugin:
-		plugin.getGalleryImage()
+		plugin.getCameraImage()
 	else:
 		print(plugin_name, " plugin not loaded!")
 	

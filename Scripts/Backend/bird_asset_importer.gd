@@ -7,7 +7,7 @@ signal bird_imported
 var bird_name: String
 var bird: BirdSpecies
 
-func _init(bird_name: String):
+func _init(bird_name: String)->void:
 	self.bird_name = bird_name
 	bird = BirdSpecies.new()
 	bird.bird_name = bird_name

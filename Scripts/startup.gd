@@ -8,14 +8,14 @@ func _ready()->void:
 	_print_welcome_screen()
 	
 
-func _print_welcome_screen():
+func _print_welcome_screen()->void:
 	var node: Array[Node] = get_tree().get_nodes_in_group("Dialog")
 	if len(node) > 0:
 		await node[-1].ready
 		get_tree().call_group("Dialog", "display", welcome_text, "Welcome!")
 	
 
-func _setup_screen_orientation():
+func _setup_screen_orientation()->void:
 	var os_name = OS.get_name()
 	match os_name:
 		"Android", "iOS":

@@ -21,7 +21,7 @@ func _init(image: PackedByteArray)->void:
 	headers = [auth_header, content_type_header]
 	url = Database.get_image_endpoint()
 
-func _ready():
+func _ready()->void:
 	_create_http_request()
 
 func _create_http_request()->void:

@@ -41,6 +41,15 @@ type LabelAnnotations = {
 }
 
 Deno.serve(async (req: Request) => {  
+  if (req.method != "POST") {
+    return new Response(
+      JSON.stringify({
+        error: "Request must be a POST"
+      }),
+      { headers: HEADERS,
+        status: 400 },
+    );
+  }
   try {
     const imageIdentification = new ImageIdentification(await req.arrayBuffer());
     await imageIdentification.identifyLabelsInImage();
@@ -165,7 +174,7 @@ class ImageIdentification {
 
   public async getBirdName(): Promise<{ name: string, approximate: boolean}> {
     const labels = Array.from(this._labels.keys());
-    await this._labelSoter.sort(["Bird","Fox Sparrow"]);
+    await this._labelSoter.sort(labels);
     const sortedLabels: SortedLabels = this._labelSoter.sortedLabels;
     if (sortedLabels.birdFamilyLabels.length == 0 && sortedLabels.birdSpeciesLabels.length == 0) {
       throw new Error("Blurry bird");

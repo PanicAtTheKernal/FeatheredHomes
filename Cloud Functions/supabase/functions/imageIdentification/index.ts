@@ -5,6 +5,7 @@
 import { Buffer } from "node:buffer";
 import { LabelSorter, SortedLabels } from "./LabelSorter.ts";
 import { Supabase } from "../SupabaseClient.ts";
+import { ReferralWikiPage } from "../WikiPage.ts";
 
 const CONTENT_TYPE = "application/json; charset=utf-8";
 const HEADERS = { "Content-Type": CONTENT_TYPE };
@@ -44,6 +45,17 @@ Deno.serve(async (req: Request) => {
     const imageIdentification = new ImageIdentification(await req.arrayBuffer());
     await imageIdentification.identifyLabelsInImage();
     const birdName = await imageIdentification.getBirdName();
+    // const wikiPage = new ReferralWikiPage("Sparrow");
+    // await wikiPage.setupParser();
+    // wikiPage.hasReferralSections(["Birds", "Species"]);
+    // console.log("Here")
+    // const e =wikiPage.getFirstBirdReferralPage();
+    // await e.setupParser()
+    // console.log(await e.isPageAboutBirds());
+    // const birdName = {
+    //   name: "test",
+    //   approximate: false
+    // }
     const response: ImageIdentificationResponse = {
       isBird: true,
       birdSpecies: birdName.name,
@@ -153,12 +165,13 @@ class ImageIdentification {
 
   public async getBirdName(): Promise<{ name: string, approximate: boolean}> {
     const labels = Array.from(this._labels.keys());
-    await this._labelSoter.sort(labels);
+    await this._labelSoter.sort(["Bird","Fox Sparrow"]);
     const sortedLabels: SortedLabels = this._labelSoter.sortedLabels;
     if (sortedLabels.birdFamilyLabels.length == 0 && sortedLabels.birdSpeciesLabels.length == 0) {
       throw new Error("Blurry bird");
     }
     if(sortedLabels.birdSpeciesLabels.length == 0) {
+      console.log("Here");
       const defaultBirdName = await Supabase.instantiate().fetchDefaultBirdName(sortedLabels.birdFamilyLabels[0]);
       return {
         name: defaultBirdName,

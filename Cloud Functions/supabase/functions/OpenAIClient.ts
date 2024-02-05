@@ -164,6 +164,17 @@ export class ChatGPT {
         }
         return chatGPTResponse.choices[0].message.content;
     }
+
+    public async generateSimplifiedSummary(summary: string): Promise<string> {
+        const openAIRequestDirector = new OpenAIRequestDirector();
+        await openAIRequestDirector.setSystemMessage("Summary");
+        const nameExtractionRequest = openAIRequestDirector.buildGPT3request(summary) as any;
+        const chatGPTResponse = await this._openAIClient.chat.completions.create(nameExtractionRequest);
+        if (chatGPTResponse.choices[0].message.content == null) {
+            throw new Error("ChatGPT: There was an error with chatGPT and the bird name extraction");
+        }
+        return chatGPTResponse.choices[0].message.content;
+    }
 }
 
 export default { ChatGPT };

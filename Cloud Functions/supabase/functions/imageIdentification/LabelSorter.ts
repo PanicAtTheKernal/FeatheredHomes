@@ -77,7 +77,7 @@ export class LabelSorter {
                 const referralPage = new ReferralWikiPage(label, this._birdReferralSections);
                 await referralPage.setupParser();
                 if (!referralPage.isReferralPage()) {
-                    throw new Error("Not a bird page");
+                    throw new Error("Not a bird page");= ""
                 } else {
                     wikiPage = referralPage.getFirstBirdReferralPage();
                     // Need to call it again if the referral page return a new bird wiki page
@@ -118,8 +118,8 @@ export class LabelSorter {
             throw new Error("No bird");
         }
         await this.fetchLabelLists();
-        for(let i=0; i<this._labels.length; i++) {
-            await this.sortLabel(this._labels[i]);
+        for(let label in this._labels) {
+            await this.sortLabel(label.toUpperCase());
         }
         this.sortedLabels.isBird = true;
     }

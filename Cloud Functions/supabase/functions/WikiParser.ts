@@ -30,7 +30,7 @@ export class WikiParser {
         if (summary.length == 0) {
             throw new Error(`The wiki page doesn't have a summary`);
         }
-        return summary.text();
+        return WikiParser.replaceCitations(summary.text().replaceAll("\n",""));
     }
 
     public getSection(section: string): string {
@@ -73,6 +73,10 @@ export class WikiParser {
         const imageText = this.getInfoBox().find(`tr:has(img):first`)
             .nextAll("tr:not(:has(img)):first");
         return imageText.text();
+    }
+
+    public getNumberOfSections(): number {
+        return 0;
     }
 
     public getLinksFromSection(section: string): string[] {

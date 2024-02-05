@@ -11,6 +11,21 @@ export type BlacklistLabel = {
     Label: string
 }
 
+export type BirdSpecies = {
+    birdId: string;
+    birdName: string;
+    birdDescription: string;
+    birdScientificName: string;
+    birdFamily: string;
+    birdShapeId: string;
+    dietId: string;
+    birdImageUrl: string;
+    createdAt: string;
+    version: string;
+    birdSimulationInfo: string[];
+}
+
+
 type NewLabel = {
     table: string,
     label: BirdLabel | BlacklistLabel
@@ -24,6 +39,7 @@ export class Supabase {
     private readonly _blacklistTable = "BlacklistedLabels";
     private readonly _birdLabelsTable = "BirdLabels";
     private readonly _systemMessageTable = "SystemMessages";
+    private readonly _birdSpeciesTable = "BirdSpecies";
 
     private constructor() {
         this._supabaseServiceRoleKey = Deno.env.get("SERVICE_ROLE_KEY") as string;
@@ -97,6 +113,16 @@ export class Supabase {
         return data.map((labelObj) => {
             return labelObj.Label;
         });
+    }
+
+    public async fetchBirdSpecies(birdName: string): Promise<BirdSpecies | null> {
+        const { data, error } = await this._supabaseAdminClient.from(this._birdSpeciesTable)
+            .select()
+            .like("birdName", `%${birdName}%`);
+        if (error != null) {
+            throw new Error(`Supabase: ${error.message}`);
+        }
+        return (data.length != 0) ? data[0] : null;
     }
 
     public async fetchDefaultBirdName(label: string): Promise<string> {

@@ -22,6 +22,8 @@ var bird_stamina: float
 var bird_ground_cost: float
 @export
 var can_bird_swim: bool = false
+@export
+var can_bird_fly: bool = true
 @export_range(4.0, 48.0)
 var bird_ground_max_distance: float
 

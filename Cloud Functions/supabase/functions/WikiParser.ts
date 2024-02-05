@@ -75,8 +75,8 @@ export class WikiParser {
         return imageText.text();
     }
 
-    public getNumberOfSections(): number {
-        return 0;
+    public isNoHeadingPage(): boolean {
+        return this.$page(`#content .mw-headline`).first().text() == "References";
     }
 
     public getLinksFromSection(section: string): string[] {

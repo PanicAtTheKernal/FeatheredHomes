@@ -41,6 +41,7 @@ export class BirdWikiPage extends WikiPage {
         if(this._wikiParser != undefined) return;
         await this._wikiPageRequest.search();
         this._wikiParser = new WikiParser(await this._wikiPageRequest.fetch());
+        this._isNoHeadingPage = this._wikiParser.isNoHeadingPage();
     }
 
     private async isSummaryAboutBirds(): Promise<boolean> {

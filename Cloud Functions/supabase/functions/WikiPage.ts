@@ -29,12 +29,15 @@ export class BirdWikiPage extends WikiPage {
     private _isSummaryAboutBirds: boolean;
     private _hasSummaryBeenChecked: boolean;
     private _isNoHeadingPage: boolean;
+    private _descriptionHeading: string;
+
 
     constructor(pageName: string | URL) {
         super(pageName);
         this._isSummaryAboutBirds = false;
         this._hasSummaryBeenChecked = false;
         this._isNoHeadingPage = false;
+        this._descriptionHeading = "Description";
     }
 
     public async setupParser(): Promise<void> {
@@ -79,6 +82,14 @@ export class BirdWikiPage extends WikiPage {
         this.isParserSetup();
         const infoBoxText = this._wikiParser.getInfoBoxImageText();
         return await ChatGPT.instantiate().extractBirdName(infoBoxText);
+    }
+
+    public getDescription(): string {
+        if(this._wikiParser.hasFullSection(this._descriptionHeading)) {
+            return WikiParser.replaceCitations(this._wikiParser.getFullSection(this._descriptionHeading));
+        } else {
+            return WikiParser.replaceCitations(this._wikiParser.getSection(this._descriptionHeading))
+        }
     }
 
     public async isBirdFamily(): Promise<boolean> {

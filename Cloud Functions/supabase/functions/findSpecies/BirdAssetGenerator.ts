@@ -1,14 +1,15 @@
 import { BirdSpecies } from "../SupabaseClient.ts";
 import { BirdWikiPage } from "../WikiPage.ts";
 import { crypto } from "https://deno.land/std@0.202.0/crypto/crypto.ts";
-import { WikiParser } from "../WikiParser.ts";
 import { ChatGPT } from "../OpenAIClient.ts";
+import { ImageGenerator } from "./ImageGenerator.ts";
 
 export class BirdAssetGenerator {
     private readonly _birdName: string;
     private readonly _version: string;
     private readonly _wikiPage: BirdWikiPage;
     private readonly _generatedBird: BirdSpecies;
+    private _imageGenerator!: ImageGenerator;
 
     constructor (birdName: string) {
         this._birdName = birdName;
@@ -18,13 +19,14 @@ export class BirdAssetGenerator {
             birdName: "",
             birdFamily: "",
             birdDescription: "",
-            birdImageUrl: "",
+            birdImages: { image: "" },
             birdScientificName: "",
             birdShapeId: "",
             birdSimulationInfo: [],
             createdAt: "",
             dietId: "",
             version: "",
+            birdUnisex: true
         };
         // Label is in upper case but the request will only work if it's lowercase
         this._wikiPage = new BirdWikiPage(birdName.toLowerCase());
@@ -40,19 +42,21 @@ export class BirdAssetGenerator {
     }
 
     private generateFamilyName(): void {
-        this._generatedBird.birdFamily = this._wikiPage.getBirdFamily().replace("\n", "").toUpperCase();
+        this._generatedBird.birdFamily = this._wikiPage.getBirdFamily().toUpperCase();
     }
 
     private async generateDescription(): Promise<void> {
-        console.log(this._wikiPage.getBirdSummary());
         const wikiSummary = this._wikiPage.getBirdSummary();
-        const improvedSummary = await ChatGPT.instantiate().generateSimplifiedSummary(wikiSummary);
-        console.log(improvedSummary);
+        const birdName = this._wikiPage.getBirdName().toLowerCase()
+        const improvedSummary = await ChatGPT.instantiate().generateSimplifiedSummary(wikiSummary, birdName);
         this._generatedBird.birdDescription = improvedSummary;
     }
 
     private async generateImage(): Promise<void> {
-
+        const description = this._wikiPage.getDescription();
+        const familyName = this._wikiPage.getBirdFamily().toUpperCase();
+        this._imageGenerator = new ImageGenerator(description, familyName);
+        await this._imageGenerator.generate();
     }
 
     private generateScientificName(): void {

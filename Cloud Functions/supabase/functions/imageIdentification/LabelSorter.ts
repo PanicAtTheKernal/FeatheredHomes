@@ -77,7 +77,7 @@ export class LabelSorter {
                 const referralPage = new ReferralWikiPage(label, this._birdReferralSections);
                 await referralPage.setupParser();
                 if (!referralPage.isReferralPage()) {
-                    throw new Error("Not a bird page");= ""
+                    throw new Error("Not a bird page");
                 } else {
                     wikiPage = referralPage.getFirstBirdReferralPage();
                     // Need to call it again if the referral page return a new bird wiki page

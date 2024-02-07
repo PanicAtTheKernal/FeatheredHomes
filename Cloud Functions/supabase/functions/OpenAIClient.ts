@@ -178,7 +178,7 @@ export class ChatGPT {
         const nameExtractionRequest = openAIRequestDirector.buildSummaryRequest(summary, focus) as any;
         const chatGPTResponse = await this._openAIClient.chat.completions.create(nameExtractionRequest);
         if (chatGPTResponse.choices[0].message.content == null) {
-            throw new Error("ChatGPT: There was an error with chatGPT and the bird name extraction");
+            throw new Error("ChatGPT: There was an error with chatGPT and the simplified bird summary");
         }
         return chatGPTResponse.choices[0].message.content;
     }
@@ -188,6 +188,9 @@ export class ChatGPT {
         await openAIRequestDirector.setSystemMessage("Summary");
         const nameExtractionRequest = openAIRequestDirector.buildGPT3request(description) as any;
         const chatGPTResponse = await this._openAIClient.chat.completions.create(nameExtractionRequest);
+        if (chatGPTResponse.choices[0].message.content == null) {
+            throw new Error("ChatGPT: There was an error with chatGPT and the bird appearance");
+        }
         return (chatGPTResponse.choices[0].message.content == "True");
     }
 }

@@ -1,3 +1,4 @@
+import { ChatGPT } from "../OpenAIClient.ts";
 import { BirdShape, GenderImages, Supabase, UnisexImage } from "../SupabaseClient.ts";
 
 export class ImageGenerator {
@@ -26,7 +27,7 @@ export class ImageGenerator {
     }
 
     private async isBirdLookUnisex(): Promise<boolean> {
-        return true;
+        return await ChatGPT.instantiate().checkIfBirdAppearanceUnisex(this._description);
     }
 
     private async generateUnisexImage(): Promise<void> {

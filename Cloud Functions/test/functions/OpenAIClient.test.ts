@@ -25,7 +25,6 @@ describe("ChatGPT", () => {
     };
     const fakeDescription = "Fake description";
 
-
     let chatGPT: ChatGPT;
     let createStub: SinonStub;
     let buildGPT3requestSpy: SinonSpy;
@@ -61,5 +60,15 @@ describe("ChatGPT", () => {
         createStub.resolves(fakeFalseResponse);
         const result = await chatGPT.checkIfBirdAppearanceUnisex("");
         assertEquals(result, false);
+    })
+
+    it(checkIfBirdAppearanceUnisexTests, "should throw error if message content is null", async () => {
+        const fakeFalseResponse = fakeChatGPTResponse as any;
+        const errorMessage = "ChatGPT: There was an error with chatGPT and the bird appearance";
+        fakeFalseResponse.choices[0].message.content = null;
+        createStub.resolves(fakeFalseResponse);
+        chatGPT.checkIfBirdAppearanceUnisex("").catch((error: Error) => {
+            assertEquals(error.message, errorMessage);
+        });
     })
 })

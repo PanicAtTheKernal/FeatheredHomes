@@ -11,6 +11,37 @@ export type BlacklistLabel = {
     Label: string
 }
 
+export type UnisexImage = {
+    image: string
+}
+
+export type GenderImages = {
+    male: string,
+    female: string
+}
+
+export type BirdShape = {
+    BirdShapeName: string;
+    BirdShapeTemplateUrl: string;
+    BirdShapeTemplateJson: object;
+}
+
+export type BirdSpecies = {
+    birdId: string;
+    birdName: string;
+    birdDescription: string;
+    birdScientificName: string;
+    birdFamily: string;
+    birdShapeId: string;
+    dietId: string;
+    birdImages: UnisexImage | GenderImages;
+    createdAt: string;
+    version: string;
+    birdSimulationInfo: string[];
+    birdUnisex: boolean;
+}
+
+
 type NewLabel = {
     table: string,
     label: BirdLabel | BlacklistLabel
@@ -24,6 +55,9 @@ export class Supabase {
     private readonly _blacklistTable = "BlacklistedLabels";
     private readonly _birdLabelsTable = "BirdLabels";
     private readonly _systemMessageTable = "SystemMessages";
+    private readonly _birdSpeciesTable = "BirdSpecies";
+    private readonly _familyToShapeTable = "FamilyToShape";
+    private readonly _birdShapeTable = "BirdShape";
 
     private constructor() {
         this._supabaseServiceRoleKey = Deno.env.get("SERVICE_ROLE_KEY") as string;
@@ -99,6 +133,17 @@ export class Supabase {
         });
     }
 
+    public async fetchBirdSpecies(birdName: string): Promise<BirdSpecies | null> {
+        const { data, error } = await this._supabaseAdminClient.from(this._birdSpeciesTable)
+            .select()
+            .like("birdName", `%${birdName}%`);
+        if (error != null) {
+            throw new Error(`Supabase: ${error.message}`);
+        }
+        console.log(data);
+        return (data.length != 0) ? data[0] : null;
+    }
+
     public async fetchDefaultBirdName(label: string): Promise<string> {
         const { data, error } = await this._supabaseAdminClient.from(this._birdLabelsTable)
             .select("DefaultBird")
@@ -107,6 +152,30 @@ export class Supabase {
             throw new Error(`Supabase: ${error.message}`);
         }
         return data[0].DefaultBird;
+    }
+
+    public async fetchShapeFromFamily(familyName: string): Promise<string> {
+        const { data, error } = await this._supabaseAdminClient.from(this._familyToShapeTable)
+            .select("Shape")
+            .limit(1)
+            .eq("Family", familyName);
+        if (error != null) {
+            throw new Error(`Supabase: ${error.message}`);
+        }
+        if (data.length == 0) {
+            throw Error("No template found");
+        }
+        return data[0].Shape as string;
+    }   
+
+    public async fetchBirdShape(shapeId: string): Promise<BirdShape> {
+        const { data, error } = await this._supabaseAdminClient.from(this._birdShapeTable)
+            .select("BirdShapeName, BirdShapeTemplateUrl, BirdShapeTemplateJson")
+            .eq("BirdShapeId", shapeId);
+        if (error != null) {
+            throw new Error(`Supabase: ${error.message}`);
+        }
+        return data[0] as BirdShape;
     }
 
     public async addBlacklistLabel(label: BlacklistLabel): Promise<void> {
@@ -121,6 +190,18 @@ export class Supabase {
             table: this._birdLabelsTable,
             label: label
         })
+    }
+
+    public async updateDatabase() {
+        const list = await this.fetchBirdFamilyLabels();
+        const labels = Array.from(list.keys());
+        for (const label of labels) {
+            console.log(label)
+            // console.log(label.toUpperCase());
+            const { error } = await this._supabaseAdminClient.from(this._birdLabelsTable)
+                .update({ Label: label.toUpperCase(), DefaultBird: list.get(label)?.toUpperCase() })
+                .eq('Label', label);
+        }
     }
 } 
 

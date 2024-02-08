@@ -1,12 +1,12 @@
 import OpenAI from 'https://deno.land/x/openai@v4.16.1/mod.ts';
 import { Supabase } from './SupabaseClient.ts';
 
-enum GPTModels {
+export enum GPTModels {
     gpt3="gpt-3.5-turbo-1106",
     gpt4Vision="gpt-4-vision-preview"
 }
 
-type OpenAIMessage = {
+export type OpenAIMessage = {
     role: string,
     content: [{
         type: string,
@@ -14,7 +14,7 @@ type OpenAIMessage = {
     }]
 }
 
-type OpenAIRequest = {
+export type OpenAIRequest = {
     model: GPTModels,
     messages: OpenAIMessage[],
     max_tokens: number
@@ -102,7 +102,7 @@ class OpenAIRequestBuilder {
     }
 }
 
-class OpenAIRequestDirector {
+export class OpenAIRequestDirector {
     private _builder: OpenAIRequestBuilder;
 
     constructor () {
@@ -119,6 +119,13 @@ class OpenAIRequestDirector {
 
     public buildGPT3request(content: string): OpenAIRequest {
         this._builder.addContent(content);
+        this._builder.setGPTModel(GPTModels.gpt3);
+        return this._builder.getRequest();
+    }
+
+    public buildSummaryRequest(summary: string, focus: string): OpenAIRequest {
+        this._builder.addContent(summary);
+        this._builder.replaceSystemMsgPlaceholder(focus);
         this._builder.setGPTModel(GPTModels.gpt3);
         return this._builder.getRequest();
     }
@@ -164,6 +171,28 @@ export class ChatGPT {
         }
         return chatGPTResponse.choices[0].message.content;
     }
+
+    public async generateSimplifiedSummary(summary: string, focus: string): Promise<string> {
+        const openAIRequestDirector = new OpenAIRequestDirector();
+        await openAIRequestDirector.setSystemMessage("Summary");
+        const nameExtractionRequest = openAIRequestDirector.buildSummaryRequest(summary, focus) as any;
+        const chatGPTResponse = await this._openAIClient.chat.completions.create(nameExtractionRequest);
+        if (chatGPTResponse.choices[0].message.content == null) {
+            throw new Error("ChatGPT: There was an error with chatGPT and the simplified bird summary");
+        }
+        return chatGPTResponse.choices[0].message.content;
+    }
+
+    public async checkIfBirdAppearanceUnisex(description: string): Promise<boolean> {
+        const openAIRequestDirector = new OpenAIRequestDirector();
+        await openAIRequestDirector.setSystemMessage("Summary");
+        const nameExtractionRequest = openAIRequestDirector.buildGPT3request(description) as any;
+        const chatGPTResponse = await this._openAIClient.chat.completions.create(nameExtractionRequest);
+        if (chatGPTResponse.choices[0].message.content == null) {
+            throw new Error("ChatGPT: There was an error with chatGPT and the bird appearance");
+        }
+        return (chatGPTResponse.choices[0].message.content == "True");
+    }
 }
 
-export default { ChatGPT };
+export default { ChatGPT, OpenAIRequestDirector, OpenAIRequestBuilder };

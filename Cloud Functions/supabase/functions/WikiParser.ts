@@ -22,7 +22,7 @@ export class WikiParser {
         if (pageTitle.length == 0) {
             throw new Error("The wiki page doesn't have a title");
         }
-        return pageTitle.text();
+        return pageTitle.text().replaceAll("\n", "");
     }
 
     public getSummary(): string {
@@ -30,7 +30,7 @@ export class WikiParser {
         if (summary.length == 0) {
             throw new Error(`The wiki page doesn't have a summary`);
         }
-        return summary.text();
+        return WikiParser.replaceCitations(summary.text().replaceAll("\n",""));
     }
 
     public getSection(section: string): string {
@@ -40,7 +40,7 @@ export class WikiParser {
         if (sectionContent.length == 0) {
                 throw new Error(`The wiki page doesn't have a ${section} section`);
             }
-        return sectionContent.text();
+        return sectionContent.text().replaceAll("\n", "");
     }
 
     public getFullSection(section: string): string {
@@ -50,7 +50,7 @@ export class WikiParser {
         if (sectionContent.length == 0) {
                 throw new Error(`The wiki page doesn't have a ${section} full section`);
             }
-        return sectionContent.text();
+        return sectionContent.text().replaceAll("\n", "");
     }
 
     public getBinomialName(): string {
@@ -58,7 +58,7 @@ export class WikiParser {
         if (binomialName.length == 0) {
             throw new Error(`The wiki page infobox doesn't have a binomial name`);
         }
-        return binomialName.text();
+        return binomialName.text().replaceAll("\n", "");
     }
 
     public getInfoBoxProperty(property: string): string {
@@ -66,13 +66,17 @@ export class WikiParser {
         if (propertyContent.length == 0) {
             throw new Error(`The wiki page infobox doesn't have a ${property} property`);
         }
-        return propertyContent.text();
+        return propertyContent.text().replaceAll("\n", "");
     }
 
     public getInfoBoxImageText(): string {
         const imageText = this.getInfoBox().find(`tr:has(img):first`)
             .nextAll("tr:not(:has(img)):first");
-        return imageText.text();
+        return imageText.text().replaceAll("\n", "");
+    }
+
+    public isNoHeadingPage(): boolean {
+        return this.$page(`#content .mw-headline`).first().text().replaceAll("\n", "") == "References";
     }
 
     public getLinksFromSection(section: string): string[] {

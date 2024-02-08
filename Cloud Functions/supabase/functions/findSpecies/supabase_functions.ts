@@ -20,6 +20,11 @@ let supabaseAdminClient: SupabaseClient;
 let helperFunctions: BirdHelperFunctions;
 const webFunctions = _webFunctions;
 
+/**
+ * @todo DONE
+ * @param request 
+ * @returns 
+ */
 export async function findSpecies(request: Request): Promise<Response> {
     supabaseAdminClient = createClient(
         SUPABASE_URL,
@@ -55,7 +60,11 @@ export async function findSpecies(request: Request): Promise<Response> {
         status: 200
     });
 }
-
+/**
+ * @todo DONE
+ * @param request 
+ * @returns 
+ */
 async function findWikiPage(species: string, client: SupabaseClient): Promise<Response> {
     const wikiSearchEndpoint = new URL("https://en.wikipedia.org/w/api.php");
     wikiSearchEndpoint.searchParams.append("origin", "*");

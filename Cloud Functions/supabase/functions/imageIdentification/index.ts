@@ -54,17 +54,6 @@ Deno.serve(async (req: Request) => {
     const imageIdentification = new ImageIdentification(await req.arrayBuffer());
     await imageIdentification.identifyLabelsInImage();
     const birdName = await imageIdentification.getBirdName();
-    // const wikiPage = new ReferralWikiPage("Sparrow");
-    // await wikiPage.setupParser();
-    // wikiPage.hasReferralSections(["Birds", "Species"]);
-    // console.log("Here")
-    // const e =wikiPage.getFirstBirdReferralPage();
-    // await e.setupParser()
-    // console.log(await e.isPageAboutBirds());
-    // const birdName = {
-    //   name: "test",
-    //   approximate: false
-    // }
     const response: ImageIdentificationResponse = {
       isBird: true,
       birdSpecies: birdName.name,

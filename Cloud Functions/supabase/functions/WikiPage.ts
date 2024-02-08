@@ -28,11 +28,23 @@ export class WikiPage {
 export class BirdWikiPage extends WikiPage {
     private _isSummaryAboutBirds: boolean;
     private _hasSummaryBeenChecked: boolean;
+    private _isNoHeadingPage: boolean;
+    private _descriptionHeading: string;
+
 
     constructor(pageName: string | URL) {
         super(pageName);
         this._isSummaryAboutBirds = false;
         this._hasSummaryBeenChecked = false;
+        this._isNoHeadingPage = false;
+        this._descriptionHeading = "Description";
+    }
+
+    public async setupParser(): Promise<void> {
+        if(this._wikiParser != undefined) return;
+        await this._wikiPageRequest.search();
+        this._wikiParser = new WikiParser(await this._wikiPageRequest.fetch());
+        this._isNoHeadingPage = this._wikiParser.isNoHeadingPage();
     }
 
     private async isSummaryAboutBirds(): Promise<boolean> {
@@ -42,6 +54,18 @@ export class BirdWikiPage extends WikiPage {
         this._isSummaryAboutBirds = await ChatGPT.instantiate().checkIfSummaryIsAboutBirds(summary);
         this._hasSummaryBeenChecked = true;
         return this._isSummaryAboutBirds;
+    }
+
+    public getBirdSummary(): string {
+        return this._wikiParser.getSummary();
+    }
+
+    public getBirdScientificName(): string {
+        return this._wikiParser.getBinomialName();
+    }
+
+    public getBirdName(): string {
+        return this._wikiParser.getPageTitle();
     }
 
     public getBirdFamily(): string {
@@ -60,6 +84,14 @@ export class BirdWikiPage extends WikiPage {
         return await ChatGPT.instantiate().extractBirdName(infoBoxText);
     }
 
+    public getDescription(): string {
+        if(this._wikiParser.hasFullSection(this._descriptionHeading)) {
+            return WikiParser.replaceCitations(this._wikiParser.getFullSection(this._descriptionHeading));
+        } else {
+            return WikiParser.replaceCitations(this._wikiParser.getSection(this._descriptionHeading))
+        }
+    }
+
     public async isBirdFamily(): Promise<boolean> {
         this.isParserSetup();
         if(!this._wikiParser.hasInfoBoxProperty("Family"))  return false;
@@ -72,11 +104,6 @@ export class BirdWikiPage extends WikiPage {
         if(!this._wikiParser.hasInfoBoxProperty("Species")) return false;
         if(!(await this.isBirdFamily())) return false;
         return true;
-    }
-
-    public hasTheWordBird(): boolean {
-        if (!this._wikiParser.hasWord("bird")) return false;
-        return this._wikiParser.hasWord("Bird");
     }
 
     public async isPageAboutBirds(): Promise<boolean> {

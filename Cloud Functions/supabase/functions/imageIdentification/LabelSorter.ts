@@ -118,8 +118,8 @@ export class LabelSorter {
             throw new Error("No bird");
         }
         await this.fetchLabelLists();
-        for(let i=0; i<this._labels.length; i++) {
-            await this.sortLabel(this._labels[i]);
+        for(let label in this._labels) {
+            await this.sortLabel(label.toUpperCase());
         }
         this.sortedLabels.isBird = true;
     }

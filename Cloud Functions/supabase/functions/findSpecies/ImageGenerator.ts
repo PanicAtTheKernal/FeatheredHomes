@@ -7,6 +7,7 @@ export class ImageGenerator {
     private _images: UnisexImage | GenderImages | undefined;
     private _shapeId: string;
     private _templateJson: object;
+    private _colourJson: object;
     private _templateUrl: string;
     private _unisex: boolean;
 
@@ -17,6 +18,7 @@ export class ImageGenerator {
         this._unisex = true;
         this._templateJson = {};
         this._templateUrl = "";
+        this._colourJson = {};
     }
 
     private async fetchTemplate(): Promise<void> {
@@ -32,6 +34,10 @@ export class ImageGenerator {
 
     private async generateUnisexImage(): Promise<void> {
         
+    }
+
+    private async generateListOfColours(gender?: string): Promise<void> {
+
     }
 
     private async generateGenderImages(): Promise<void> {

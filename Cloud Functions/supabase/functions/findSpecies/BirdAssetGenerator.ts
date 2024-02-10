@@ -55,8 +55,12 @@ export class BirdAssetGenerator {
     private async generateImage(): Promise<void> {
         const description = this._wikiPage.getDescription();
         const familyName = this._wikiPage.getBirdFamily().toUpperCase();
-        this._imageGenerator = new ImageGenerator(description, familyName);
+        const birdName = this._wikiPage.getBirdName();
+        this._imageGenerator = new ImageGenerator(description, familyName, birdName);
         await this._imageGenerator.generate();
+        this._generatedBird.birdUnisex = this._imageGenerator.unisex;
+        this._generatedBird.birdShapeId = this._imageGenerator.shapeId;
+        this._generatedBird.birdImages = this._imageGenerator.images;
     }
 
     private generateScientificName(): void {

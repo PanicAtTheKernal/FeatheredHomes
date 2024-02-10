@@ -1,9 +1,10 @@
-import OpenAI from 'https://deno.land/x/openai@v4.16.1/mod.ts';
+import OpenAI from 'npm:openai';
 import { Supabase } from './SupabaseClient.ts';
 
 export enum GPTModels {
-    gpt3="gpt-3.5-turbo-1106",
-    gpt4Vision="gpt-4-vision-preview"
+    gpt3="gpt-3.5-turbo-0125",
+    gpt4Vision="gpt-4-vision-preview",
+    gpt4Turbo="gpt-4-turbo-preview"
 }
 
 export type OpenAIMessage = {
@@ -18,6 +19,11 @@ export type OpenAIRequest = {
     model: GPTModels,
     messages: OpenAIMessage[],
     max_tokens: number
+}
+
+export type ReplacementValues = {
+    placeholder: string,
+    replacement: string | string[]
 }
 
 class OpenAIRequestBuilder {
@@ -50,39 +56,40 @@ class OpenAIRequestBuilder {
         });
     }
 
-    public replaceSystemMsgPlaceholder(replacementValues: string[] | string): void {
+    public replaceSystemMsgPlaceholder(replacementValues: ReplacementValues[]): void {
         if (this._request.messages[0].role != "system") {
             throw new Error("System message not set");
         }
 
-        const replacementValue = "<>";
-        switch (typeof replacementValues) {
-            case "string": {
-                this._request.messages[0].content[0].text = this._request.messages[0].content[0].text.replace(replacementValue, replacementValues);
-                break;
-            }
-            case "object": {
-                if ((replacementValues instanceof Array)) {
-                    if (replacementValues.length == 0) throw new Error("Value length is 0");
-
-                    const list: string = replacementValues
-                        .map((replacementValues) => replacementValues.replace(/^/, "- "))
-                        .join("\n");
-            
-                    // Replacement 
-                    this._request.messages[0].content[0].text = this._request.messages[0].content[0].text.replace(replacementValue, list);
+        replacementValues.forEach((replacementValue: ReplacementValues) => {
+            switch (typeof replacementValue.replacement) {
+                case "string": {
+                    this._request.messages[0].content[0].text = this._request.messages[0].content[0].text.replace(replacementValue.placeholder, replacementValue.replacement);
                     break;
                 }
-
-                const json = JSON.stringify(replacementValues);
-                const removedValues = json.replaceAll(/\[(?:[0-9]+,?)+\]/g, " ");
-                this._request.messages[0].content[0].text = this._request.messages[0].content[0].text.replace(replacementValue, removedValues);
-        
-                break;
-            }
-            default:
-                throw Error("Unsupported type");
-        }
+                case "object": {
+                    if ((replacementValues instanceof Array)) {
+                        if (replacementValues.length == 0) throw new Error("Value length is 0");
+    
+                        const list: string = replacementValue.replacement
+                            .map((replacement) => replacement.replace(/^/, "- "))
+                            .join("\n");
+                
+                        // Replacement 
+                        this._request.messages[0].content[0].text = this._request.messages[0].content[0].text.replace(replacementValue.placeholder, list);
+                        break;
+                    }
+    
+                    const json = JSON.stringify(replacementValue.replacement);
+                    const removedValues = json.replaceAll(/\[(?:[0-9]+,?)+\]/g, " ");
+                    this._request.messages[0].content[0].text = this._request.messages[0].content[0].text.replace(replacementValue.placeholder, removedValues);
+            
+                    break;
+                }
+                default:
+                    throw Error("Unsupported type");
+            };
+        })
     }
 
     public addContent(content: string): void {
@@ -109,12 +116,9 @@ export class OpenAIRequestDirector {
         this._builder = new OpenAIRequestBuilder();
     }
 
-    public async setSystemMessage(systemMessageName: string, replacementValues?: string | string[]) {
+    public async setSystemMessage(systemMessageName: string) {
         const message = await Supabase.instantiate().fetchSystemMessage(systemMessageName);
         this._builder.addSystemMessage(message); 
-        if (replacementValues != undefined) {
-            this._builder.replaceSystemMsgPlaceholder(replacementValues);
-        }
     }
 
     public buildGPT3request(content: string): OpenAIRequest {
@@ -124,9 +128,28 @@ export class OpenAIRequestDirector {
     }
 
     public buildSummaryRequest(summary: string, focus: string): OpenAIRequest {
+        const replacement: ReplacementValues = {
+            placeholder: "<>",
+            replacement: focus
+        };
         this._builder.addContent(summary);
-        this._builder.replaceSystemMsgPlaceholder(focus);
+        this._builder.replaceSystemMsgPlaceholder([replacement]);
         this._builder.setGPTModel(GPTModels.gpt3);
+        return this._builder.getRequest();
+    }
+
+    public buildColourGeneratorRequest(description: string, gender: string, bodyParts: string): OpenAIRequest {
+        const genderReplacement: ReplacementValues = {
+            placeholder: "<>",
+            replacement: gender
+        };
+        const bodyPartsReplacement: ReplacementValues = {
+            placeholder: "[]",
+            replacement: `[${bodyParts}]`
+        };
+        this._builder.addContent(description);
+        this._builder.setGPTModel(GPTModels.gpt4Turbo);
+        this._builder.replaceSystemMsgPlaceholder([genderReplacement, bodyPartsReplacement]);
         return this._builder.getRequest();
     }
 }
@@ -192,6 +215,19 @@ export class ChatGPT {
             throw new Error("ChatGPT: There was an error with chatGPT and the bird appearance");
         }
         return (chatGPTResponse.choices[0].message.content == "True");
+    }
+
+    public async generateColoursFromDescription(description: string, gender: string, bodyParts: string): Promise<string> {
+        const openAIRequestDirector = new OpenAIRequestDirector();
+        await openAIRequestDirector.setSystemMessage("ColourGenerator");
+        const nameExtractionRequest = openAIRequestDirector.buildColourGeneratorRequest(description, gender, bodyParts) as any;
+        console.log(nameExtractionRequest);
+        const chatGPTResponse = await this._openAIClient.chat.completions.create(nameExtractionRequest);
+        if (chatGPTResponse.choices[0].message.content == null) {
+            throw new Error("ChatGPT: There was an error with chatGPT and the colour generation");
+        }
+        console.log(chatGPTResponse.choices[0].message.content);
+        return chatGPTResponse.choices[0].message.content;
     }
 }
 

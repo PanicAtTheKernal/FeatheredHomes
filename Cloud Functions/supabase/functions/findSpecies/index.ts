@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
     const findSpecies = new FindSpecies(validation.body.birdSpecies.toUpperCase());
     const bird = await findSpecies.getBird();
     return new Response(
-      JSON.stringify("bird"),
+      JSON.stringify(bird),
       { headers: HEADERS,
         status: 200 },
     );

@@ -58,6 +58,7 @@ export class Supabase {
     private readonly _birdSpeciesTable = "BirdSpecies";
     private readonly _familyToShapeTable = "FamilyToShape";
     private readonly _birdShapeTable = "BirdShape";
+    private readonly _birdAssetBucket = "BirdAssets";
 
     private constructor() {
         this._supabaseServiceRoleKey = Deno.env.get("SERVICE_ROLE_KEY") as string;
@@ -190,6 +191,16 @@ export class Supabase {
             table: this._birdLabelsTable,
             label: label
         })
+    }
+
+    public async uploadBirdImage(birdShape: string, birdName: string, image: Uint8Array): Promise<string> {
+        await this._supabaseAdminClient.storage.from(this._birdAssetBucket)
+            .upload(`${birdShape}/${birdName}.png`, image, {
+                contentType: 'image/png'
+            })
+        const { data } = await this._supabaseAdminClient.storage.from(this._birdAssetBucket)
+            .getPublicUrl(`${birdShape}/${birdName}.png`)
+        return data.publicUrl;
     }
 
     public async updateDatabase() {

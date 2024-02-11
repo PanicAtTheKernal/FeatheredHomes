@@ -26,7 +26,7 @@ describe("ImageGenerator", () => {
     })
 
     afterEach(() => {
-        sinon.restore()
+        sinon.restore();
     })
 
     it(generateTests, "shapeId should not be an empty string", async () => {

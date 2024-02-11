@@ -8,6 +8,7 @@ export class ImageGenerator {
     private readonly _family: string;
     private readonly _birdName: string;
     private _images: UnisexImage | GenderImages | undefined;
+    private _colourMaps: UnisexImage | GenderImages | object;
     private _shapeId: string;
     private _shapeName: string;
     private _templateJson: object;
@@ -25,6 +26,7 @@ export class ImageGenerator {
         this._templateUrl = "";
         this._colourJson = {};
         this._birdName = birdName;
+        this._colourMaps = {};
     }
 
     private async fetchTemplate(): Promise<void> {
@@ -36,14 +38,15 @@ export class ImageGenerator {
     }
 
     private async isBirdLookUnisex(): Promise<boolean> {
-        return await ChatGPT.instantiate().checkIfBirdAppearanceUnisex(this._description);
+        this._unisex = await ChatGPT.instantiate().checkIfBirdAppearanceUnisex(this._description);
+        return this._unisex;
     }
 
     private async generateUnisexImage(): Promise<void> {
         const fileName = this._birdName.replaceAll(" ", "-").toLowerCase();
         this._images = {
             image: await this.generateImageAndUpload("the", fileName)
-        }; 
+        };
     }
 
     private async generateImageAndUpload(gender: string, fileName: string): Promise<string> {
@@ -52,9 +55,27 @@ export class ImageGenerator {
         console.log(templateMap);
         const birdColourMap: ColourMap = new ColourMap(templateMap, colours);
         birdColourMap.createMap();
+        this.addColourMap(gender, birdColourMap);
         const imageManipulator: ImageManipulator = new ImageManipulator(this._templateUrl, birdColourMap);
         const birdImage = await imageManipulator.modifyImage();
         return await Supabase.instantiate().uploadBirdImage(this._shapeName, fileName, birdImage);
+    }
+
+    private addColourMap(gender: string, colourMap: ColourMap): void {
+        switch(gender) {
+            case "the":
+                // @ts-ignore: Adding property
+                this._colourMaps.image = Object.fromEntries(colourMap.colourMap);
+                break;
+            case "a male":
+                // @ts-ignore: Adding property
+                this._colourMaps.male = Object.fromEntries(colourMap.colourMap);
+                break;
+            case "a female":
+                // @ts-ignore: Adding property
+                this._colourMaps.female = Object.fromEntries(colourMap.colourMap);
+                break;
+        }
     }
 
     private generateBodyPartNames(): string {
@@ -108,6 +129,14 @@ export class ImageGenerator {
             throw new Error("The image needs to be generated first");
         } 
         return this._unisex;
+    }
+
+    public get colourMaps(): UnisexImage | GenderImages {
+        if (Object.keys(this._colourMaps).length == 0) {
+            throw new Error();
+        }
+        // @ts-ignore: The if statement handles the edge case of the empty object
+        return this._colourMaps;
     }
 }
 

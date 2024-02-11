@@ -1,8 +1,10 @@
-import { BirdSpecies } from "../SupabaseClient.ts";
+import { BirdSpecies, Supabase } from "../SupabaseClient.ts";
 import { BirdWikiPage } from "../WikiPage.ts";
 import { crypto } from "https://deno.land/std@0.202.0/crypto/crypto.ts";
 import { ChatGPT } from "../OpenAIClient.ts";
 import { ImageGenerator } from "./ImageGenerator.ts";
+import { DietGenerator } from "./DietGenerator.ts";
+import { TraitGenerator } from "./TraitGenerator.ts";
 
 export class BirdAssetGenerator {
     private readonly _birdName: string;
@@ -26,7 +28,8 @@ export class BirdAssetGenerator {
             createdAt: "",
             dietId: "",
             version: "",
-            birdUnisex: true
+            birdUnisex: true,
+            birdColourMap: { image: "" }
         };
         // Label is in upper case but the request will only work if it's lowercase
         this._wikiPage = new BirdWikiPage(birdName.toLowerCase());
@@ -53,7 +56,7 @@ export class BirdAssetGenerator {
     }
 
     private async generateImage(): Promise<void> {
-        const description = this._wikiPage.getDescription();
+        const description = await this._wikiPage.getDescription();
         const familyName = this._wikiPage.getBirdFamily().toUpperCase();
         const birdName = this._wikiPage.getBirdName();
         this._imageGenerator = new ImageGenerator(description, familyName, birdName);
@@ -61,18 +64,19 @@ export class BirdAssetGenerator {
         this._generatedBird.birdUnisex = this._imageGenerator.unisex;
         this._generatedBird.birdShapeId = this._imageGenerator.shapeId;
         this._generatedBird.birdImages = this._imageGenerator.images;
+        this._generatedBird.birdColourMap = this._imageGenerator.colourMaps;
     }
 
     private generateScientificName(): void {
         this._generatedBird.birdScientificName = this._wikiPage.getBirdScientificName().toUpperCase();
     }
 
-    private generateShapeId(): void {
-        // Get it from the image generator class
-    }
-
     private async generateTraits(): Promise<void> {
-
+        const description = await this._wikiPage.getBehaviourSection();
+        const birdName = this._wikiPage.getBirdName();
+        const traitGenerator = new TraitGenerator(description, birdName);
+        await traitGenerator.generateTraits()
+        this._generatedBird.birdSimulationInfo = Object.fromEntries(traitGenerator.birdTraits);
     } 
 
     private generateDate(): void {
@@ -88,7 +92,10 @@ export class BirdAssetGenerator {
     }
 
     private async generateDiet(): Promise<void> {
-
+        const description = await this._wikiPage.getBehaviourSection();
+        const dietGenerator: DietGenerator = new DietGenerator(description);
+        await dietGenerator.generate();
+        this._generatedBird.dietId = dietGenerator.dietId;
     }
 
     private setVersion(): void {
@@ -100,18 +107,17 @@ export class BirdAssetGenerator {
     }
 
     public async generate(): Promise<void> {
-        // TODO add logic for single heading wiki pages
         this.generateId();
         this.generateName();
         this.generateFamilyName();
-        // await this.generateDescription();
+        await this.generateDescription();
         await this.generateImage();
         this.generateScientificName();
-        this.generateShapeId();
         await this.generateTraits();
         this.generateDate();
         await this.generateDiet();
         this.setVersion();
+        await Supabase.instantiate().uploadNewBird(this._generatedBird);
     }
 
     public get generatedBird(): BirdSpecies {

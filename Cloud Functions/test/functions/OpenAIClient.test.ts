@@ -7,8 +7,7 @@ import { BirdShape, Supabase } from "../../supabase/functions/SupabaseClient.ts"
 import { ChatGPT, GPTModels, OpenAIRequest, OpenAIRequestDirector } from "../../supabase/functions/OpenAIClient.ts";
 import { ImageGenerator } from "../../supabase/functions/findSpecies/ImageGenerator.ts";
 import { assertThrows } from "https://deno.land/std@0.214.0/assert/assert_throws.ts";
-import OpenAI from "https://deno.land/x/openai@v4.16.1/mod.ts";
-import Sinon from "npm:@types/sinon";
+import OpenAI from "npm:openai";
 
 describe("ChatGPT", () => {
     const checkIfBirdAppearanceUnisexTests = describe("checkIfBirdAppearanceUnisex");

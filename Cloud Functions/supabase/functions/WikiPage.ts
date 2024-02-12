@@ -26,11 +26,12 @@ export class WikiPage {
 
 // Extends the wikiPage class with bird wiki page specific functions
 export class BirdWikiPage extends WikiPage {
+    private readonly _descriptionHeading: string;
     private _isSummaryAboutBirds: boolean;
     private _hasSummaryBeenChecked: boolean;
     private _isNoHeadingPage: boolean;
-    private _descriptionHeading: string;
-
+    private readonly _behaviourHeading: string;
+    private readonly _breeding: string;
 
     constructor(pageName: string | URL) {
         super(pageName);
@@ -38,6 +39,8 @@ export class BirdWikiPage extends WikiPage {
         this._hasSummaryBeenChecked = false;
         this._isNoHeadingPage = false;
         this._descriptionHeading = "Description";
+        this._behaviourHeading = "Behaviour";
+        this._breeding = "Breeding";
     }
 
     public async setupParser(): Promise<void> {
@@ -84,11 +87,26 @@ export class BirdWikiPage extends WikiPage {
         return await ChatGPT.instantiate().extractBirdName(infoBoxText);
     }
 
-    public getDescription(): string {
+    public async getDescription(): Promise<string> {
         if(this._wikiParser.hasFullSection(this._descriptionHeading)) {
             return WikiParser.replaceCitations(this._wikiParser.getFullSection(this._descriptionHeading));
-        } else {
+        } else if (this._wikiParser.hasSection(this._descriptionHeading)) {
             return WikiParser.replaceCitations(this._wikiParser.getSection(this._descriptionHeading))
+        } else  {
+            // No heading page case
+            const noHeadingPageContent = WikiParser.replaceCitations(this._wikiParser.getSummary());
+            return await ChatGPT.instantiate().generateCustomSummary(noHeadingPageContent, "description");
+        }
+    }
+
+    public async getBehaviourSection(): Promise<string> {
+        if (this._wikiParser.hasFullSection(this._behaviourHeading)) {
+            return this._wikiParser.getFullSection(this._behaviourHeading);
+        } else if (this._wikiParser.hasFullSection(this._breeding)) {
+            return this._wikiParser.getFullSection(this._breeding);
+        } else {
+            const noHeadingPageContent = WikiParser.replaceCitations(this._wikiParser.getSummary());
+            return await ChatGPT.instantiate().generateCustomSummary(noHeadingPageContent, "behaviour, nesting and breeding");
         }
     }
 

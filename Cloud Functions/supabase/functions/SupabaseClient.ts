@@ -1,4 +1,5 @@
 import { SupabaseClient, createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
+import { ColourMap } from './findSpecies/ColourMap.ts';
 
 
 export type BirdLabel = {
@@ -12,12 +13,12 @@ export type BlacklistLabel = {
 }
 
 export type UnisexImage = {
-    image: string
+    image: string | ColourMap
 }
 
 export type GenderImages = {
-    male: string,
-    female: string
+    male: string | ColourMap,
+    female: string | ColourMap
 }
 
 export type BirdShape = {
@@ -37,8 +38,9 @@ export type BirdSpecies = {
     birdImages: UnisexImage | GenderImages;
     createdAt: string;
     version: string;
-    birdSimulationInfo: string[];
+    birdSimulationInfo: object;
     birdUnisex: boolean;
+    birdColourMap: object;
 }
 
 
@@ -58,6 +60,9 @@ export class Supabase {
     private readonly _birdSpeciesTable = "BirdSpecies";
     private readonly _familyToShapeTable = "FamilyToShape";
     private readonly _birdShapeTable = "BirdShape";
+    private readonly _dietTable = "Diet";
+    private readonly _traitTable = "Traits";
+    private readonly _birdAssetBucket = "BirdAssets";
 
     private constructor() {
         this._supabaseServiceRoleKey = Deno.env.get("SERVICE_ROLE_KEY") as string;
@@ -178,6 +183,34 @@ export class Supabase {
         return data[0] as BirdShape;
     }
 
+    public async fetchDiets(): Promise<string[]> {
+        const { data, error } = await this._supabaseAdminClient.from(this._dietTable)
+            .select("DietName");
+        if (error != null) {
+            throw new Error(`Supabase: ${error.message}`);
+        }
+        return data.map(entry => entry.DietName);
+    }
+
+    public async fetchDietId(diet: string): Promise<string> {
+        const { data, error } = await this._supabaseAdminClient.from(this._dietTable)
+            .select("DietId")
+            .eq("DietName", diet);
+        if (error != null) {
+            throw new Error(`Supabase: ${error.message}`);
+        }
+        return data[0].DietId as string;
+    }
+
+    public async fetchTraits(): Promise<string[]> {
+        const { data, error } = await this._supabaseAdminClient.from(this._traitTable)
+        .select("traitName");
+        if (error != null) {
+            throw new Error(`Supabase: ${error.message}`);
+        }
+        return data.map(entry => entry.traitName); 
+    }
+
     public async addBlacklistLabel(label: BlacklistLabel): Promise<void> {
         await this.addLabel({
             table: this._blacklistTable,
@@ -190,6 +223,23 @@ export class Supabase {
             table: this._birdLabelsTable,
             label: label
         })
+    }
+
+    public async uploadBirdImage(birdShape: string, birdName: string, image: Uint8Array): Promise<string> {
+        await this._supabaseAdminClient.storage.from(this._birdAssetBucket)
+            .upload(`${birdShape}/${birdName}.png`, image, {
+                contentType: 'image/png'
+            })
+        const { data } = await this._supabaseAdminClient.storage.from(this._birdAssetBucket)
+            .getPublicUrl(`${birdShape}/${birdName}.png`)
+        return data.publicUrl;
+    }
+
+    public async uploadNewBird(bird: BirdSpecies): Promise<void> {
+        const response = await this._supabaseAdminClient.from(this._birdSpeciesTable).insert(bird);
+        if(response.error) {
+            throw new Error(`Inserting a new label resulted in this error "${response.error.message}"`);
+        }
     }
 
     public async updateDatabase() {

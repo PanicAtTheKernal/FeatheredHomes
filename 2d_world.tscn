@@ -9210,6 +9210,7 @@ position = Vector2(363, 266)
 zoom = Vector2(6, 6)
 limit_left = 0
 limit_top = 0
+limit_smoothed = true
 script = ExtResource("2_gse07")
 
 [node name="RegenFood" type="Timer" parent="."]

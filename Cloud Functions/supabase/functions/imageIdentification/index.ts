@@ -163,8 +163,10 @@ class ImageIdentification {
 
   public async getBirdName(): Promise<{ name: string, approximate: boolean}> {
     const labels = Array.from(this._labels.keys());
+    console.log(labels)
     await this._labelSoter.sort(labels);
     const sortedLabels: SortedLabels = this._labelSoter.sortedLabels;
+    console.log(sortedLabels)
     if (sortedLabels.birdFamilyLabels.length == 0 && sortedLabels.birdSpeciesLabels.length == 0) {
       throw new Error("Blurry bird");
     }

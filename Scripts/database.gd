@@ -16,8 +16,8 @@ func _ready()->void:
 	await _login()
 	if not is_connected_to_db:
 		return
-	await _load_traits()
-	Logger.print_debug(traits, logger_key)
+	#await _load_traits()
+	#Logger.print_debug(traits, logger_key)
 
 func _load_env_file()->ConfigFile:
 	var config = ConfigFile.new()

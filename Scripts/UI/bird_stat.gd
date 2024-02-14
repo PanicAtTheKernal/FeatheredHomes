@@ -32,15 +32,15 @@ func _ready()->void:
 func load_new_bird(bird: BirdInfo)->void:
 	var date_dict = Time.get_datetime_dict_from_datetime_string(bird.date_found, false)
 	var date_found = str(date_dict.get("day"),"/",date_dict.get("month"),"/",date_dict.get("year"))
-	bird_name_label.text = bird.species.bird_name
+	bird_name_label.text = bird.species.name
 	date_found_label.text = date_found
 	status_label.text = bird.get_status_message(bird.status)
 	if bird.status != BirdInfo.StatusTypes.NOT_GENERATED:
-		_load_image(bird.species.bird_animations)
+		_load_image(bird.species.animations)
 	else:
 		Logger.print_debug("Bird isn't generated, using image placeholder", logger_key)
 		_load_image(default_frames)
-	Logger.print_debug(str("Updated UI with ",bird.species.bird_name), logger_key)
+	Logger.print_debug(str("Updated UI with ",bird.species.name), logger_key)
 	
 
 func _load_image(frames: SpriteFrames)->void:

@@ -2,14 +2,17 @@ extends Task
 
 class_name ReachedTarget
 
-@export
-var navigation_data: NavigationData
+var bird: Bird
+
+func _init(parent_bird: Bird, node_name:="ReachedTarget") -> void:
+	super(node_name)
+	bird = parent_bird
 
 func run():
-	if BirdHelperFunctions.character_at_target(navigation_data.character_body.global_position, data["target"]) == false:
+	if BirdHelperFunctions.character_at_target(bird.global_position, bird.target) == false:
 		super.fail()
 		return
-	data["target_reached"] = false
+	bird.target_reached = false
 	super.success()
 	
 func start():

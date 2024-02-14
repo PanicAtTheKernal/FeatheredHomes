@@ -2,17 +2,21 @@ extends Task
 
 class_name FindNearestFood
 
-var world_resources: WorldResources
-@export
-var navigation_data: NavigationData
+
+var bird: Bird
+
 var min_distance: float = 5
+
+func _init(parent_bird: Bird, node_name: String="CheckStamina") -> void:
+	super(node_name)
+	bird = parent_bird
 
 # TODO look at the perfromance under load
 func run():
-	var food_sources = world_resources.food_sources
+	var food_sources = bird.world_resources.food_sources
 	var distances: Array[float] = []
 	var list_sources: Dictionary = {}
-	var character_position: Vector2 = navigation_data.character_body.global_position
+	var character_position: Vector2 = bird.global_position
 	for food_source in food_sources:
 		# Only add resouce that are full
 		if food_source.current_state == "Empty":
@@ -30,11 +34,11 @@ func run():
 
 	var new_target = list_sources[shortest_distance]
 	print("New_target" + str(new_target))
-	navigation_data.calulate_distance.update_target(new_target)
+	bird.update_target(new_target)
+
+	# Might not need
+
 	# Disable the physics process until the navagation agents updated
-	set_physics_process(false)
+	# set_physics_process(false)
 	super.success()
 	return
-
-func start():
-	world_resources = data["world_resources"]

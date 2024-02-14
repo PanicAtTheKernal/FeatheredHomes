@@ -101,6 +101,7 @@ expand_icon = true
 script = ExtResource("7_v6h0r")
 
 [node name="Crosshair" type="TextureRect" parent="."]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

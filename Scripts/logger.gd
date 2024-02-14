@@ -7,7 +7,8 @@ enum LogType {
 	NAVIGATION,
 	AI,
 	GENERAL,
-	UI
+	UI,
+	BUILDER
 }
 
 var isDebug: bool = true
@@ -16,9 +17,10 @@ var allowed_logs: Dictionary = {
 	LogType.CAMERA: true,
 	LogType.DATABASE: true,
 	LogType.NAVIGATION: false,
-	LogType.AI: false,
+	LogType.AI: true,
 	LogType.GENERAL: true,
-	LogType.UI: true
+	LogType.UI: true,
+	LogType.BUILDER: true
 }
 
 var log_colours: Dictionary = {
@@ -28,7 +30,8 @@ var log_colours: Dictionary = {
 	LogType.NAVIGATION: "[color=cyan][b]Navigation (<>): [/b][/color]",
 	LogType.AI: "[color=yellow][b]AI (<>): [/b][/color]",
 	LogType.GENERAL: "[color=white][b]General (<>): [/b][/color]",
-	LogType.UI: "[color=purple][b]UI (<>): [/b][/color]",	
+	LogType.UI: "[color=purple][b]UI (<>): [/b][/color]",
+	LogType.BUILDER: "[color=blue][b]Builder (<>): [/b][/color]"
 }
 
 func _is_log_allowed(type:LogType)->bool:

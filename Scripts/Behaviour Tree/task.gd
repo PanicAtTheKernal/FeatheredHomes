@@ -21,6 +21,8 @@ var logger_key = {
 	"obj": self.name
 }
 
+func _init(node_name: String) -> void:
+	logger_key.obj = node_name
 
 func running()->void:
 	status = RUNNING

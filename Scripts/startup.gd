@@ -5,7 +5,7 @@ const welcome_text: String = """Welcome to the Feathered Home Pre-Alpha. Please 
 # Rotate the screen to potrait on moblie devices
 func _ready()->void:
 	_setup_screen_orientation()
-	_print_welcome_screen()
+	#_print_welcome_screen()
 	
 
 func _print_welcome_screen()->void:

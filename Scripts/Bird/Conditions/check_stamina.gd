@@ -2,13 +2,17 @@ extends Task
 
 class_name CheckStamina
 
+# TODO Randomise this
 var threshold: float = 0.5
 
+var bird: Bird
+
+func _init(parent_bird: Bird, node_name: String="CheckStamina") -> void:
+	super(node_name)
+	bird = parent_bird
+
 func run():
-	var stamina = data["stamina"]
-	var max_stamina = data["max_stamina"]
-	# TODO Move threshold to bird species info
-	if stamina > max_stamina * threshold:
+	if bird.current_stamina > (bird.species.max_stamina * threshold):
 		super.fail()
 	else:
 		super.success()

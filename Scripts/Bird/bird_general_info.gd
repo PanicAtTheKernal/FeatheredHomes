@@ -19,6 +19,12 @@ var species: BirdSpecies
 var description: String
 @export
 var family: String
+@export
+var scientific_name: String
+@export
+var gender: String
+@export
+var unisex: bool
 
 var status_messages: Dictionary = {
 	StatusTypes.NOT_GENERATED: "Not generated",

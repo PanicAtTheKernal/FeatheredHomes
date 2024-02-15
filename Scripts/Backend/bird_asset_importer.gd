@@ -2,6 +2,12 @@ extends Node
 
 class_name BirdAssetImporter
 
+const MAX_STAMINA = 10000
+const MIN_STAMINA = 500
+const MAX_GROUND_DISTANCE = 10
+const MIN_GROUND_DISTANCE = 4
+const MAX_FLIGHT_DISTANCE = 30
+
 signal bird_imported
 
 var http_request: HTTPRequest
@@ -39,14 +45,39 @@ func _create_request()->void:
 	add_child(http_request)
 
 func _build_species(response_body: Dictionary)->void:
-	bird.species.name = response_body.get("birdName")
+	var simulation_info = response_body.get("birdSimulationInfo") as Dictionary
+	bird.species.name = (response_body.get("birdName") as String).capitalize()
+	bird.species.max_stamina = randf_range(MIN_STAMINA, MAX_STAMINA)
+	bird.species.stamina = randf_range(MIN_STAMINA, bird.species.max_stamina)
+	bird.species.ground_cost = 5
+	bird.species.can_swim = simulation_info.get("canSwim")
+	bird.species.can_fly = simulation_info.get("canFly")
+	bird.species.ground_max_distance = randf_range(MIN_GROUND_DISTANCE, MAX_GROUND_DISTANCE)
+	bird.species.take_off_cost = 1
+	bird.species.flight_cost = 10
+	bird.species.flight_max_distance = randf_range(bird.species.ground_max_distance, MAX_FLIGHT_DISTANCE)
+	bird.species.preen = simulation_info.get("preen")
+	bird.species.takes_dust_baths = simulation_info.get("takesDustBaths")
+	bird.species.does_sunbathing = simulation_info.get("doesSunbathing")
+	
 
 func _build_info(response_body: Dictionary)->void:
 	bird.description = response_body.get("birdDescription")
-	bird.family = response_body.get("birdFamily")
+	bird.family = (response_body.get("birdFamily") as String).capitalize()
+	bird.scientific_name = (response_body.get("birdScientificName") as String).capitalize()
+
+func _build_shape()->void:
+	bird.species.size = 1.0 ## Fetch From db
+
+func _build_diet()->void:
+	pass
+
+func _build_image()->void:
+	pass
 
 func _on_fetch_bird_species_request_complete(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray)->void:
 	var response_body: Dictionary = JSON.parse_string(body.get_string_from_ascii()).get("data")
+	## Take account of genders
 
 
 func get_bird()->BirdInfo:

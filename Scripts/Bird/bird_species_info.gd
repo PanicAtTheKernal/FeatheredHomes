@@ -7,16 +7,16 @@ class_name BirdSpecies
 var name: String
 @export_range(1.0, 11.0)
 var size: float
+@export
+var diet: String
 
 @export 
 var animations: SpriteFrames
 
 @export_group("Navigation")
-@export_range(0, 200) 
-var range: float
-@export_range(100, 100000) 
+@export_range(100, 10000) 
 var max_stamina: float 
-@export_range(100, 100000) 
+@export_range(100, 10000) 
 var stamina: float
 
 @export_group("Ground")
@@ -40,4 +40,8 @@ var flight_max_distance: float
 
 @export_group("Traits")
 @export
-var traits: Dictionary
+var preen: bool
+@export
+var takes_dust_baths: bool
+@export
+var does_sunbathing: bool

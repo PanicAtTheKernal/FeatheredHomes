@@ -5,8 +5,8 @@ class_name UpdateTarget
 @export
 var target: Vector2
 
-func run():
+func run()->void:
 	super.success()
 	
-func start():
+func start()->void:
 	pass

@@ -38,13 +38,12 @@ func _ready():
 	#set_physics_process(false)
 
 #
-func _process(_delta):
-	if is_ground_agent_updated:
-		set_physics_process(true)
+# func _process(_delta):
+# 	if is_ground_agent_updated:
+# 		set_physics_process(true)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta):
-	#self.data["delta"] = delta
+func _physics_process(_delta):
 	run()
 
 func _on_navigation_update_timeout():
@@ -61,7 +60,7 @@ func _on_navigation_update_timeout():
 	#self.data["calculate_distances"] = true
 	pass
 
-func run():
+func run()->void:
 	for child in get_children():
 		child.run()
 

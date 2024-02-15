@@ -5,14 +5,12 @@ class_name FindNearestFood
 
 var bird: Bird
 
-var min_distance: float = 5
-
-func _init(parent_bird: Bird, node_name: String="CheckStamina") -> void:
+func _init(parent_bird: Bird, node_name: String="FindNearestFood") -> void:
 	super(node_name)
 	bird = parent_bird
 
 # TODO look at the perfromance under load
-func run():
+func run()->void:
 	var food_sources = bird.world_resources.food_sources
 	var distances: Array[float] = []
 	var list_sources: Dictionary = {}
@@ -33,9 +31,8 @@ func run():
 		return
 
 	var new_target = list_sources[shortest_distance]
-	print("New_target" + str(new_target))
-	bird.update_target(new_target)
-
+	Logger.print_debug("[New target] "+str(new_target), logger_key)
+	await bird.update_target(new_target)
 	# Might not need
 
 	# Disable the physics process until the navagation agents updated

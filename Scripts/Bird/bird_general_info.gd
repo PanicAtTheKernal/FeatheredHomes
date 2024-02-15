@@ -15,6 +15,10 @@ var id: int
 var status: StatusTypes
 @export
 var species: BirdSpecies
+@export
+var description: String
+@export
+var family: String
 
 var status_messages: Dictionary = {
 	StatusTypes.NOT_GENERATED: "Not generated",

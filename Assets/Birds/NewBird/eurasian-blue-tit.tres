@@ -6,15 +6,16 @@
 [resource]
 script = ExtResource("1_dfoau")
 name = "Blue Tit"
+size = 0.0
 animations = ExtResource("1_k8gkr")
 range = 0.0
 max_stamina = 1000.0
-stamina = 700.0
-ground_cost = 15.0
-can_bird_swim = false
-can_bird_fly = true
-ground_max_distance = 20.0
+stamina = 400.0
+ground_cost = 5.0
+can_swim = false
+can_fly = true
+ground_max_distance = 5.0
 take_off_cost = 1.0
-flight_cost = 0.0
+flight_cost = 10.0
 flight_max_distance = 48.0
 traits = {}

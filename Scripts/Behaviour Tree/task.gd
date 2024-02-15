@@ -71,7 +71,7 @@ func start()->void:
 		child.start()
 		
 
-func reset():
+func reset()->void:
 	cancel()
 	status = LOADED
 

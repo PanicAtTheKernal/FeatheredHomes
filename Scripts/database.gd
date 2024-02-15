@@ -58,3 +58,13 @@ func get_anon_token()->String:
 
 func get_image_endpoint()->String:
 	return config.get_value(ENVIRONMENT_VARIABLES, "URL", "") + config.get_value(ENVIRONMENT_VARIABLES, "IMAGE_ENDPOINT", "")
+
+func get_fetch_species_endpoint()->String:
+	return config.get_value(ENVIRONMENT_VARIABLES, "URL", "") + config.get_value(ENVIRONMENT_VARIABLES, "FIND_SPECIES_URL", "")
+
+func fetch_bird_species()->Dictionary:
+	var http_request = HTTPRequest.new()
+	var result = await http_request.request_completed
+	result.body
+	add_child(http_request)
+	return {}

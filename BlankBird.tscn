@@ -54,20 +54,20 @@ shape = SubResource("CircleShape2D_2ghpp")
 navigation_layers = 3
 avoidance_enabled = true
 avoidance_mask = 3
+debug_enabled = true
 debug_use_custom = true
 
 [node name="CalorieTimer" type="Timer" parent="."]
+autostart = true
 
 [node name="NavigationTimer" type="Timer" parent="."]
 autostart = true
 
-[node name="BirdBehaviouralTree" type="Node" parent="." node_paths=PackedStringArray("navigation_data")]
+[node name="BirdBehaviouralTree" type="Node" parent="."]
 script = ExtResource("4_vfg7a")
-navigation_data = NodePath("")
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_animation_finished"]
-[connection signal="play_new_animation" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_play_new_animation"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="navigation_finished" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_navigation_finished"]
 [connection signal="path_changed" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_path_changed"]
-[connection signal="timeout" from="CalorieTimer" to="BirdBehaviouralTree" method="_on_calorie_timer_timeout"]
+[connection signal="timeout" from="CalorieTimer" to="." method="_on_calorie_timer_timeout"]

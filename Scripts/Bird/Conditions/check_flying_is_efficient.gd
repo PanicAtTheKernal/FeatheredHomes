@@ -2,10 +2,14 @@ extends Task
 
 class_name CheckIfFlyingIsEfficient
 
+## Not needed anymore
+## @deprecated
+##
+
 var character_body: CharacterBody2D
 var flight_agent: NavigationAgent2D
 
-func run():
+func run()->void:
 	var flight_cost:float = data["total_flight_energy_cost"]
 	var ground_cost:float = data["total_ground_energy_cost"]
 	var path: PackedVector2Array = flight_agent.get_current_navigation_result().path
@@ -29,6 +33,6 @@ func run():
 	character_body.set_collision_mask_value(2, true)
 	super.success()
 
-func start():
+func start()->void:
 	character_body = data["character_body"]
 	flight_agent = data["flight_agent"]

@@ -5,6 +5,8 @@ class_name BirdSpecies
 @export_group("GeneralBirdInfo")
 @export
 var name: String
+@export_range(1.0, 11.0)
+var size: float
 
 @export 
 var animations: SpriteFrames
@@ -21,9 +23,9 @@ var stamina: float
 @export_range(5.0, 300.0)
 var ground_cost: float
 @export
-var can_bird_swim: bool = false
+var can_swim: bool = false
 @export
-var can_bird_fly: bool = true
+var can_fly: bool = true
 @export_range(4.0, 48.0)
 var ground_max_distance: float
 

@@ -11,11 +11,11 @@ func _init(parent_bird: Bird, node_name: String="CheckStamina") -> void:
 	super(node_name)
 	bird = parent_bird
 
-func run():
+func run()->void:
 	if bird.current_stamina > (bird.species.max_stamina * threshold):
 		super.fail()
 	else:
 		super.success()
 
-func start():
+func start()->void:
 	pass

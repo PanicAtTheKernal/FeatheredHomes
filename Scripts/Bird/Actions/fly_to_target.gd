@@ -8,7 +8,7 @@ var speed_multiplier: float = 1.3
 var flight_agent: NavigationAgent2D
 var character_body: CharacterBody2D
 
-func run():
+func run()->void:
 	var direction = character_body.to_local(flight_agent.get_next_path_position()).normalized()
 	character_body.velocity = direction * (BirdHelperFunctions.SPEED*speed_multiplier) * self.data["delta"]
 	
@@ -26,7 +26,7 @@ func run():
 		super.fail()
 
 	
-func start():
+func start()->void:
 	flight_agent = self.data["flight_agent"]
 	character_body = self.data["character_body"]
 	super.start()

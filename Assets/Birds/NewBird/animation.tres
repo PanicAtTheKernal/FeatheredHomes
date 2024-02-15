@@ -1,6 +1,10 @@
-[gd_resource type="SpriteFrames" load_steps=10 format=3 uid="uid://bn5ofc4v5g8hy"]
+[gd_resource type="SpriteFrames" load_steps=15 format=3 uid="uid://bn5ofc4v5g8hy"]
 
 [ext_resource type="Texture2D" uid="uid://bd8ik77kpqfpk" path="res://Assets/Birds/Chickadee-Sprite-Sheet-2.png" id="1_0m73c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n3rwa"]
+atlas = ExtResource("1_0m73c")
+region = Rect2(1152, 0, 96, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7htik"]
 atlas = ExtResource("1_0m73c")
@@ -30,12 +34,36 @@ region = Rect2(288, 0, 96, 64)
 atlas = ExtResource("1_0m73c")
 region = Rect2(384, 0, 96, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_i5x2n"]
+atlas = ExtResource("1_0m73c")
+region = Rect2(672, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8y81v"]
+atlas = ExtResource("1_0m73c")
+region = Rect2(768, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_83w02"]
+atlas = ExtResource("1_0m73c")
+region = Rect2(864, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jcsbv"]
+atlas = ExtResource("1_0m73c")
+region = Rect2(960, 0, 96, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_kqbbo"]
 atlas = ExtResource("1_0m73c")
 region = Rect2(0, 0, 96, 64)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_n3rwa")
+}],
+"loop": false,
+"name": &"Eating",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7htik")
@@ -65,6 +93,23 @@ animations = [{
 }],
 "loop": false,
 "name": &"Take-off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i5x2n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8y81v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_83w02")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jcsbv")
+}],
+"loop": true,
+"name": &"Walking",
 "speed": 5.0
 }, {
 "frames": [{

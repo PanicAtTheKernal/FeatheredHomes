@@ -6,7 +6,7 @@ class_name Selector
 
 var current_child = 0
 
-func run():
+func run()->void:
 	get_child(current_child).run()
 	running()
 
@@ -24,6 +24,6 @@ func cancel():
 	current_child = 0
 	super.cancel()
 
-func start():
+func start()->void:
 	current_child = 0
 	super.start()

@@ -53,8 +53,7 @@ func _on_image_request_complete(result: int, response_code: int, headers: Packed
 	var bird_species = result_body.get("birdSpecies")
 	var approximate = result_body.get("approximate")
 	_notify_user("bird", bird_species)
-	BirdResourceManager.add_bird(bird_species)
-	await BirdResourceManager.new_bird
+	await BirdResourceManager.add_bird(bird_species)
 	_cleanup()
 
 func _cleanup()->void:

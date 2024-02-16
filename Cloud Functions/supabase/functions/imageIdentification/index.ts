@@ -3,7 +3,7 @@
 // This enables autocomplete, go to definition, etc.
 
 import { Buffer } from "node:buffer";
-import { LabelSorter, SortedLabels } from "./LabelSorter.ts";
+import { LabelSorter, SortedLabels } from "../LabelSorter.ts";
 import { Supabase } from "../SupabaseClient.ts";
 import { ReferralWikiPage } from "../WikiPage.ts";
 

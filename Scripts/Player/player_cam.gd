@@ -54,6 +54,9 @@ func display(message: String, heading: String = "Notice:")->void:
 	Logger.print_debug("Player camera movement is disabled", logger_key)
 	isActive = false
 
+func turn_off_movement()->void:
+	isActive = false
+
 func turn_on_movement()->void:
 	Logger.print_debug("Player camera movement is enabled", logger_key)	
 	isActive = true

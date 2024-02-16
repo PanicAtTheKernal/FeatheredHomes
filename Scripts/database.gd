@@ -1,6 +1,9 @@
 extends Node
 
 const ENVIRONMENT_VARIABLES = "environment" 
+const DIET_TABLE = "Diet"
+const SHAPE_TABLE = "BirdShape"
+
 
 var config: ConfigFile
 var is_connected_to_db: bool
@@ -16,8 +19,6 @@ func _ready()->void:
 	await _login()
 	if not is_connected_to_db:
 		return
-	#await _load_traits()
-	#Logger.print_debug(traits, logger_key)
 
 func _load_env_file()->ConfigFile:
 	var config = ConfigFile.new()
@@ -37,22 +38,6 @@ func _login()->void:
 	else: 
 		is_connected_to_db = true
 
-func _load_traits()->Dictionary:
-	if traits.size() > 0:
-		return traits
-	var traits_query: SupabaseQuery = SupabaseQuery.new().from("Traits").select()
-	var traits_result = await Supabase.database.query(traits_query).completed
-	for row in traits_result.data:
-		var trait_name = row["traitName"]
-		var trait_rule = row["traitRule"]
-		var trait_pattern = row["traitPattern"]
-		var trait_entry = {
-			"trait_rule": trait_rule,
-			"trait_pattern": trait_pattern
-		}
-		traits[trait_name] = trait_entry
-	return traits
-
 func get_anon_token()->String:
 	return config.get_value(ENVIRONMENT_VARIABLES, "ANON_TOKEN", "")
 
@@ -60,11 +45,22 @@ func get_image_endpoint()->String:
 	return config.get_value(ENVIRONMENT_VARIABLES, "URL", "") + config.get_value(ENVIRONMENT_VARIABLES, "IMAGE_ENDPOINT", "")
 
 func get_fetch_species_endpoint()->String:
-	return config.get_value(ENVIRONMENT_VARIABLES, "URL", "") + config.get_value(ENVIRONMENT_VARIABLES, "FIND_SPECIES_URL", "")
+	return config.get_value(ENVIRONMENT_VARIABLES, "URL", "") + config.get_value(ENVIRONMENT_VARIABLES, "FIND_SPECIES_ENDPOINT", "")
 
-func fetch_bird_species()->Dictionary:
-	var http_request = HTTPRequest.new()
-	var result = await http_request.request_completed
-	result.body
-	add_child(http_request)
-	return {}
+func get_search_endpoint()->String:
+	return config.get_value(ENVIRONMENT_VARIABLES, "URL", "") + config.get_value(ENVIRONMENT_VARIABLES, "SEARCH_ENDPOINT", "")
+
+func fetch_diet_name(diet_id: String)->String:
+	var diet_query: SupabaseQuery = SupabaseQuery.new().from(DIET_TABLE).select(["DietName"]).eq("DietId", diet_id)
+	var diet_result = await Supabase.database.query(diet_query).completed
+	return diet_result.data[0]["DietName"]
+
+func fetch_shape(shape_id: String)->Dictionary:
+	var shape_query: SupabaseQuery = SupabaseQuery.new().from(SHAPE_TABLE).select().eq("BirdShapeId", shape_id)
+	var shape_result = await Supabase.database.query(shape_query).completed
+	return shape_result.data[0] as Dictionary
+
+func download_image(image_name, file_name)->void:
+	var storageResult: StorageTask = await Supabase.storage.from("BirdAssets").download(image_name, BirdResourceManager.BIRD_DATA_PATH + file_name).completed
+	if storageResult.error != null:
+		Logger.print_debug(storageResult.error, logger_key)

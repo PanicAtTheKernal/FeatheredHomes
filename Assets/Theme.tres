@@ -1,8 +1,9 @@
-[gd_resource type="Theme" load_steps=29 format=3 uid="uid://sct70k5b8gxf"]
+[gd_resource type="Theme" load_steps=30 format=3 uid="uid://sct70k5b8gxf"]
 
 [ext_resource type="Texture2D" uid="uid://bxdhaypp45ddw" path="res://Assets/big-button-sprite.png" id="1_4d5x0"]
 [ext_resource type="FontFile" uid="uid://c4xvfnmsiyw7t" path="res://Assets/Silkscreen/Silkscreen-Regular.ttf" id="1_b40rr"]
 [ext_resource type="Texture2D" uid="uid://by50r2nhjrjn" path="res://Assets/theme-ui.png" id="2_abom5"]
+[ext_resource type="FontFile" uid="uid://nxmuchvunil1" path="res://Assets/Silkscreen/Silkscreen-Bold.ttf" id="3_k1sf3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wa5uq"]
 atlas = ExtResource("1_4d5x0")
@@ -168,7 +169,11 @@ ItemList/styles/hovered = SubResource("StyleBoxTexture_q064h")
 ItemList/styles/panel = SubResource("StyleBoxTexture_nup3b")
 ItemList/styles/selected = SubResource("StyleBoxEmpty_lin0k")
 ItemList/styles/selected_focus = SubResource("StyleBoxEmpty_1h6s3")
+LineEdit/font_sizes/font_size = 48
 Panel/styles/panel = SubResource("StyleBoxTexture_ctglq")
+RichTextLabel/font_sizes/bold_font_size = 48
+RichTextLabel/font_sizes/normal_font_size = 48
+RichTextLabel/fonts/bold_font = ExtResource("3_k1sf3")
 ScrollContainer/styles/panel = SubResource("StyleBoxTexture_j6qq7")
 VScrollBar/styles/grabber = SubResource("StyleBoxTexture_movi6")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxTexture_fu2f6")

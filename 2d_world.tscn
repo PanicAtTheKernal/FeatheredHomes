@@ -9226,7 +9226,7 @@ tile_map = NodePath("../TileMap")
 [node name="Marker2D" type="Marker2D" parent="."]
 position = Vector2(363, 191)
 
-[node name="Birds" type="Node2D" parent="."]
+[node name="Birds" type="Node2D" parent="." groups=["BirdManager"]]
 script = ExtResource("10_tep2h")
 default_bird = ExtResource("8_xwsb6")
 default_info = ExtResource("9_naqma")

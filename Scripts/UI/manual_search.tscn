@@ -1,18 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://d2vy7b25mpbee"]
+[gd_scene load_steps=6 format=3 uid="uid://0w8vhuuiopaw"]
 
-[ext_resource type="Script" path="res://Scripts/UI/dialog.gd" id="1_6thm6"]
-[ext_resource type="Texture2D" uid="uid://mflsr74fmyc" path="res://Assets/background.png" id="1_eeyfq"]
-[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="3_2eewb"]
-[ext_resource type="FontFile" uid="uid://nxmuchvunil1" path="res://Assets/Silkscreen/Silkscreen-Bold.ttf" id="4_4ef35"]
+[ext_resource type="Script" path="res://Scripts/UI/manual_search.gd" id="1_tv6no"]
+[ext_resource type="Texture2D" uid="uid://mflsr74fmyc" path="res://Assets/background.png" id="2_l5fyq"]
+[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="3_cm428"]
+[ext_resource type="FontFile" uid="uid://nxmuchvunil1" path="res://Assets/Silkscreen/Silkscreen-Bold.ttf" id="4_y7npg"]
+[ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="5_so8ne"]
 
-[node name="Dialog" type="Control"]
+[node name="ManualSearch" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_6thm6")
+script = ExtResource("1_tv6no")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -23,7 +24,7 @@ offset_top = -252.0
 offset_bottom = 252.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_eeyfq")
+texture = ExtResource("2_l5fyq")
 expand_mode = 4
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -40,11 +41,11 @@ theme_override_constants/margin_bottom = 100
 
 [node name="Panel" type="Panel" parent="MarginContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(900, 420)
+custom_minimum_size = Vector2(900, 300)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme = ExtResource("3_2eewb")
+theme = ExtResource("3_cm428")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel"]
 layout_mode = 1
@@ -71,10 +72,10 @@ layout_mode = 2
 [node name="Notice" type="RichTextLabel" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme = ExtResource("3_2eewb")
-theme_override_fonts/bold_font = ExtResource("4_4ef35")
+theme = ExtResource("3_cm428")
+theme_override_fonts/bold_font = ExtResource("4_y7npg")
 bbcode_enabled = true
-text = "[b]Notice:[/b]"
+text = "[b]Manual Search:[/b]"
 fit_content = true
 autowrap_mode = 0
 
@@ -87,18 +88,35 @@ theme_override_constants/margin_bottom = 12
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Text" type="RichTextLabel" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer2"]
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("3_2eewb")
-theme_override_font_sizes/normal_font_size = 48
-theme_override_font_sizes/bold_font_size = 0
-text = "Place Holder"
+theme = ExtResource("3_cm428")
+placeholder_text = "Name Of bird"
+max_length = 20
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 2
+
+[node name="AspectRatioContainer2" type="AspectRatioContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3/AspectRatioContainer2"]
+custom_minimum_size = Vector2(288, 96)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("5_so8ne")
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 56
+text = "Cancel"
+clip_text = true
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
 
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
@@ -112,4 +130,5 @@ theme_override_font_sizes/font_size = 56
 text = "OK"
 clip_text = true
 
+[connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3/AspectRatioContainer2/CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3/AspectRatioContainer/OkButton" to="." method="_on_ok_button_pressed"]

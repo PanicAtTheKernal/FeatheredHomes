@@ -1,5 +1,5 @@
-import { BirdWikiPage, ReferralWikiPage } from "./../WikiPage.ts";
-import { Supabase } from "./../SupabaseClient.ts";
+import { BirdWikiPage, ReferralWikiPage } from "./WikiPage.ts";
+import { Supabase } from "./SupabaseClient.ts";
 
 export type SortedLabels = {
     isBird: boolean,

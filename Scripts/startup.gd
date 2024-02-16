@@ -5,7 +5,7 @@ const welcome_text: String = """Welcome to the Feathered Home Pre-Alpha. Please 
 # Rotate the screen to potrait on moblie devices
 func _ready()->void:
 	_setup_screen_orientation()
-	#_print_welcome_screen()
+	_print_welcome_screen()
 	
 
 func _print_welcome_screen()->void:
@@ -13,6 +13,7 @@ func _print_welcome_screen()->void:
 	if len(node) > 0:
 		await node[-1].ready
 		get_tree().call_group("Dialog", "display", welcome_text, "Welcome!")
+		get_tree().call_group("Dialog", "increase_dialog")		
 	
 
 func _setup_screen_orientation()->void:

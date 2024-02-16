@@ -45,6 +45,6 @@ func _load_player_data()->void:
 
 func save_player_data()->void:
 	Logger.print_debug("Saving player data", logger_key)	
-	var error = await ResourceSaver.save(player_data, PLAYER_DATA_PATH+PLAYER_DATA_FILE)
+	var error = ResourceSaver.save(player_data, PLAYER_DATA_PATH+PLAYER_DATA_FILE)
 	if error != OK:
-		Logger.print_debug(str("Error loading player data",error), logger_key)
+		Logger.print_debug(str("Error saving player data",error), logger_key)

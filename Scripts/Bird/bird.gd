@@ -46,6 +46,7 @@ func _ready():
 	animatated_spite.sprite_frames = species.animations
 	animatated_spite.animation_finished.connect(_on_animation_finished)
 	current_stamina = species.stamina
+	# TODO Look into removing this
 	$NavigationTimer.autostart = true
 	# Start the navaiagation timer at differnet times for each bird
 	await get_tree().create_timer(randf_range(0.5, 3.0)).timeout

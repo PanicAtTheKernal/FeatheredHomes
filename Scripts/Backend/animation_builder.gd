@@ -48,7 +48,6 @@ func _create_frames(image: ImageTexture)->Array[AtlasTexture]:
 func _create_animations(frames: Array[AtlasTexture])->SpriteFrames:
 	var animations = SpriteFrames.new()
 	var animation_names = animation_template.keys()
-	print(animation_names)
 	for animation_name in animation_names:
 		var animation_info = animation_template.get(animation_name)
 		var animation_frames = animation_info["frames"]

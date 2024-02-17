@@ -41,7 +41,7 @@ theme_override_constants/margin_bottom = 100
 
 [node name="Panel" type="Panel" parent="MarginContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(900, 300)
+custom_minimum_size = Vector2(900, 500)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -80,8 +80,8 @@ fit_content = true
 autowrap_mode = 0
 
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_constants/margin_bottom = 12
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/MarginContainer2"]
@@ -95,6 +95,15 @@ size_flags_horizontal = 3
 theme = ExtResource("3_cm428")
 placeholder_text = "Name Of bird"
 max_length = 20
+
+[node name="SupportedFamiles" type="RichTextLabel" parent="MarginContainer/Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "[u]Supported Bird Families:[/u]
+[ul bullet=-]"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2

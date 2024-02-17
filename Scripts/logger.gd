@@ -22,7 +22,7 @@ var allowed_logs: Dictionary = {
 	LogType.GENERAL: true,
 	LogType.UI: true,
 	LogType.BUILDER: true,
-	LogType.ANIMATION: true
+	LogType.ANIMATION: false
 }
 
 var log_colours: Dictionary = {

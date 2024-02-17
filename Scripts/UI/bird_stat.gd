@@ -89,6 +89,7 @@ func _load_image(frames: SpriteFrames)->void:
 
 
 func _on_new_frame_timer_timeout()->void:
+	# Loop through frames of the bird different animations
 	image.texture = bird_frames.get_frame_texture(current_anim_name, current_frame_index)
 	if current_frame_index == max_frames:
 		current_anim_index = (current_anim_index + 1) % len(anim_names)
@@ -102,3 +103,25 @@ func _on_new_frame_timer_timeout()->void:
 func _on_close_button_pressed()->void:
 	new_frame_timer.stop()
 	hide()
+
+func _on_scroll_container_draw() -> void:
+	# Adapt the content to screen size so the scrollable area is always on screen
+	# There was a bug where the scroll bar will overflow from the screen, cutting off content from it
+	var container: ScrollContainer = $Panel/MarginContainer/Content/ScrollContainer as ScrollContainer
+	var margin: MarginContainer = $Panel/MarginContainer as MarginContainer
+	var start_pos = container.global_position.y
+	var new_minium = DisplayServer.window_get_size_with_decorations().y - start_pos - margin.get_theme_constant("margin_bottom")
+	if container.custom_minimum_size.y != new_minium:
+		container.custom_minimum_size.y = new_minium
+	Logger.print_debug(str(start_pos, "d") ,logger_key)
+
+func _input(event: InputEvent) -> void:
+	# There is a bug where the scroll event is inconsistent with this constainer,
+	# this adds a fix using the screen drag event instead
+	if event is InputEventScreenDrag:
+		Logger.print_debug(event, logger_key)
+		var container: ScrollContainer = $Panel/MarginContainer/Content/ScrollContainer as ScrollContainer
+		var max = container.get_v_scroll_bar().max_value
+		var min = container.get_v_scroll_bar().min_value
+		var new_value = container.get_v_scroll_bar().value - event.relative.y
+		container.get_v_scroll_bar().value = clamp(new_value, min, max)

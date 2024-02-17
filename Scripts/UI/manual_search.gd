@@ -2,6 +2,13 @@ extends Control
 
 @onready
 var line_edit: LineEdit = %LineEdit
+@onready
+var families: RichTextLabel = %SupportedFamiles
+
+func _ready() -> void:
+	var supported_families = await Database.fetch_supported_familes()
+	for family in supported_families:
+		families.text += family + "\n"
 
 func show_search()->void:
 	show()

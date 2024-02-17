@@ -3,7 +3,7 @@ extends Node
 const ENVIRONMENT_VARIABLES = "environment" 
 const DIET_TABLE = "Diet"
 const SHAPE_TABLE = "BirdShape"
-
+const FAMILY_TO_SHAPE_TABLE = "FamilyToShape"
 
 var config: ConfigFile
 var is_connected_to_db: bool
@@ -59,6 +59,14 @@ func fetch_shape(shape_id: String)->Dictionary:
 	var shape_query: SupabaseQuery = SupabaseQuery.new().from(SHAPE_TABLE).select().eq("BirdShapeId", shape_id)
 	var shape_result = await Supabase.database.query(shape_query).completed
 	return shape_result.data[0] as Dictionary
+
+func fetch_supported_familes()->Array[String]:
+	var family_query: SupabaseQuery = SupabaseQuery.new().from(FAMILY_TO_SHAPE_TABLE).select()
+	var family_result = await Supabase.database.query(family_query).completed
+	var supported_familes: Array[String] = []
+	for family in family_result.data:
+		supported_familes.push_back(family["Family"])
+	return supported_familes
 
 func download_image(image_name, file_name)->void:
 	var storageResult: StorageTask = await Supabase.storage.from("BirdAssets").download(image_name, BirdResourceManager.BIRD_DATA_PATH + file_name).completed

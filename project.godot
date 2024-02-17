@@ -53,7 +53,7 @@ on_mouse_scroll_down={
 
 [input_devices]
 
-pointing/emulate_touch_from_mouse=true
+pointing/android/enable_pan_and_scale_gestures=true
 
 [layer_names]
 

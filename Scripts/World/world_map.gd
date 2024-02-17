@@ -63,7 +63,6 @@ func has_food(loc: Vector2i)->bool:
 	return false
 
 func _on_regen_food_timeout():
-	print(len(self.get_parent().find_children("", "CharacterBody2D")))
 	for food_source in food_sources:
 		#Ignore food souce that still have food
 		if food_source.current_state == "Full":

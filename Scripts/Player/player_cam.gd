@@ -40,6 +40,10 @@ func _input(event)->void:
 	# Move the camera
 	if event is InputEventMouseMotion and dragging and isActive:
 		position -= event.relative / zoom
+		
+	if event is InputEventMagnifyGesture:
+		Logger.print_debug(event, logger_key)	
+		zoom = clamp(zoom * event.factor, MIN_ZOOM_VEC, MAX_ZOOM_VEC)
 
 func zoom_in()->void:
 	if zoom < MAX_ZOOM_VEC:

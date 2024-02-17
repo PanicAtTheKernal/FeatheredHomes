@@ -12,7 +12,8 @@ func _print_welcome_screen()->void:
 	var node: Array[Node] = get_tree().get_nodes_in_group("Dialog")
 	if len(node) > 0:
 		await node[-1].ready
-		get_tree().call_group("Dialog", "display", welcome_text, "Welcome!")
+		get_tree().call_group("Dialog", "display", welcome_text, "Welcome!", false)
+		get_tree().call_group("PlayerCamera", "turn_off_movement")
 		get_tree().call_group("Dialog", "increase_dialog")		
 	
 

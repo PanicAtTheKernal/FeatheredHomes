@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=30 format=3 uid="uid://sct70k5b8gxf"]
+[gd_resource type="Theme" load_steps=31 format=3 uid="uid://sct70k5b8gxf"]
 
 [ext_resource type="Texture2D" uid="uid://bxdhaypp45ddw" path="res://Assets/big-button-sprite.png" id="1_4d5x0"]
 [ext_resource type="FontFile" uid="uid://c4xvfnmsiyw7t" path="res://Assets/Silkscreen/Silkscreen-Regular.ttf" id="1_b40rr"]
@@ -102,6 +102,17 @@ texture_margin_top = 8.0
 texture_margin_right = 8.0
 texture_margin_bottom = 8.0
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w7h6m"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+texture = SubResource("AtlasTexture_l0jhe")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j6qq7"]
 content_margin_left = 8.0
 content_margin_top = 8.0
@@ -171,6 +182,7 @@ ItemList/styles/selected = SubResource("StyleBoxEmpty_lin0k")
 ItemList/styles/selected_focus = SubResource("StyleBoxEmpty_1h6s3")
 LineEdit/font_sizes/font_size = 48
 Panel/styles/panel = SubResource("StyleBoxTexture_ctglq")
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_w7h6m")
 RichTextLabel/font_sizes/bold_font_size = 48
 RichTextLabel/font_sizes/normal_font_size = 48
 RichTextLabel/fonts/bold_font = ExtResource("3_k1sf3")

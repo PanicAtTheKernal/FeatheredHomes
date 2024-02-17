@@ -113,13 +113,11 @@ func _on_scroll_container_draw() -> void:
 	var new_minium = DisplayServer.window_get_size_with_decorations().y - start_pos - margin.get_theme_constant("margin_bottom")
 	if container.custom_minimum_size.y != new_minium:
 		container.custom_minimum_size.y = new_minium
-	Logger.print_debug(str(start_pos, "d") ,logger_key)
 
 func _input(event: InputEvent) -> void:
 	# There is a bug where the scroll event is inconsistent with this constainer,
 	# this adds a fix using the screen drag event instead
 	if event is InputEventScreenDrag:
-		Logger.print_debug(event, logger_key)
 		var container: ScrollContainer = $Panel/MarginContainer/Content/ScrollContainer as ScrollContainer
 		var max = container.get_v_scroll_bar().max_value
 		var min = container.get_v_scroll_bar().min_value

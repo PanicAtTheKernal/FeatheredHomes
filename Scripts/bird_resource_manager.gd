@@ -1,7 +1,7 @@
 extends Node
 
 const BIRD_DATA_PATH: String = "user://Birds/"
-const BIRD_FILE_EXTENSION: String = ".tres"
+const BIRD_FILE_EXTENSION: String = "-INFO.tres"
 
 var birds: Array[BirdInfo]
 var logger_key = {
@@ -56,7 +56,8 @@ func find_bird(bird_name: String)->void:
 		get_tree().call_group("LoadingSearchButton", "hide_loading")
 
 func save_bird(bird_data: BirdInfo)->void:
-	var file_name = (bird_data.species.name+"-"+bird_data.gender).to_upper()+"-INFO.tres"
+	var bird_name = bird_data.species.name.replace(" ", "-")
+	var file_name = (bird_name+"-"+bird_data.gender).to_upper()+BIRD_FILE_EXTENSION
 	Logger.print_debug("Saving player data", logger_key)	
 	var error = ResourceSaver.save(bird_data, BIRD_DATA_PATH+file_name)
 	if error != OK:

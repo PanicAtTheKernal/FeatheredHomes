@@ -4,7 +4,8 @@ class_name BirdInfo
 
 enum StatusTypes {
 	NOT_GENERATED,
-	GENERATED
+	GENERATED,
+	DEAD
 }
 
 @export
@@ -15,10 +16,21 @@ var id: int
 var status: StatusTypes
 @export
 var species: BirdSpecies
+@export
+var description: String
+@export
+var family: String
+@export
+var scientific_name: String
+@export
+var gender: String
+@export
+var unisex: bool
 
 var status_messages: Dictionary = {
 	StatusTypes.NOT_GENERATED: "Not generated",
-	StatusTypes.GENERATED: "Generated"
+	StatusTypes.GENERATED: "Generated",
+	StatusTypes.DEAD: "Dead"
 }
 
 func _init():

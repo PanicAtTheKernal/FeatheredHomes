@@ -37,7 +37,7 @@ script = ExtResource("3_u2c0p")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2ghpp")
 
-[node name="GroundAgent" type="NavigationAgent2D" parent="."]
+[node name="NavAgent" type="NavigationAgent2D" parent="."]
 avoidance_enabled = true
 avoidance_mask = 3
 debug_enabled = true
@@ -145,10 +145,9 @@ script = ExtResource("14_nx48i")
 [node name="FlyToTarget" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector/FlightSequence"]
 script = ExtResource("15_mdxmt")
 
-[connection signal="change_state" from="." to="AnimatedSprite2D" method="_on_bird_change_state"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_animation_finished"]
-[connection signal="navigation_finished" from="GroundAgent" to="BirdBehaviouralTree" method="_on_ground_agent_navigation_finished"]
-[connection signal="path_changed" from="GroundAgent" to="BirdBehaviouralTree" method="_on_ground_agent_path_changed"]
+[connection signal="navigation_finished" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_navigation_finished"]
+[connection signal="path_changed" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_path_changed"]
 [connection signal="path_changed" from="FlightAgent" to="BirdBehaviouralTree" method="_on_flight_agent_path_changed"]
 [connection signal="timeout" from="CalorieTimer" to="BirdBehaviouralTree" method="_on_calorie_timer_timeout"]
 [connection signal="timeout" from="NavigationTimer" to="BirdBehaviouralTree" method="_on_navigation_update_timeout"]

@@ -1,32 +1,27 @@
 extends Task
 
-class_name MoveOnGround
+class_name Move
 
-@export_range(0.1, 3.0)
-var speed_multiplier: float = 1.0
+var bird: Bird
 
-@export
-var navigation_data: NavigationData
-var nav_agent: NavigationAgent2D
-var character_body: CharacterBody2D
-@export
-var calculate_distance: CalculateDistance
+func _init(parent_bird: Bird, node_name:String="Move") -> void:
+	super(node_name)
+	bird = parent_bird
 
-func run():
-	var direction = character_body.to_local(nav_agent.get_next_path_position()).normalized()
-	character_body.velocity = direction * BirdHelperFunctions.SPEED * self.data["delta"]
-	
-	var is_character_at_target = BirdHelperFunctions.character_at_target(character_body.global_position, data["target"])
-	if  is_character_at_target == false and nav_agent.is_target_reachable():
-		character_body.move_and_slide()
+func run()->void:
+	bird.next_path_position = bird.nav_agent.get_next_path_position()
+	bird.direction = bird.to_local(bird.next_path_position).normalized()
+	bird.animatated_spite.flip_h = bird.direction.x < 0
+	bird.velocity = bird.direction * bird.SPEED * bird.physics_delta
+	var bird_at_target = bird.at_target()
+	if not bird_at_target and bird.nav_agent.is_target_reachable():
+		bird.move_and_slide()
 		super.running()	
-	elif is_character_at_target:
-		data["target_reached"] = true
+	elif bird_at_target:
+		bird.target_reached = true
 		super.success()
-	elif not nav_agent.is_target_reachable():
+	elif not bird.nav_agent.is_target_reachable():
 		super.fail()
 	
-func start():
-	character_body = navigation_data.character_body
-	nav_agent = navigation_data.nav_agent
+func start()->void:
 	super.start()

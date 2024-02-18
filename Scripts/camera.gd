@@ -49,6 +49,7 @@ func take_picture()->void:
 func _take_picture_andorid()->void:
 	if plugin:
 		plugin.getCameraImage()
+		#plugin.getGalleryImage()
 	else:
 		print(plugin_name, " plugin not loaded!")
 	

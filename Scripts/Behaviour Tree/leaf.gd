@@ -4,5 +4,5 @@ extends Task
 
 class_name Leaf
 
-func run():
+func run()->void:
 	success()

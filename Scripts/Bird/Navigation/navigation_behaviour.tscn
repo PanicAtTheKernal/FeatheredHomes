@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/walk.gd" id="8_ecqlb"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/check_if_swimming.gd" id="9_2u1we"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/swim.gd" id="10_3744t"]
-[ext_resource type="Script" path="res://Scripts/Bird/Navigation/check_if_moving_on_air.gd" id="11_kkec2"]
+[ext_resource type="Script" path="res://Scripts/Bird/Navigation/check_if_flying.gd" id="11_64j4j"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/fly.gd" id="12_yyq6m"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/move.gd" id="13_8b7lm"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/check_if_reached_target.gd" id="14_xpql5"]
@@ -23,10 +23,9 @@ calulate_distance = NodePath("NavigationSequence/CalculateDistance")
 [node name="NavigationSequence" type="Node" parent="."]
 script = ExtResource("2_a4ouu")
 
-[node name="CalculateDistance" type="Node" parent="NavigationSequence" node_paths=PackedStringArray("navigation_data")]
+[node name="CalculateDistance" type="Node" parent="NavigationSequence"]
 unique_name_in_owner = true
 script = ExtResource("3_e24xc")
-navigation_data = NodePath("../..")
 
 [node name="MovementSelector" type="Node" parent="NavigationSequence"]
 script = ExtResource("4_odi5h")
@@ -34,13 +33,11 @@ script = ExtResource("4_odi5h")
 [node name="GroundSequence" type="Node" parent="NavigationSequence/MovementSelector"]
 script = ExtResource("2_a4ouu")
 
-[node name="CheckIfMovingOnGround" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence" node_paths=PackedStringArray("calculate_distance")]
+[node name="CheckIfMovingOnGround" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence"]
 script = ExtResource("5_h5rat")
-calculate_distance = NodePath("../../../CalculateDistance")
 
-[node name="CheckGroundType" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence" node_paths=PackedStringArray("navigation_data")]
+[node name="CheckGroundType" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence"]
 script = ExtResource("6_3qoab")
-navigation_data = NodePath("../../../..")
 
 [node name="GroundSelector" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence"]
 script = ExtResource("4_odi5h")
@@ -48,44 +45,35 @@ script = ExtResource("4_odi5h")
 [node name="WalkingSequence" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector"]
 script = ExtResource("2_a4ouu")
 
-[node name="CheckIfWalking" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/WalkingSequence" node_paths=PackedStringArray("check_ground_type")]
+[node name="CheckIfWalking" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/WalkingSequence"]
 script = ExtResource("7_6fsov")
-check_ground_type = NodePath("../../../CheckGroundType")
 
-[node name="Walk" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/WalkingSequence" node_paths=PackedStringArray("navigation_data")]
+[node name="Walk" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/WalkingSequence"]
 script = ExtResource("8_ecqlb")
-navigation_data = NodePath("../../../../../..")
 
 [node name="SwimmingSequence" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector"]
 script = ExtResource("2_a4ouu")
 
-[node name="CheckIfSwimming" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/SwimmingSequence" node_paths=PackedStringArray("check_ground_type")]
+[node name="CheckIfSwimming" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/SwimmingSequence"]
 script = ExtResource("9_2u1we")
-check_ground_type = NodePath("../../../CheckGroundType")
 
-[node name="Swim" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/SwimmingSequence" node_paths=PackedStringArray("navigation_data")]
+[node name="Swim" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/SwimmingSequence"]
 script = ExtResource("10_3744t")
-navigation_data = NodePath("../../../../../..")
 
 [node name="AirSequence" type="Node" parent="NavigationSequence/MovementSelector"]
 script = ExtResource("2_a4ouu")
 
-[node name="CheckIfMovingOnAir" type="Node" parent="NavigationSequence/MovementSelector/AirSequence" node_paths=PackedStringArray("calculate_distance")]
-script = ExtResource("11_kkec2")
-calculate_distance = NodePath("../../../CalculateDistance")
+[node name="CheckIfMovingOnAir" type="Node" parent="NavigationSequence/MovementSelector/AirSequence"]
+script = ExtResource("11_64j4j")
 
-[node name="Fly" type="Node" parent="NavigationSequence/MovementSelector/AirSequence" node_paths=PackedStringArray("navigation_data")]
+[node name="Fly" type="Node" parent="NavigationSequence/MovementSelector/AirSequence"]
 script = ExtResource("12_yyq6m")
-navigation_data = NodePath("../../../..")
 
-[node name="Move" type="Node" parent="NavigationSequence" node_paths=PackedStringArray("navigation_data", "calculate_distance")]
+[node name="Move" type="Node" parent="NavigationSequence"]
 script = ExtResource("13_8b7lm")
-navigation_data = NodePath("../..")
-calculate_distance = NodePath("../CalculateDistance")
 
 [node name="CheckIfReachedTarget" type="Node" parent="NavigationSequence"]
 script = ExtResource("14_xpql5")
 
-[node name="Stop" type="Node" parent="NavigationSequence" node_paths=PackedStringArray("navigation_data")]
+[node name="Stop" type="Node" parent="NavigationSequence"]
 script = ExtResource("15_l7lnx")
-navigation_data = NodePath("../..")

@@ -10,6 +10,24 @@ var date_found_label: Label = %DateFoundData
 var status_label: Label = %StatusData
 @onready
 var new_frame_timer: Timer = %NewFrameTimer
+@onready
+var description: RichTextLabel = %DescriptionData
+@onready
+var family_label: Label = %FamilyData
+@onready
+var scientific_label: Label = %ScientificData
+@onready
+var gender_label: Label = %GenderData
+@onready
+var diet_label: Label = %DietData
+@onready
+var fly_label: Label = %FlyData
+@onready
+var swim_label: Label = %SwimData
+@onready
+var cleaning_label: Label = %CleaningMethodsData
+@onready
+var current_stamina: Label = %CurrentStaminaData
 
 @export
 var default_frames: SpriteFrames
@@ -32,16 +50,34 @@ func _ready()->void:
 func load_new_bird(bird: BirdInfo)->void:
 	var date_dict = Time.get_datetime_dict_from_datetime_string(bird.date_found, false)
 	var date_found = str(date_dict.get("day"),"/",date_dict.get("month"),"/",date_dict.get("year"))
-	bird_name_label.text = bird.species.bird_name
+	bird_name_label.text = bird.species.name
+	family_label.text = bird.family
+	scientific_label.text = bird.scientific_name
+	gender_label.text = bird.gender
+	diet_label.text = bird.species.diet
 	date_found_label.text = date_found
 	status_label.text = bird.get_status_message(bird.status)
+	description.text = bird.description
+	fly_label.text = "Yes" if bird.species.can_fly else "No"
+	swim_label.text = "Yes" if bird.species.can_swim else "No"
+	_build_cleaning_label(bird)
+	current_stamina.text = str(bird.species.stamina/bird.species.max_stamina * 100,"%")
 	if bird.status != BirdInfo.StatusTypes.NOT_GENERATED:
-		_load_image(bird.species.bird_animations)
+		_load_image(bird.species.animations)
 	else:
 		Logger.print_debug("Bird isn't generated, using image placeholder", logger_key)
 		_load_image(default_frames)
-	Logger.print_debug(str("Updated UI with ",bird.species.bird_name), logger_key)
+	Logger.print_debug(str("Updated UI with ",bird.species.name), logger_key)
 	
+func _build_cleaning_label(bird: BirdInfo)->void:
+	var cleaning_methods: String = ""
+	if bird.species.preen:
+		cleaning_methods += "Preening, "
+	if bird.species.takes_dust_baths:
+		cleaning_methods += "Dust Baths, "
+	if bird.species.does_sunbathing:
+		cleaning_methods += "Sunbathing, "
+	cleaning_label.text = cleaning_methods.trim_suffix(", ")
 
 func _load_image(frames: SpriteFrames)->void:
 	if len(frames.get_animation_names()) > 0:
@@ -56,6 +92,7 @@ func _load_image(frames: SpriteFrames)->void:
 
 
 func _on_new_frame_timer_timeout()->void:
+	# Loop through frames of the bird different animations
 	image.texture = bird_frames.get_frame_texture(current_anim_name, current_frame_index)
 	if current_frame_index == max_frames:
 		current_anim_index = (current_anim_index + 1) % len(anim_names)
@@ -69,3 +106,23 @@ func _on_new_frame_timer_timeout()->void:
 func _on_close_button_pressed()->void:
 	new_frame_timer.stop()
 	hide()
+
+func _on_scroll_container_draw() -> void:
+	# Adapt the content to screen size so the scrollable area is always on screen
+	# There was a bug where the scroll bar will overflow from the screen, cutting off content from it
+	var container: ScrollContainer = $Panel/MarginContainer/Content/ScrollContainer as ScrollContainer
+	var margin: MarginContainer = $Panel/MarginContainer as MarginContainer
+	var start_pos = container.global_position.y
+	var new_minium = DisplayServer.window_get_size_with_decorations().y - start_pos - margin.get_theme_constant("margin_bottom")
+	if container.custom_minimum_size.y != new_minium:
+		container.custom_minimum_size.y = new_minium
+
+func _input(event: InputEvent) -> void:
+	# There is a bug where the scroll event is inconsistent with this constainer,
+	# this adds a fix using the screen drag event instead
+	if event is InputEventScreenDrag:
+		var container: ScrollContainer = $Panel/MarginContainer/Content/ScrollContainer as ScrollContainer
+		var max = container.get_v_scroll_bar().max_value
+		var min = container.get_v_scroll_bar().min_value
+		var new_value = container.get_v_scroll_bar().value - event.relative.y
+		container.get_v_scroll_bar().value = clamp(new_value, min, max)

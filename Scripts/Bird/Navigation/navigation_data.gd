@@ -2,6 +2,10 @@ extends Task
 
 class_name NavigationData
 
+## Not needed anymore
+## @deprecated
+##
+
 @export
 var nav_agent: NavigationAgent2D
 @export
@@ -15,7 +19,7 @@ var bird_species_info: BirdSpecies
 @export
 var calulate_distance: CalculateDistance
 
-func run():
+func run()->void:
 	get_child(0).run()
 	super.running()
 	
@@ -28,6 +32,6 @@ func child_fail():
 func child_running():
 	super.running()
 	
-func start():
+func start()->void:
 	bird_species_info = data["species"]
 	super.start()

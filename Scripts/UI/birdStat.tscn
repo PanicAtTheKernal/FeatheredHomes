@@ -80,7 +80,7 @@ layout_mode = 2
 theme_override_constants/margin_top = 20
 
 [node name="ColorRect" type="ColorRect" parent="Panel/MarginContainer/Content/HeadingContainer/MarginContainer"]
-custom_minimum_size = Vector2(320, 320)
+custom_minimum_size = Vector2(480, 480)
 layout_direction = 2
 layout_mode = 2
 size_flags_vertical = 3
@@ -94,10 +94,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -128.0
-offset_top = -128.0
-offset_right = 128.0
-offset_bottom = 128.0
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("AtlasTexture_itgj4")
@@ -109,10 +109,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -160.0
-offset_top = -160.0
-offset_right = 160.0
-offset_bottom = 160.0
+offset_left = -240.0
+offset_top = -240.0
+offset_right = 240.0
+offset_bottom = 240.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("AtlasTexture_ck5gq")
@@ -134,7 +134,7 @@ text = "X"
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/Content"]
 layout_mode = 2
-theme_override_constants/margin_top = 8
+theme_override_constants/margin_top = 64
 theme_override_constants/margin_bottom = 8
 
 [node name="Seperator" type="Panel" parent="Panel/MarginContainer/Content/MarginContainer"]
@@ -145,20 +145,25 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_0p0h4")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/Content"]
 layout_mode = 2
-size_flags_vertical = 3
+mouse_filter = 0
+mouse_force_pass_scroll_events = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
 
 [node name="Name" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="BirdNameHeading" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Name"]
+[node name="Heading" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Name"]
+clip_contents = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 56
-text = "Bird Name: "
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Name:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
 
 [node name="BirdNameData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Name"]
 unique_name_in_owner = true
@@ -169,13 +174,108 @@ theme_override_font_sizes/font_size = 56
 text = "Blue tit"
 autowrap_mode = 2
 
+[node name="Family" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Family"]
+clip_contents = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Family:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
+
+[node name="FamilyData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Family"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+text = "Blue tit"
+autowrap_mode = 2
+
+[node name="Scientific" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Scientific"]
+clip_contents = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Scientific 
+Name:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
+
+[node name="ScientificData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Scientific"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+text = "Blue tit"
+autowrap_mode = 2
+
+[node name="Gender" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Heading" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Gender"]
+clip_contents = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Gender:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
+
+[node name="GenderData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Gender"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+text = "Male
+"
+autowrap_mode = 2
+
+[node name="Diet" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Heading" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Diet"]
+clip_contents = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Diet:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
+
+[node name="DietData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Diet"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+text = "Seeds"
+autowrap_mode = 2
+
 [node name="DateFound" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="DateFoundHeading" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/DateFound"]
+[node name="Heading" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/DateFound"]
+clip_contents = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 56
-text = "Date Found: "
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Date Found:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
 
 [node name="DateFoundData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/DateFound"]
 unique_name_in_owner = true
@@ -188,10 +288,15 @@ text = "2/2/2024"
 [node name="Status" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="StatusHeading" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Status"]
+[node name="Heading" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Status"]
+clip_contents = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 56
-text = "Status: "
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Status:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
 
 [node name="StatusData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Status"]
 unique_name_in_owner = true
@@ -201,10 +306,115 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 56
 text = "Not Generated"
 
+[node name="Description" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+clip_contents = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Description:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
+
+[node name="DescriptionData" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_1q51l")
+theme_override_font_sizes/normal_font_size = 56
+fit_content = true
+
+[node name="Fly" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Fly"]
+clip_contents = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Can Fly:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
+
+[node name="FlyData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Fly"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+text = "Seeds"
+autowrap_mode = 2
+
+[node name="Swim" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Swim"]
+clip_contents = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Can Swim:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
+
+[node name="SwimData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/Swim"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+text = "Seeds"
+autowrap_mode = 2
+
+[node name="CleaningMethods" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/CleaningMethods"]
+clip_contents = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Cleaning
+Methods:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
+
+[node name="CleaningMethodsData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/CleaningMethods"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+autowrap_mode = 2
+
+[node name="RemainingStamina" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/RemainingStamina"]
+clip_contents = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Cleaning
+Methods:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
+
+[node name="CurrentStaminaData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/RemainingStamina"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+autowrap_mode = 2
+
 [node name="NewFrameTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 wait_time = 0.3
-autostart = true
 
 [connection signal="pressed" from="Panel/MarginContainer/Content/HeadingContainer/HBoxContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="draw" from="Panel/MarginContainer/Content/ScrollContainer" to="." method="_on_scroll_container_draw"]
 [connection signal="timeout" from="NewFrameTimer" to="." method="_on_new_frame_timer_timeout"]

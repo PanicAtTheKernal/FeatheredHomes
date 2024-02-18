@@ -9,10 +9,14 @@ var ground_cost: float
 var flight_cost: float
 var take_off_cost: float
 
+## Not needed anymore
+## @deprecated
+##
+
 @export
 var mid_flight_calculations: bool = true
 
-func run():
+func run()->void:
 	# Prevent calculate distance to once per second instead of 60 a second  
 	if data["calculate_distances"] == false:
 		get_child(0).run()
@@ -58,7 +62,7 @@ func run():
 func child_success():
 	super.success()
 
-func start():
+func start()->void:
 	ground_agent = self.data["ground_agent"]
 	flight_agent = self.data["flight_agent"]
 	character_body = self.data["character_body"]

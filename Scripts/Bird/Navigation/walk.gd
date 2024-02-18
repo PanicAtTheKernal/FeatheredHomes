@@ -2,21 +2,16 @@ extends Task
 
 class_name Walk
 
-@export
-var navigation_data: NavigationData
-var nav_agent: NavigationAgent2D
-var character_body: CharacterBody2D
+var bird: Bird
 
-var change_state
+func _init(parent_bird: Bird, node_name:String="Walk") -> void:
+	super(node_name)
+	bird = parent_bird
 
-func run():
-	var direction = character_body.to_local(nav_agent.get_next_path_position()).normalized()
-	var should_flip_h = direction.x < 0
-	change_state.emit("Ground", should_flip_h)
+func run()->void:
+	bird.animatated_spite.update_state("Ground")
+	bird.animatated_spite.play_walking_animation()
 	super.success()
 	
-func start():
-	character_body = navigation_data.character_body
-	nav_agent = navigation_data.nav_agent
-	change_state = data["change_state"]
+func start()->void:
 	super.start()

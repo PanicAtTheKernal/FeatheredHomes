@@ -4,12 +4,12 @@ extends Task
 
 class_name Inverter
 
-func run():
+func run()->void:
 	get_child(0).run()
 	running()
 
-func child_success():
+func child_success()->void:
 	fail()
 
-func child_fail():
+func child_fail()->void:
 	success()

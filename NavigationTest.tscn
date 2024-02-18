@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cv0t0stbv53hr"]
+[gd_scene load_steps=26 format=3 uid="uid://cv0t0stbv53hr"]
 
 [ext_resource type="Texture2D" uid="uid://cnuew56xuo5jv" path="res://Assets/Titlemap/roguelikeSheet_transparent.png" id="1_d3jjw"]
 [ext_resource type="Script" path="res://Scripts/World/world_navigation.gd" id="1_n72i0"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://Scripts/Player/player_cam.gd" id="2_wbf6d"]
 [ext_resource type="Resource" uid="uid://lbomgeivl84f" path="res://Scripts/Food/ProtoFood.tres" id="3_4j6hx"]
 [ext_resource type="PackedScene" uid="uid://b0r1g32c1xayf" path="res://BirdNavTest2.tscn" id="8_bkcdb"]
-[ext_resource type="Resource" uid="uid://b25tuaxl75q5k" path="res://Assets/Birds/NewBird/eurasian-blue-tit.tres" id="8_vs5eu"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_iy7di"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -9468,10 +9467,8 @@ layer_1/tile_data = PackedInt32Array(0, 3670016, 27, 65536, 3670016, 27, 131072,
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("2_wbf6d")
 
-[node name="Bird" parent="." node_paths=PackedStringArray("target", "world_resources") instance=ExtResource("8_bkcdb")]
+[node name="Bird" parent="." node_paths=PackedStringArray("world_resources") instance=ExtResource("8_bkcdb")]
 position = Vector2(88, 72)
-target = NodePath("../Marker2D")
-bird_species = ExtResource("8_vs5eu")
 world_resources = NodePath("../WorldResources")
 
 [node name="Marker2D" type="Marker2D" parent="."]

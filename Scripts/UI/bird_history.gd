@@ -11,7 +11,7 @@ var logger_key = {
 # Called when the node enters the scene tree for the first time.
 func _ready()->void:
 	setup_list(BirdResourceManager.get_bird_list_items())
-	BirdResourceManager.new_bird.connect(_on_new_bird)
+	BirdResourceManager.new_bird_added.connect(_on_new_bird)
 
 func _process(delta)->void:
 	pass
@@ -19,10 +19,9 @@ func _process(delta)->void:
 func _on_close_button_pressed()->void:
 	hide()
 
-func _on_new_bird(new_bird: BirdInfo)->void:
-	var new_item = str(new_bird.species.bird_name)
-	list.add_item(new_item)
-	Logger.print_debug(("New bird added to bird history '"+new_item+"'"), logger_key)
+func _on_new_bird()->void:
+	setup_list(BirdResourceManager.get_bird_list_items())
+	Logger.print_debug(("Updated bird history"), logger_key)
 
 func setup_list(items: PackedStringArray)->void:
 	Logger.print_debug("Setting up list", logger_key)

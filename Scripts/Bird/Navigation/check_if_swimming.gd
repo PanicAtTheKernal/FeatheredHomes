@@ -2,17 +2,17 @@ extends Task
 
 class_name CheckIfSwimming
 
-@export
-var check_ground_type: CheckGroundType
-var is_target_reached: bool
+var bird: Bird
 
-func run():
-	is_target_reached = data["target_reached"]
-	if check_ground_type.current_tile == "Water" and not is_target_reached:
+func _init(parent_bird: Bird, node_name:String="CheckIfSwimming") -> void:
+	super(node_name)
+	bird = parent_bird
+
+func run()->void:
+	if bird.current_tile == "Water" and not bird.target_reached:
 		super.success()
 	else:
 		super.fail()
 	
-func start():
-	is_target_reached = data["target_reached"]
+func start()->void:
 	super.start()

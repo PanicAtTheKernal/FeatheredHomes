@@ -32,36 +32,6 @@ func _ready():
 		DirAccess.make_dir_recursive_absolute(ASSET_PATH)
 
 
-func _on_button_pressed():
-	var users_bird_name = line_edit.text
-	if users_bird_name == "":
-		print("User didn't enter bird name")
-	
-	# Disable the form until the bird spawns
-	#progress_bar.show()
-	line_edit.editable = false
-	submit_button.hide()
-	var bird_species_file = find_potential_files(line_edit.text)
-	line_edit.clear()
-	if bird_species_file != "":
-		add_bird_to_scene(bird_species_file)
-	else:
-		get_bird_from_cloud(users_bird_name)
-		
-	
-
-func find_potential_files(bird_name: String) -> String:
-	# The species rescoure files don't use spaces, files instead use hyphens
-	var bird_file_name = bird_name.replace(" ", "-")
-	var files = DirAccess.get_files_at(ASSET_PATH)
-	var file_regex = RegEx.new()
-	file_regex.compile("[^*]*"+bird_file_name+"[^*]*[.]tres")
-	print(files)
-	for file in files:
-		if file_regex.search(file):
-			print(file)
-			return file
-	return ""
 
 func get_bird_from_cloud(bird_name: String):
 	# Don't make the request if the env file didn't load in
@@ -95,7 +65,7 @@ func build_simulation(request_body: Dictionary):
 	var body: Dictionary = request_body.get("data")
 	var new_species: BirdSpecies = BirdSpecies.new()
 	var bird_name: String = body.get("birdName")
-	var bird_file_name: String = bird_name.replace(" ", "-") + ".tres"
+	var bird_file_name: String = bird_name.replace(" ", "-") + "-info.tres"
 	var simulation_info: Dictionary = body.get("birdSimulationInfo")
 	var bird_shape_id: String = body.get("birdShapeId")
 	var bird_template_url: String = body.get("birdImageUrl")

@@ -1,14 +1,13 @@
-[gd_scene load_steps=33 format=3 uid="uid://dsps58agtajiu"]
+[gd_scene load_steps=32 format=3 uid="uid://dsps58agtajiu"]
 
 [ext_resource type="Texture2D" uid="uid://cnuew56xuo5jv" path="res://Assets/Titlemap/roguelikeSheet_transparent.png" id="1_q8hc6"]
 [ext_resource type="Script" path="res://Scripts/World/world_map.gd" id="2_g4m67"]
 [ext_resource type="Script" path="res://Scripts/Player/player_cam.gd" id="2_gse07"]
 [ext_resource type="Resource" uid="uid://lbomgeivl84f" path="res://Scripts/Food/ProtoFood.tres" id="3_vd1to"]
-[ext_resource type="PackedScene" uid="uid://cquo65bvi3v3n" path="res://BirdNavTest.tscn" id="6_pqj27"]
-[ext_resource type="PackedScene" uid="uid://b0r1g32c1xayf" path="res://BirdNavTest2.tscn" id="7_h4xq2"]
 [ext_resource type="PackedScene" uid="uid://cc7jo7b3cgbem" path="res://Scripts/World/ui.tscn" id="8_k080l"]
 [ext_resource type="Resource" uid="uid://b25tuaxl75q5k" path="res://Assets/Birds/NewBird/eurasian-blue-tit.tres" id="8_xwsb6"]
 [ext_resource type="Resource" uid="uid://hxbky8sm223l" path="res://Assets/Birds/NewBird/sample_bird_info.tres" id="9_naqma"]
+[ext_resource type="Script" path="res://Scripts/World/bird_manager.gd" id="10_tep2h"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_tt3tg"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -9210,27 +9209,21 @@ position = Vector2(363, 266)
 zoom = Vector2(6, 6)
 limit_left = 0
 limit_top = 0
+limit_smoothed = true
 script = ExtResource("2_gse07")
 
 [node name="RegenFood" type="Timer" parent="."]
 wait_time = 10.0
 autostart = true
 
-[node name="Bird" parent="." node_paths=PackedStringArray("target", "tile_map", "world_resources") instance=ExtResource("7_h4xq2")]
-position = Vector2(456, 588)
-target = NodePath("../Marker2D")
-tile_map = NodePath("../TileMap")
-bird_species = ExtResource("8_xwsb6")
-world_resources = NodePath("../WorldResources")
-bird_info = ExtResource("9_naqma")
-
-[node name="UI" parent="." node_paths=PackedStringArray("world_rescources", "player_cam", "tile_map") instance=ExtResource("8_k080l")]
-bird_scene = ExtResource("6_pqj27")
-world_rescources = NodePath("../WorldResources")
-player_cam = NodePath("../PlayerCam")
-tile_map = NodePath("../TileMap")
+[node name="UI" parent="." instance=ExtResource("8_k080l")]
 
 [node name="Marker2D" type="Marker2D" parent="."]
 position = Vector2(363, 191)
+
+[node name="Birds" type="Node2D" parent="." groups=["BirdManager"]]
+script = ExtResource("10_tep2h")
+default_bird = ExtResource("8_xwsb6")
+default_info = ExtResource("9_naqma")
 
 [connection signal="timeout" from="RegenFood" to="WorldResources" method="_on_regen_food_timeout"]

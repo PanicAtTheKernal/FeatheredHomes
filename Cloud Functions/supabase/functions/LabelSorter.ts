@@ -1,5 +1,5 @@
-import { BirdWikiPage, ReferralWikiPage } from "./../WikiPage.ts";
-import { Supabase } from "./../SupabaseClient.ts";
+import { BirdWikiPage, ReferralWikiPage } from "./WikiPage.ts";
+import { Supabase } from "./SupabaseClient.ts";
 
 export type SortedLabels = {
     isBird: boolean,
@@ -118,7 +118,8 @@ export class LabelSorter {
             throw new Error("No bird");
         }
         await this.fetchLabelLists();
-        for(let label in this._labels) {
+        for(const label of this._labels) {
+            console.log(label);
             await this.sortLabel(label.toUpperCase());
         }
         this.sortedLabels.isBird = true;

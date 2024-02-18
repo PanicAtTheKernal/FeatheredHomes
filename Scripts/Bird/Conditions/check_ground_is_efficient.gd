@@ -2,13 +2,17 @@ extends Task
 
 class_name CheckIfGroundIsEfficient
 
+## Not needed anymore
+## @deprecated
+##
+
 @export
 
 var tile_map: TileMap
 var ground_agent: NavigationAgent2D
 var character_body: CharacterBody2D
 
-func run():
+func run()->void:
 	var flight_cost:float = data["total_flight_energy_cost"]
 	var ground_cost:float = data["total_ground_energy_cost"]
 	
@@ -30,7 +34,7 @@ func run():
 	character_body.set_collision_mask_value(2, false)
 	super.success()
 
-func start():
+func start()->void:
 	tile_map = self.data["tile_map"]
 	ground_agent = self.data["ground_agent"]
 	character_body = self.data["character_body"]

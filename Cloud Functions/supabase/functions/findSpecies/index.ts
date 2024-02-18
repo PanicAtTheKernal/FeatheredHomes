@@ -1,7 +1,6 @@
 import { RequestValidator } from "../RequestValidator.ts";
 import { Supabase, BirdSpecies } from "../SupabaseClient.ts";
 import { BirdAssetGenerator } from "./BirdAssetGenerator.ts";
-import { findSpecies } from "./supabase_functions.ts"
 
 const CONTENT_TYPE = "application/json; charset=utf-8";
 const HEADERS = { "Content-Type": CONTENT_TYPE };

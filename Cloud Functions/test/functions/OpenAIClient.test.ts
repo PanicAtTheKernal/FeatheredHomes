@@ -2,17 +2,17 @@ import { assertEquals } from "https://deno.land/std@0.214.0/assert/mod.ts";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, it} from "https://deno.land/std@0.207.0/testing/bdd.ts";
 import { assert } from "node:console";
 // @deno-types="npm:@types/sinon"
-import sinon, { SinonSpy, SinonStub } from "npm:sinon";
+import sinon, { SinonSpy, SinonStub, SinonStubbedInstance } from "npm:sinon";
 import { BirdShape, Supabase } from "../../supabase/functions/SupabaseClient.ts";
 import { ChatGPT, GPTModels, OpenAIRequest, OpenAIRequestDirector } from "../../supabase/functions/OpenAIClient.ts";
 import { ImageGenerator } from "../../supabase/functions/findSpecies/ImageGenerator.ts";
 import { assertThrows } from "https://deno.land/std@0.214.0/assert/assert_throws.ts";
 import OpenAI from "npm:openai";
+import TestHelper from "../TestHelper.ts";
 
 describe("ChatGPT", () => {
     const checkIfBirdAppearanceUnisexTests = describe("checkIfBirdAppearanceUnisex");
 
-    const fakeEnvGet = sinon.fake.returns("OPEN-AI-API-KEY");
     const fakeChatGPTResponse: object =  {
         choices: [
             {
@@ -24,28 +24,38 @@ describe("ChatGPT", () => {
     };
     const fakeDescription = "Fake description";
 
-    let chatGPT: ChatGPT;
+    let openAIStub: SinonStubbedInstance<OpenAI>;
+    let openAIRequestDirectorStub: SinonStubbedInstance<OpenAIRequestDirector>;
     let createStub: SinonStub;
-    let buildGPT3requestSpy: SinonSpy;
+    let denoEnvStub: SinonStubbedInstance<Deno.Env>;
+    
+    let chatGPT: ChatGPT;
+    
+    beforeAll(() => {
+        openAIStub = sinon.createStubInstance(OpenAI);
+        openAIRequestDirectorStub = sinon.stub(OpenAIRequestDirector.prototype);
+        createStub = sinon.stub(OpenAI.Chat.Completions.prototype, "create")
+        denoEnvStub = TestHelper.createDenoEnvStub();
+    })
 
     beforeEach(() => {
-        sinon.createStubInstance(OpenAI);
-        sinon.stub(OpenAIRequestDirector.prototype, "setSystemMessage");
-        buildGPT3requestSpy = sinon.spy(OpenAIRequestDirector.prototype, "buildGPT3request");
-        createStub = sinon.stub(OpenAI.Chat.Completions.prototype, "create")
         createStub.resolves(fakeChatGPTResponse);
 
-        sinon.stub(Deno.env, "get").callsFake(fakeEnvGet);
+        TestHelper.setDenoEnvStub(denoEnvStub);
         chatGPT = ChatGPT.instantiate();
     })
 
     afterEach(() => {
-        sinon.restore();
+        sinon.reset();
     })
+
+    afterAll(() => {
+        sinon.restore();
+    });
 
     it(checkIfBirdAppearanceUnisexTests, "should make build request with description", async () =>{
         await chatGPT.checkIfBirdAppearanceUnisex(fakeDescription);
-        assert(buildGPT3requestSpy.calledWith(fakeDescription));
+        assert(openAIRequestDirectorStub.buildGPT3request.calledWith(fakeDescription));
     })
 
     it(checkIfBirdAppearanceUnisexTests, "should return true if response content is \"True\"", async () => {

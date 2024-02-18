@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
   }
 })
 
-class FindSpecies {
+export class FindSpecies {
   private readonly _requestBirdName: string;
 
   constructor(requestBirdName: string) {

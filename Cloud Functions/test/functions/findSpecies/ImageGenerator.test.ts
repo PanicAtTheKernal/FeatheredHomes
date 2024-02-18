@@ -12,22 +12,16 @@ import { ColourMap } from "../../../supabase/functions/findSpecies/ColourMap.ts"
 import Sinon from "npm:@types/sinon";
 import { assertNotEquals } from "https://deno.land/std@0.214.0/assert/assert_not_equals.ts";
 import TestHelper from "../../TestHelper.ts";
+import { fail } from "https://deno.land/std@0.214.0/assert/fail.ts";
 
 
 describe("ImageGenerator", () => {
     const generateTests = describe("generate");
+    const shapeIdTest = describe("shapeId");
+    const imagesTest = describe("images");
+    const unisexTest = describe("unisex");
+    const colourMapsTest = describe("colourMaps");
 
-    const fakeTemplateError = "No template found";
-    const fakeColours = {
-        beak: "#000000",
-        belly: "#FFFFFF",
-    }
-    const fakeColourMap = new Map(
-        [["#000000","#FFFFFF"],["#FFFFFF","#000000"]])
-    const fakeOpenAi = {
-        checkIfBirdAppearanceUnisex: sinon.fake.returns("True"),
-        generateColoursFromDescription: sinon.fake.returns(JSON.stringify(fakeColours))
-    }
     let supabaseStub: SinonStubbedInstance<Supabase>;
     let chatGPTStub: SinonStubbedInstance<ChatGPT>;
     let imageManipulatorStub: SinonStubbedInstance<ImageManipulator>;
@@ -37,24 +31,17 @@ describe("ImageGenerator", () => {
 
 
     beforeAll(() => {
-        imageManipulatorStub = sinon.stub(ImageManipulator.prototype);
-        colourMapStub = sinon.stub(ColourMap.prototype);
-        chatGPTStub = sinon.createStubInstance(ChatGPT);
+        imageManipulatorStub = TestHelper.createImageManipulatorStub();
+        colourMapStub = TestHelper.createColourMap();
+        chatGPTStub = TestHelper.createChatGPTStub();
         supabaseStub = TestHelper.createSupabaseStub();
-        sinon.replace(ChatGPT, "instantiate", sinon.fake.returns(chatGPTStub));
     })
     
     beforeEach(() => {
-        // ImageManipulator
-        imageManipulatorStub.modifyImage.resolves(new Uint8Array(2));
-        // ColourMap
-        colourMapStub.getValue.returns(255);
-        sinon.stub(colourMapStub, "colourMap").get(() => fakeColourMap);
-        // ChatGPT
-        chatGPTStub.checkIfBirdAppearanceUnisex.resolves(true);
-        chatGPTStub.generateColoursFromDescription.resolves(JSON.stringify(fakeColours));
-        //Supabase
-        TestHelper.setupSupabaseStub(supabaseStub)
+        TestHelper.setupImageManipulatorStub(imageManipulatorStub);
+        TestHelper.setupColourMapStub(colourMapStub);
+        TestHelper.setupChatGPTStub(chatGPTStub);
+        TestHelper.setupSupabaseStub(supabaseStub);
         // This should always be last
         imageGenerator = new ImageGenerator("testDescription", "testFamily", "testName");
     })
@@ -68,6 +55,7 @@ describe("ImageGenerator", () => {
     });
     
     it(generateTests, "generate should throw error when template is not found", () => {
+        const fakeTemplateError = "No template found";
         supabaseStub.fetchShapeFromFamily.throws(fakeTemplateError);    
         imageGenerator.generate().catch((error: Error) => {
             assertEquals(error.message, `Sinon-provided ${fakeTemplateError}`);
@@ -92,12 +80,52 @@ describe("ImageGenerator", () => {
 
     // Test for unisex and gendered images
     it(generateTests, "images should return type UnisexImage if chatGPT says bird is unisex", async () => {
-        const unisexUrl = "unisex.asdf";
-        supabaseStub.uploadBirdImage.resolves(unisexUrl);
         await imageGenerator.generate();
         const imageValue = (imageGenerator.images as UnisexImage);
-        assertEquals(imageValue.image, unisexUrl);
+        assertEquals(imageValue.image, TestHelper.birdUrl);
     })
 
-    // Test for colourMaps
+    it(generateTests, "images should return type GenderImages if bird appearance is not unisex, ", async () => {
+        chatGPTStub.checkIfBirdAppearanceUnisex.resolves(false);
+        await imageGenerator.generate();
+        const imageValue = (imageGenerator.images as GenderImages);
+        assertEquals(imageValue.male, TestHelper.birdUrl);
+        assertEquals(imageValue.female, TestHelper.birdUrl);
+    })
+
+    it(shapeIdTest, "Throw error if shapeId hasn't been generated", () => {
+        try {
+            imageGenerator.shapeId;
+            fail();
+        } catch (_error) {
+            assert(true);
+        }
+    })
+
+    it(imagesTest, "Throw error if images hasn't been generated", () => {
+        try {
+            imageGenerator.images;
+            fail();
+        } catch (_error) {
+            assert(true);
+        }
+    })
+
+    it(unisexTest, "Throw error if shapeId hasn't been generated", () => {
+        try {
+            imageGenerator.unisex;
+            fail();
+        } catch (_error) {
+            assert(true);
+        }
+    })
+
+    it(colourMapsTest, "Throw error if images hasn't been generated", () => {
+        try {
+            imageGenerator.colourMaps;
+            fail();
+        } catch (_error) {
+            assert(true);
+        }
+    })
 })

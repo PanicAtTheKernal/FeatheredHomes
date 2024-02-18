@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Setup repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Deno
         uses: denoland/setup-deno@v1
@@ -26,4 +26,21 @@ jobs:
       #   run: deno lint
 
       - name: Run tests
-        run: deno test -A
+        run: deno test -A --junit-path report.xml
+
+      - name: Coverage report
+        run: deno test -A --coverage=cov_profile ; deno coverage cov_profile --html
+
+      - name: Archive test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: report.xml
+          retention-days: 5
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: cov_profile/html
+          retention-days: 5

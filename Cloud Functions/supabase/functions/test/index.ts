@@ -7,7 +7,7 @@ console.log("Hello from Functions!")
 Deno.serve(async (req) => {
   const { name } = await req.json()
   const data = {
-    message: `Hello ${name}!`,
+    message: `Greetings ${name}!`,
   }
 
   return new Response(

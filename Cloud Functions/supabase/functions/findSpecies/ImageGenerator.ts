@@ -109,7 +109,7 @@ export class ImageGenerator {
     }    
 
     public get shapeId(): string {
-        if (this._shapeId == undefined) {
+        if (this._shapeId == "") {
             throw new Error("The image needs to be generated first");
         } 
         return this._shapeId;
@@ -123,7 +123,7 @@ export class ImageGenerator {
     }
 
     public get unisex(): boolean {
-        if (this._shapeId == undefined) {
+        if (this._shapeId == "") {
             throw new Error("The image needs to be generated first");
         } 
         return this._unisex;

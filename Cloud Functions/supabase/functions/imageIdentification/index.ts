@@ -77,7 +77,7 @@ Deno.serve(async (req: Request) => {
   }
 })
 
-class LabelDetection {
+export class LabelDetection {
   private readonly _imageBuffer: ArrayBuffer;
   private readonly _imageBase64: string;
   private readonly _maxRequest: number;
@@ -145,7 +145,7 @@ class LabelDetection {
   }
 }
 
-class ImageIdentification {
+export class ImageIdentification {
   private readonly _labelDetection: LabelDetection;
   private readonly _labelSoter: LabelSorter;
   private _labels: Map<string, number>;

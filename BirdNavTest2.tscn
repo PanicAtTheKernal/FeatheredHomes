@@ -74,9 +74,8 @@ debug_path_custom_color = Color(0, 1, 1, 1)
 [node name="NavigationTimer" type="Timer" parent="."]
 autostart = true
 
-[node name="BirdBehaviouralTree" type="Node" parent="." node_paths=PackedStringArray("navigation_data")]
+[node name="BirdBehaviouralTree" type="Node" parent="."]
 script = ExtResource("4_jplix")
-navigation_data = NodePath("Selector/FoodSequence/Navigation")
 
 [node name="Selector" type="Node" parent="BirdBehaviouralTree"]
 script = ExtResource("5_2vo8c")

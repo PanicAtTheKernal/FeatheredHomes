@@ -79,10 +79,16 @@ func burn_caloires():
 	var movement_cost = species.ground_cost if state == States.GROUND else species.flight_cost
 	var amount = CALORIES_BURNED * species.size + movement_cost
 	current_stamina = clamp(current_stamina - amount, 0, species.max_stamina)
+	info.species.stamina = current_stamina
+	# Death State
+	if current_stamina == 0:
+		info.status = BirdInfo.StatusTypes.DEAD
+		queue_free()
 	
 func add_caloires(amount:float):
 	current_stamina = clamp(current_stamina + amount, 0, species.max_stamina)
-
+	info.species.stamina = current_stamina	
+	
 func _on_animation_finished()->void:
 	# Enable the AI after the animation is finished playing
 	behavioural_tree.set_physics_process(true)

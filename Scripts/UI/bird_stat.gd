@@ -26,6 +26,8 @@ var fly_label: Label = %FlyData
 var swim_label: Label = %SwimData
 @onready
 var cleaning_label: Label = %CleaningMethodsData
+@onready
+var current_stamina: Label = %CurrentStaminaData
 
 @export
 var default_frames: SpriteFrames
@@ -59,6 +61,7 @@ func load_new_bird(bird: BirdInfo)->void:
 	fly_label.text = "Yes" if bird.species.can_fly else "No"
 	swim_label.text = "Yes" if bird.species.can_swim else "No"
 	_build_cleaning_label(bird)
+	current_stamina.text = str(bird.species.stamina/bird.species.max_stamina * 100,"%")
 	if bird.status != BirdInfo.StatusTypes.NOT_GENERATED:
 		_load_image(bird.species.animations)
 	else:

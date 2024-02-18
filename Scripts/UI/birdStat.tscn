@@ -389,6 +389,28 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 56
 autowrap_mode = 2
 
+[node name="RemainingStamina" type="HBoxContainer" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/RemainingStamina"]
+clip_contents = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 56
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Cleaning
+Methods:[/u][/color] "
+fit_content = true
+autowrap_mode = 0
+
+[node name="CurrentStaminaData" type="Label" parent="Panel/MarginContainer/Content/ScrollContainer/VBoxContainer/RemainingStamina"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+autowrap_mode = 2
+
 [node name="NewFrameTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 wait_time = 0.3

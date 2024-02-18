@@ -46,20 +46,6 @@ func _ready():
 func _physics_process(_delta):
 	run()
 
-func _on_navigation_update_timeout():
-	# If flight_agent is not set then none of the data is set
-	#if self.data["flight_agent"] == null:
-		#return
-	#if data["ground_agent"].target_position != data["target"]:
-		#self.data["flight_agent"].set_navigation_map(data["tile_map"].get_navigation_map(1))
-		#self.data["flight_agent"].target_position = data["target"]
-		#self.data["ground_agent"].target_position = data["target"]
-		#self.data["flight_agent"].get_next_path_position()
-		#self.data["ground_agent"].get_next_path_position()
-		#self.data["ground_path"] = self.data["ground_agent"].get_current_navigation_result().path
-	#self.data["calculate_distances"] = true
-	pass
-
 func run()->void:
 	for child in get_children():
 		child.run()

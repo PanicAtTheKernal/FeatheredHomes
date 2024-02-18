@@ -1,7 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.207.0/assert/mod.ts";
 import { Stub, assertSpyCall, assertSpyCalls, spy, stub, } from "https://deno.land/std@0.207.0/testing/mock.ts";
-import { parseWikiPage, _functions } from ".././supabase/functions/findSpecies/supabase_functions.ts";
-import { BirdHelperFunctions, SupabaseFunctions, _webFunctions, BirdWikiPage } from ".././supabase/functions/findSpecies/supabase_helper_functions.ts";
+// import { parseWikiPage, _functions } from ".././supabase/functions/findSpecies/supabase_functions.ts";
+// import { BirdHelperFunctions, SupabaseFunctions, _webFunctions, BirdWikiPage } from ".././supabase/functions/findSpecies/supabase_helper_functions.ts";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, it} from "https://deno.land/std@0.207.0/testing/bdd.ts";
 
 // const mockHtmkDir = "/test/mockHtml/"

@@ -52,7 +52,6 @@ export class ImageGenerator {
     private async generateImageAndUpload(gender: string, fileName: string): Promise<string> {
         const templateMap = new Map(Object.entries(this._templateJson));
         const colours = await this.generateListOfColours(gender);
-        console.log(templateMap);
         const birdColourMap: ColourMap = new ColourMap(templateMap, colours);
         birdColourMap.createMap();
         this.addColourMap(gender, birdColourMap);
@@ -102,7 +101,6 @@ export class ImageGenerator {
 
     public async generate(): Promise<void> {
         await this.fetchTemplate();
-        console.log(this.generateBodyPartNames())
         if (await this.isBirdLookUnisex()) {
             await this.generateUnisexImage();
         } else {

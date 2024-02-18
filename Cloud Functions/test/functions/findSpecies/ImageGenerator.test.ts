@@ -11,17 +11,12 @@ import { ImageManipulator } from "../../../supabase/functions/findSpecies/ImageM
 import { ColourMap } from "../../../supabase/functions/findSpecies/ColourMap.ts";
 import Sinon from "npm:@types/sinon";
 import { assertNotEquals } from "https://deno.land/std@0.214.0/assert/assert_not_equals.ts";
+import TestHelper from "../../TestHelper.ts";
 
 
 describe("ImageGenerator", () => {
     const generateTests = describe("generate");
 
-    const fakeShapeId = "848c3291-8e0e-403b-8372-1b0a416edf0f";
-    const fakeBirdShape: BirdShape = {
-        BirdShapeName: "Bird",
-        BirdShapeTemplateJson: {},
-        BirdShapeTemplateUrl: "https://fakeBird.com"
-    }
     const fakeTemplateError = "No template found";
     const fakeColours = {
         beak: "#000000",
@@ -45,9 +40,8 @@ describe("ImageGenerator", () => {
         imageManipulatorStub = sinon.stub(ImageManipulator.prototype);
         colourMapStub = sinon.stub(ColourMap.prototype);
         chatGPTStub = sinon.createStubInstance(ChatGPT);
-        supabaseStub = sinon.createStubInstance(Supabase);
+        supabaseStub = TestHelper.createSupabaseStub();
         sinon.replace(ChatGPT, "instantiate", sinon.fake.returns(chatGPTStub));
-        sinon.replace(Supabase, "instantiate", sinon.fake.returns(supabaseStub));
     })
     
     beforeEach(() => {
@@ -60,8 +54,7 @@ describe("ImageGenerator", () => {
         chatGPTStub.checkIfBirdAppearanceUnisex.resolves(true);
         chatGPTStub.generateColoursFromDescription.resolves(JSON.stringify(fakeColours));
         //Supabase
-        supabaseStub.fetchShapeFromFamily.resolves(fakeShapeId);
-        supabaseStub.fetchBirdShape.resolves(fakeBirdShape);
+        TestHelper.setupSupabaseStub(supabaseStub)
         // This should always be last
         imageGenerator = new ImageGenerator("testDescription", "testFamily", "testName");
     })
@@ -83,7 +76,7 @@ describe("ImageGenerator", () => {
 
     it(generateTests, "shapeId should not be an empty string", async () => {
         await imageGenerator.generate();
-        assertEquals(imageGenerator.shapeId, fakeShapeId);
+        assertEquals(imageGenerator.shapeId, TestHelper.fakeShapeId);
     })
 
     it(generateTests, "unisex should return true if chatGPT says it's true", async () => {

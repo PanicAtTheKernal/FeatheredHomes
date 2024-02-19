@@ -1,6 +1,5 @@
-import { assertEquals } from "https://deno.land/std@0.214.0/assert/mod.ts";
+import { assert, assertEquals } from "https://deno.land/std@0.214.0/assert/mod.ts";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, it} from "https://deno.land/std@0.207.0/testing/bdd.ts";
-import console, { assert } from "node:console";
 // @deno-types="npm:@types/sinon"
 import sinon, { SinonStub, SinonStubbedInstance } from "npm:sinon";
 import { BirdShape, Supabase, UnisexImage, GenderImages } from "../../../supabase/functions/SupabaseClient.ts";

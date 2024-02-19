@@ -261,7 +261,7 @@ export class ChatGPT {
         return await this.generateSummary(description, diets, openAIRequestDirector);
     }
 
-    public async generateTraits(description: string, birdName: string, traits: string) {
+    public async generateTraits(description: string, birdName: string, traits: string): Promise<string> {
         const openAIRequestDirector = new OpenAIRequestDirector();
         await openAIRequestDirector.setSystemMessage("TraitGenerator");
         const request = openAIRequestDirector.buildTraitGeneratorRequest(description, birdName, traits) as any;

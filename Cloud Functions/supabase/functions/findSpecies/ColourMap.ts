@@ -17,8 +17,8 @@ export class ColourMap {
     }
 
     private convertHexToRGB(hexCode: string): number[] {
-        const hexCodes = hexCode.replace("#", "").match(/.{1,2}/g);
-        if (hexCodes == null) {
+        const hexCodes = hexCode.replace("#", "").match(/[0-9A-Fa-f]{1,2}/g);
+        if (hexCodes == null || hexCodes.length != 3) {
             throw Error(`Fail to parse invalid hexcode ${hexCode}`);
         }
         return hexCodes.map((hexCode: string) => {

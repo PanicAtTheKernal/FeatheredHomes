@@ -94,8 +94,7 @@ export class BirdAssetGenerator {
     private async generateDiet(): Promise<void> {
         const description = await this._wikiPage.getBehaviourSection();
         const dietGenerator: DietGenerator = new DietGenerator(description);
-        await dietGenerator.generate();
-        this._generatedBird.dietId = dietGenerator.dietId;
+        this._generatedBird.dietId = await dietGenerator.generate();
     }
 
     private setVersion(): void {

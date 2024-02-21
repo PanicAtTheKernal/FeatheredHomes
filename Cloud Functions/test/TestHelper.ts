@@ -4,12 +4,16 @@ import { BirdShape, Supabase } from "../supabase/functions/SupabaseClient.ts";
 import { ChatGPT } from "../supabase/functions/OpenAIClient.ts";
 import { ImageManipulator } from "../supabase/functions/findSpecies/ImageManipulator.ts";
 import { ColourMap } from "../supabase/functions/findSpecies/ColourMap.ts";
-import { BirdWikiPage } from "../supabase/functions/WikiPage.ts";
+import { BirdWikiPage, ReferralWikiPage } from "../supabase/functions/WikiPage.ts";
 import { BirdSpecies } from "../supabase/functions/SupabaseClient.ts";
 import { ImageGenerator } from "../supabase/functions/findSpecies/ImageGenerator.ts";
 import { DietGenerator } from "../supabase/functions/findSpecies/DietGenerator.ts";
 import { TraitGenerator } from "../supabase/functions/findSpecies/TraitGenerator.ts";
 import { Image } from 'https://deno.land/x/imagescript@1.2.15/mod.ts';
+import { RequestValidator } from "../supabase/functions/RequestValidator.ts";
+import { BirdAssetGenerator } from "../supabase/functions/findSpecies/BirdAssetGenerator.ts";
+import { LabelDetection } from "../supabase/functions/imageIdentification/LabelDetection.ts";
+import { LabelSorter } from "../supabase/functions/LabelSorter.ts";
 
 const fakeShapeId = "848c3291-8e0e-403b-8372-1b0a416edf0f";
 const fakeDiets = ["FakeFood"];
@@ -18,6 +22,10 @@ const fakeBirdShape: BirdShape = {
     BirdShapeName: "Bird",
     BirdShapeTemplateJson: {},
     BirdShapeTemplateUrl: "https://fakeBird.com"
+}
+const fakeSearchResponse = {
+    isValid: true,
+    speciesName: "Test Bird",
 }
 const fakeBird: BirdSpecies = {
     birdId: "", 
@@ -47,7 +55,9 @@ const fakeColours = {
     beak: "#000000",
     belly: "#FFFFFF",
 }
+const fakeError = "Error";
 const fakeEnvGet = "OPEN-AI-API-KEY";
+const fakeSystemMessage = "System message";
 const birdUrl = "bird.url";
 const fakeOpenAi = {
     checkIfBirdAppearanceUnisex: sinon.fake.returns("True"),
@@ -62,6 +72,33 @@ const fakeUnisexColours = {
 const fakeTraits = new Map(
     [["fakeTrait", true]]
 )
+const fakeTraitsList = ["fakeTrait"];
+const fakeLabel = "FakeLabel";
+const fakeLabels = [fakeLabel];
+const fakeFamilyLabels = new Map(
+    [["FakeFamily",fakeLabel]]
+)
+const fakeBlacklistedLabels = ["Forbidden label"]
+const fakeImageIdentificationResponse = {
+    isBird: true,
+    birdSpecies: "Test bird",
+    approximate: false,
+    error: ""
+}
+const fakeLabelAnnotation = {
+    description: "Fake label",
+    mid: "string",
+    score: 0.8,
+    topicality: 0.8
+}
+const fakeLabelMap = new Map(
+    [[fakeLabelAnnotation.description, fakeLabelAnnotation.score]]
+)
+const fakeSortedLabels = {
+    isBird: true,
+    birdSpeciesLabels: [fakeLabel],
+    birdFamilyLabels: ["FakeFamily"],
+}
 // Create stubs
 
 function createChatGPTStub(): SinonStubbedInstance<ChatGPT> {
@@ -100,14 +137,36 @@ function createTraitGeneratorStub(): SinonStubbedInstance<TraitGenerator> {
     return sinon.stub(TraitGenerator.prototype);
 }
 
-function createImageStub(): void {
+function createImageStub(): SinonStubbedInstance<Image> {
     sinon.replace(Image, "rgbaToColor", sinon.fake.returns(255));
+    const fakeImage = sinon.stub(Image.prototype);
+    return fakeImage;
 }
+
 
 function createDenoEnvStub(): SinonStubbedInstance<Deno.Env> {
     return sinon.stub(Deno.env);
 }
 
+function createRequestValidatorStub(): SinonStubbedInstance<RequestValidator> {
+    return sinon.stub(RequestValidator.prototype);
+}
+
+function createBirdAssetGeneratorStub(): SinonStubbedInstance<BirdAssetGenerator> {
+    return sinon.stub(BirdAssetGenerator.prototype);
+}
+
+function createLabelDetectionStub(): SinonStubbedInstance<LabelDetection> {
+    return sinon.stub(LabelDetection.prototype);
+}
+
+function createLabelSorterStub(): SinonStubbedInstance<LabelSorter> {
+    return sinon.stub(LabelSorter.prototype);
+}
+
+function createReferralWikiPageStub(): SinonStubbedInstance<ReferralWikiPage> {
+    return sinon.stub(ReferralWikiPage.prototype);
+}
 // Setup stubs
 
 function setupChatGPTStub(chatGPTStub: SinonStubbedInstance<ChatGPT>): void {
@@ -115,6 +174,7 @@ function setupChatGPTStub(chatGPTStub: SinonStubbedInstance<ChatGPT>): void {
     chatGPTStub.generateSimplifiedSummary.resolves("Test summary");
     chatGPTStub.generateColoursFromDescription.resolves(JSON.stringify(fakeColours));
     chatGPTStub.generateCustomSummary.resolves("Shorten description");
+    chatGPTStub.generateTraits.resolves("{ \"fakeTrait\": true }");
 }
 
 function setupSupabaseStub(supabaseStub: SinonStubbedInstance<Supabase>): void {
@@ -123,6 +183,13 @@ function setupSupabaseStub(supabaseStub: SinonStubbedInstance<Supabase>): void {
     supabaseStub.uploadBirdImage.resolves(birdUrl);
     supabaseStub.fetchDiets.resolves(fakeDiets);
     supabaseStub.fetchDietId.resolves(fakeDietId);
+    supabaseStub.fetchTraits.resolves(fakeTraitsList);
+    supabaseStub.fetchBirdSpecies.resolves(fakeBird);
+    supabaseStub.fetchBirdFamilyLabels.resolves(fakeFamilyLabels);
+    supabaseStub.fetchBirdSpeciesLabels.resolves(fakeLabels);
+    supabaseStub.fetchBlacklistedLabels.resolves(fakeBlacklistedLabels);
+    supabaseStub.fetchDefaultBirdName.resolves(fakeLabel);
+    supabaseStub.fetchSystemMessage.resolves(fakeSystemMessage);
 }
 
 function setupImageManipulatorStub(imageManipulatorStub: SinonStubbedInstance<ImageManipulator>): void {
@@ -163,8 +230,37 @@ function setupTraitGeneratorStub(traitGeneratorStub: SinonStubbedInstance<TraitG
     sinon.stub(traitGeneratorStub, "birdTraits").get(() => fakeTraits);
 }
 
+function setupImageStub(imageStub: SinonStubbedInstance<Image>): void {
+    sinon.stub(imageStub, "width").get(() => 100);
+    sinon.stub(imageStub, "height").get(() => 100);
+    // @ts-ignore:  
+    imageStub.encode.resolves(new ArrayBuffer(4));
+}
+
 function setDenoEnvStub(denoEnvStub: SinonStubbedInstance<Deno.Env>): void {
     denoEnvStub.get.returns(fakeEnvGet);
+}
+
+function setupRequestValidator(requestValidator: SinonStubbedInstance<RequestValidator>): void {
+    requestValidator.validate.resolves(null);
+    sinon.stub(requestValidator, "body").get(() => { return {birdSpecies: "Test Bird"}});
+}
+
+function setupBirdAssetGeneratorStub(birdAssetGenerator: SinonStubbedInstance<BirdAssetGenerator>): void {
+    sinon.stub(birdAssetGenerator, "generatedBird").get(() => fakeBird);
+}
+
+function setupLabelDetectorStub(labelDetector: SinonStubbedInstance<LabelDetection>): void {
+    labelDetector.getLabelDetectionResults.returns(fakeLabelMap);
+}
+
+function setupLabelSorterStub(labelSorter: SinonStubbedInstance<LabelSorter>): void {
+    sinon.stub(labelSorter, "sortedLabels").get(() => fakeSortedLabels);
+}
+
+function setupReferralWikiPageStub(referralWikiPage: SinonStubbedInstance<ReferralWikiPage>): void {
+    referralWikiPage.getFirstBirdReferralPage.returns(sinon.createStubInstance(BirdWikiPage));
+    referralWikiPage.isReferralPage.returns(true);
 }
 
 export default { 
@@ -177,11 +273,21 @@ export default {
     fakeColourMapNums,
     fakeOpenAi,
     fakeEnvGet,
+    fakeError,
     fakeUnisexImage,
     fakeUnisexColours,
     fakeColourMapHex,
     fakeDietId,
     fakeTraits,
+    fakeTraitsList,
+    fakeLabel,
+    fakeLabels,
+    fakeFamilyLabels,
+    fakeSearchResponse,
+    fakeImageIdentificationResponse,
+    fakeLabelAnnotation,
+    fakeLabelMap,
+    fakeSortedLabels,
 
     createChatGPTStub,
     createSupabaseStub, 
@@ -193,6 +299,11 @@ export default {
     createTraitGeneratorStub,
     createImageStub,
     createDenoEnvStub,
+    createRequestValidatorStub,
+    createBirdAssetGeneratorStub,
+    createLabelDetectionStub,
+    createLabelSorterStub,
+    createReferralWikiPageStub,
 
     setupChatGPTStub,
     setupSupabaseStub,
@@ -202,5 +313,11 @@ export default {
     setupImageGeneratorStub,
     setupDietGeneratorStub,
     setupTraitGeneratorStub,
+    setupImageStub,
     setDenoEnvStub,
+    setupRequestValidator,
+    setupBirdAssetGeneratorStub,
+    setupLabelDetectorStub,
+    setupLabelSorterStub,
+    setupReferralWikiPageStub,
 }

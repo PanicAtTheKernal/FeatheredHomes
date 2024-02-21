@@ -84,7 +84,8 @@ static func find_random_point_within_tile_map(tile_map:TileMap, starting_loc: Ve
 	var min_y = tile_start_loc.y-tile_range if (tile_start_loc.y-tile_range) > (start.y+1) else start.y+1
 	var max_y = tile_start_loc.y+tile_range if (tile_start_loc.y+tile_range) < (end.y-1) else end.y-1
 
-	var point_x = randi_range(min_x, max_x)
-	var point_y = randi_range(min_y, max_y)
+	randomize()
+	var point_x = randi_range(min_x, max_x*TILE_SIZE)
+	var point_y = randi_range(min_y, max_y*TILE_SIZE)
 	var tile_loc = Vector2i(point_x, point_y)
 	return tile_loc

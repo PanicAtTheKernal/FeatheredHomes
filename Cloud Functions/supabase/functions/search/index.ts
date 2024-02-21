@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
   }
 })
 
-class Search {
+export class Search {
   private readonly birdName: string;
   private readonly _labelSoter: LabelSorter;
 

@@ -4,9 +4,10 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, it} from "https:/
 import sinon, { SinonStub, SinonStubbedInstance } from "npm:sinon";
 import TestHelper from "../../TestHelper.ts";
 import { ImageIdentification } from "../../../supabase/functions/imageIdentification/index.ts";
-import { LabelDetection } from "../../../supabase/functions/imageIdentification/index.ts";
+import { LabelDetection } from "../../../supabase/functions/imageIdentification/LabelDetection.ts";
 import { LabelSorter } from "../../../supabase/functions/LabelSorter.ts";
 import { assert } from "https://deno.land/std@0.214.0/assert/assert.ts";
+import { Supabase } from "../../../supabase/functions/SupabaseClient.ts";
 
 describe("index.ts", () => {
     const url = "http://localhost:8000/";
@@ -61,6 +62,7 @@ describe("ImageIdentification", () => {
     let denoEnvStub: SinonStubbedInstance<Deno.Env>;
     let labelDetectionStub: SinonStubbedInstance<LabelDetection>;
     let labelSorterStub: SinonStubbedInstance<LabelSorter>;
+    let supabaseStub: SinonStubbedInstance<Supabase>;
 
     let imageIdentification: ImageIdentification;
 
@@ -68,12 +70,14 @@ describe("ImageIdentification", () => {
         denoEnvStub = TestHelper.createDenoEnvStub();
         labelDetectionStub = TestHelper.createLabelDetectionStub();
         labelSorterStub = TestHelper.createLabelSorterStub();
+        supabaseStub = TestHelper.createSupabaseStub();
     })
 
     beforeEach(() => {
         TestHelper.setDenoEnvStub(denoEnvStub);
         TestHelper.setupLabelDetectorStub(labelDetectionStub);
         TestHelper.setupLabelSorterStub(labelSorterStub);
+        TestHelper.setupSupabaseStub(supabaseStub);
         imageIdentification = new ImageIdentification(new ArrayBuffer(4));
     })
 
@@ -90,8 +94,23 @@ describe("ImageIdentification", () => {
         assert(labelDetectionStub.getLabelDetectionResults.called)
     })
 
+    it(getBirdNameTest, "should return fake label if specific species is found", async () => {
+        await imageIdentification.identifyLabelsInImage();
+        assertEquals((await imageIdentification.getBirdName()).name, TestHelper.fakeLabel);
+        assertEquals((await imageIdentification.getBirdName()).approximate, false);
+    })
 
-    it(getBirdNameTest, "should throw an error when labels", async () => {
+    it(getBirdNameTest, "should return fake label if no specific species is found", async () => {
+        await imageIdentification.identifyLabelsInImage();
+        const fakeSortedLabelWithFamily = TestHelper.fakeSortedLabels;
+        fakeSortedLabelWithFamily.birdSpeciesLabels = [];
+        sinon.stub(labelSorterStub, "sortedLabels").get(() => fakeSortedLabelWithFamily);
+        assertEquals((await imageIdentification.getBirdName()).name, TestHelper.fakeLabel);
+        assertEquals((await imageIdentification.getBirdName()).approximate, true);
+    })
+
+    it(getBirdNameTest, "should throw an error when labels are", async () => {
+        await imageIdentification.identifyLabelsInImage();
         const fakeSortedLabelBlurry = TestHelper.fakeSortedLabels;
         fakeSortedLabelBlurry.birdFamilyLabels = [];
         fakeSortedLabelBlurry.birdSpeciesLabels = [];

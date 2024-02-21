@@ -3,7 +3,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, it} from "https:/
 // @deno-types="npm:@types/sinon"
 import sinon, { SinonStub, SinonStubbedInstance } from "npm:sinon";
 import TestHelper from "../../TestHelper.ts";
-import { LabelDetection } from "../../../supabase/functions/imageIdentification/index.ts";
+import { LabelDetection } from "../../../supabase/functions/imageIdentification/LabelDetection.ts";
 
 describe("LabelDetection", () => {
 

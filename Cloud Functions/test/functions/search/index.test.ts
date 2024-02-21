@@ -5,6 +5,8 @@ import sinon, { SinonStub, SinonStubbedInstance } from "npm:sinon";
 import TestHelper from "../../TestHelper.ts";
 import { Search } from "../../../supabase/functions/search/index.ts";
 import { RequestValidator } from "../../../supabase/functions/RequestValidator.ts";
+import { LabelSorter } from "../../../supabase/functions/LabelSorter.ts";
+import { Supabase } from "../../../supabase/functions/SupabaseClient.ts";
 
 describe("index.ts", () => {
     const url = "http://localhost:8000/";
@@ -62,16 +64,19 @@ describe("index.ts", () => {
 })
 
 describe("Search", () => {
-    let denoEnvStub: SinonStubbedInstance<Deno.Env>;
+    let labelSorterStub: SinonStubbedInstance<LabelSorter>;
+    let supabaseStub: SinonStubbedInstance<Supabase>;
 
     let search: Search;
 
     beforeAll(() => {
-        denoEnvStub = TestHelper.createDenoEnvStub();
+        labelSorterStub = TestHelper.createLabelSorterStub();
+        supabaseStub = TestHelper.createSupabaseStub();
     })
 
     beforeEach(() => {
-        TestHelper.setDenoEnvStub(denoEnvStub);
+        TestHelper.setupLabelSorterStub(labelSorterStub);
+        TestHelper.setupSupabaseStub(supabaseStub);
         search = new Search("Test bird");
     })
 
@@ -82,4 +87,29 @@ describe("Search", () => {
     afterAll(() => {
         sinon.restore();
     });
+
+
+    it("should return fake label if specific species is found", async () => {
+        const result = await search.findBird();
+        assertEquals(result.speciesName, TestHelper.fakeLabel);
+        assertEquals(result.isValid, true);
+    })
+
+    it("should return fake label if no specific species is found", async () => {
+        const fakeSortedLabelWithFamily = TestHelper.fakeSortedLabels;
+        fakeSortedLabelWithFamily.birdSpeciesLabels = [];
+        sinon.stub(labelSorterStub, "sortedLabels").get(() => fakeSortedLabelWithFamily);
+        const result = await search.findBird();
+        assertEquals(result.speciesName, TestHelper.fakeLabel);
+        assertEquals(result.isValid, true);
+    })
+
+    it("should throw an error when labels are", async () => {
+        const fakeSortedLabelBlurry = TestHelper.fakeSortedLabels;
+        fakeSortedLabelBlurry.birdFamilyLabels = [];
+        fakeSortedLabelBlurry.birdSpeciesLabels = [];
+        sinon.stub(labelSorterStub, "sortedLabels").get(() => fakeSortedLabelBlurry);
+        const result = await search.findBird();
+        assertEquals(result.isValid, false);
+    })
 })

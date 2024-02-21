@@ -4,7 +4,7 @@ import { BirdShape, Supabase } from "../supabase/functions/SupabaseClient.ts";
 import { ChatGPT } from "../supabase/functions/OpenAIClient.ts";
 import { ImageManipulator } from "../supabase/functions/findSpecies/ImageManipulator.ts";
 import { ColourMap } from "../supabase/functions/findSpecies/ColourMap.ts";
-import { BirdWikiPage } from "../supabase/functions/WikiPage.ts";
+import { BirdWikiPage, ReferralWikiPage } from "../supabase/functions/WikiPage.ts";
 import { BirdSpecies } from "../supabase/functions/SupabaseClient.ts";
 import { ImageGenerator } from "../supabase/functions/findSpecies/ImageGenerator.ts";
 import { DietGenerator } from "../supabase/functions/findSpecies/DietGenerator.ts";
@@ -12,7 +12,7 @@ import { TraitGenerator } from "../supabase/functions/findSpecies/TraitGenerator
 import { Image } from 'https://deno.land/x/imagescript@1.2.15/mod.ts';
 import { RequestValidator } from "../supabase/functions/RequestValidator.ts";
 import { BirdAssetGenerator } from "../supabase/functions/findSpecies/BirdAssetGenerator.ts";
-import { LabelDetection } from "../supabase/functions/imageIdentification/index.ts";
+import { LabelDetection } from "../supabase/functions/imageIdentification/LabelDetection.ts";
 import { LabelSorter } from "../supabase/functions/LabelSorter.ts";
 
 const fakeShapeId = "848c3291-8e0e-403b-8372-1b0a416edf0f";
@@ -163,6 +163,10 @@ function createLabelDetectionStub(): SinonStubbedInstance<LabelDetection> {
 function createLabelSorterStub(): SinonStubbedInstance<LabelSorter> {
     return sinon.stub(LabelSorter.prototype);
 }
+
+function createReferralWikiPageStub(): SinonStubbedInstance<ReferralWikiPage> {
+    return sinon.stub(ReferralWikiPage.prototype);
+}
 // Setup stubs
 
 function setupChatGPTStub(chatGPTStub: SinonStubbedInstance<ChatGPT>): void {
@@ -247,11 +251,16 @@ function setupBirdAssetGeneratorStub(birdAssetGenerator: SinonStubbedInstance<Bi
 }
 
 function setupLabelDetectorStub(labelDetector: SinonStubbedInstance<LabelDetection>): void {
-    labelDetector.getLabelDetectionResults.resolves(fakeLabelMap);
+    labelDetector.getLabelDetectionResults.returns(fakeLabelMap);
 }
 
 function setupLabelSorterStub(labelSorter: SinonStubbedInstance<LabelSorter>): void {
     sinon.stub(labelSorter, "sortedLabels").get(() => fakeSortedLabels);
+}
+
+function setupReferralWikiPageStub(referralWikiPage: SinonStubbedInstance<ReferralWikiPage>): void {
+    referralWikiPage.getFirstBirdReferralPage.returns(sinon.createStubInstance(BirdWikiPage));
+    referralWikiPage.isReferralPage.returns(true);
 }
 
 export default { 
@@ -294,6 +303,7 @@ export default {
     createBirdAssetGeneratorStub,
     createLabelDetectionStub,
     createLabelSorterStub,
+    createReferralWikiPageStub,
 
     setupChatGPTStub,
     setupSupabaseStub,
@@ -309,4 +319,5 @@ export default {
     setupBirdAssetGeneratorStub,
     setupLabelDetectorStub,
     setupLabelSorterStub,
+    setupReferralWikiPageStub,
 }

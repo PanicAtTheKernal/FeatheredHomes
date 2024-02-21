@@ -7,6 +7,7 @@ import { FindSpecies } from "../../../supabase/functions/findSpecies/index.ts";
 import { RequestValidator } from "../../../supabase/functions/RequestValidator.ts";
 import { BirdAssetGenerator } from "../../../supabase/functions/findSpecies/BirdAssetGenerator.ts";
 import { Supabase } from "../../../supabase/functions/SupabaseClient.ts";
+import { server } from "../../../supabase/functions/imageIdentification/index.ts";
 
 
 describe("index.ts", () => {

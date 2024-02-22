@@ -1,8 +1,7 @@
 extends Resource
-class_name FoodState
 
-@export
-var state_name:String = ""
+class_name ResourceState
+
 @export
 var source_id:int = 0
 @export

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="WorldResourceTemplate" load_steps=5 format=3 uid="uid://0gg1d0tvylfk"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/world_resource_template.gd" id="1_q15rg"]
+[ext_resource type="Script" path="res://Scripts/Resources/resource_state.gd" id="2_vyo8w"]
+
+[sub_resource type="Resource" id="Resource_w0h2o"]
+script = ExtResource("2_vyo8w")
+source_id = 0
+altas_cords = Vector2i(13, 9)
+alternative_tile = 0
+
+[sub_resource type="Resource" id="Resource_8qomj"]
+script = ExtResource("2_vyo8w")
+source_id = 0
+altas_cords = Vector2i(23, 9)
+alternative_tile = 0
+
+[resource]
+script = ExtResource("1_q15rg")
+name = "FruitShrub"
+states = {
+"Empty": SubResource("Resource_w0h2o"),
+"Full": SubResource("Resource_8qomj")
+}

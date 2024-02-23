@@ -56,8 +56,9 @@ func _input(event)->void:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
 			var mouse_position = get_global_mouse_position()
 			var mouse_position_to_tile_position = tile_map.local_to_map(mouse_position)
-			var resource = world_resources.get_resource(mouse_position_to_tile_position)
-			world_resources.set_resource_state_from_loc(mouse_position_to_tile_position, update_states[resource.current_state])
+			var resource = world_resources.get_resource_from_loc(mouse_position_to_tile_position)
+			if resource:
+				world_resources.set_resource_state_from_loc(mouse_position_to_tile_position, update_states[resource.current_state])
 
 
 func zoom_in()->void:

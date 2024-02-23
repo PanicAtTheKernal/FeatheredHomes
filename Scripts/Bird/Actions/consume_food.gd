@@ -14,7 +14,7 @@ func run()->void:
 		return
 	var tile_loc: Vector2i = bird.tile_map.local_to_map(bird.target)
 	# Make sure that there is still food at the target location
-	var resource = bird.world_resources.get_resource(tile_loc)
+	var resource = bird.world_resources.get_resource("Food", tile_loc)
 	if resource != null and resource.current_state == "Full":
 		bird.world_resources.set_resource_state(resource, "Empty")
 		bird.add_caloires(resource.value)

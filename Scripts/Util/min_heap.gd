@@ -71,4 +71,5 @@ func get_root() -> HeapItem:
 		return null
 	return heap[0]
 
-
+func is_empty() -> bool:
+	return len(heap) == 0

@@ -27,6 +27,10 @@ var logger_key = {
 	"obj": "BirdManager"
 }
 
+func _ready() -> void:
+	for i in range(1000):
+		BirdResourceManager.add_bird("Dunnock")
+
 func create_bird(bird_info: BirdInfo)->void:
 	var new_bird: Bird = blank_bird.instantiate()
 	setup_bird(new_bird, randomise_stats(bird_info))
@@ -35,7 +39,7 @@ func create_bird(bird_info: BirdInfo)->void:
 	
 func randomise_stats(bird_info:BirdInfo)->BirdInfo:
 	bird_info.species.max_stamina = randf_range(MIN_STAMINA, MAX_STAMINA)
-	bird_info.species.stamina = randf_range(MIN_STAMINA, bird_info.species.max_stamina*0.3)
+	bird_info.species.stamina = randf_range(MIN_STAMINA, bird_info.species.max_stamina)
 	bird_info.species.ground_max_distance = randf_range(MIN_GROUND_DISTANCE, MAX_GROUND_DISTANCE)
 	bird_info.species.flight_max_distance = randf_range(bird_info.species.ground_max_distance, MAX_FLIGHT_DISTANCE)
 	return bird_info

@@ -38,11 +38,11 @@ func build_exploration()->void:
 	exploration_condition_selector.add_child(is_barren)
 	exploration_sequence.add_child(exploration_condition_selector)
 	# FindRandomSpot
-	exploration_sequence.add_child(FindRandomSpot.new(bird,id+": FindRandomSpot"))
+	#exploration_sequence.add_child(FindRandomSpot.new(bird,id+": FindRandomSpot"))
 	# Navigation
-	exploration_sequence.add_child(_build_navigation())
+	exploration_sequence.add_child(_build_wander())
 	# ReachedTarget
-	exploration_sequence.add_child(ReachedTarget.new(bird,id+": ReachedTarget"))
+	#exploration_sequence.add_child(ReachedTarget.new(bird,id+": ReachedTarget"))
 	root_selector.add_child(exploration_sequence)
 
 func build_foraging()->void:
@@ -70,6 +70,11 @@ func _build_navigation()->Sequence:
 	# Stop
 	navigation_sequence.add_child(Stop.new(bird, id+": Stop"))
 	return navigation_sequence
+
+func _build_wander()->Sequence:
+	var wander_sequence = Sequence.new(id+": WanderSequence")
+	wander_sequence.add_child(Wander.new(bird, id+": Wander"))
+	return wander_sequence
 
 func _build_ground_sequence()->Sequence:
 	var ground_sequence = Sequence.new(id+": GroundSequence")

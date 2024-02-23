@@ -12,7 +12,7 @@ func run()->void:
 	bird.next_path_position = bird.nav_agent.get_next_path_position()
 	bird.direction = bird.to_local(bird.next_path_position).normalized()
 	bird.animatated_spite.flip_h = bird.direction.x < 0
-	bird.velocity = bird.direction * bird.SPEED * get_physics_process_delta_time()
+	bird.velocity = bird.direction * bird.SPEED_INSANE * get_physics_process_delta_time()
 	var bird_at_target = bird.at_target()
 	if not bird_at_target and bird.nav_agent.is_target_reachable():
 		bird.move_and_slide()

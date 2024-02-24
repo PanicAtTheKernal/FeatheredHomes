@@ -28,7 +28,7 @@ var logger_key = {
 }
 
 func _ready() -> void:
-	for i in range(1000):
+	for i in range(1):
 		BirdResourceManager.add_bird("Dunnock")
 
 func create_bird(bird_info: BirdInfo)->void:

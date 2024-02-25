@@ -16,8 +16,7 @@ func run()->void:
 	# Make sure that there is still food at the target location
 	var resource = bird.world_resources.get_resource("Food", target_map_cords)
 	if resource != null and resource.current_state == "Full":
-
-		# await bird.animatated_spite.update_state("Eat")
+		var food_value = resource.value
 		await bird.animatated_spite.play_eating_animation()
 		# Wait until the eating animation is completed before moving on
 		if bird.animatated_spite.animation != "default":

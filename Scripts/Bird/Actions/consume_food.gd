@@ -14,9 +14,10 @@ func run()->void:
 		return
 	var tile_loc: Vector2i = bird.tile_map.local_to_map(bird.target)
 	# Make sure that there is still food at the target location
-	if bird.world_resources.has_food(tile_loc):
-		var tile = bird.world_resources.update_food_state(tile_loc, "Empty")
-		bird.add_caloires(tile.value)
+	var resource = bird.world_resources.get_resource("Food", tile_loc)
+	if resource != null and resource.current_state == "Full":
+		bird.world_resources.set_resource_state(resource, "Empty")
+		bird.add_caloires(resource.value)
 		bird.animatated_spite.update_state("Eat")
 		bird.animatated_spite.play_eating_animation()
 		# Wait until the eating animation is completed before moving on

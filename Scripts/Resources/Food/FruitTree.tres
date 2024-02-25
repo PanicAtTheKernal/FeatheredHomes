@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WorldResourceTemplate" load_steps=5 format=3 uid="uid://cb6dl2gjaqw73"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/world_resource_template.gd" id="1_drrvb"]
+[ext_resource type="Script" path="res://Scripts/Resources/resource_state.gd" id="2_qvrkf"]
+
+[sub_resource type="Resource" id="Resource_fxcdt"]
+script = ExtResource("2_qvrkf")
+source_id = 0
+altas_cords = Vector2i(13, 10)
+alternative_tile = 0
+
+[sub_resource type="Resource" id="Resource_lbotu"]
+script = ExtResource("2_qvrkf")
+source_id = 0
+altas_cords = Vector2i(23, 10)
+alternative_tile = 0
+
+[resource]
+script = ExtResource("1_drrvb")
+name = "FruitTree"
+respawn_rate = 0.4
+states = {
+"Empty": SubResource("Resource_fxcdt"),
+"Full": SubResource("Resource_lbotu")
+}

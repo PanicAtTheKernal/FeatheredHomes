@@ -1,11 +1,38 @@
-[gd_scene load_steps=26 format=3 uid="uid://cv0t0stbv53hr"]
+[gd_scene load_steps=25 format=3 uid="uid://cv0t0stbv53hr"]
 
 [ext_resource type="Texture2D" uid="uid://cnuew56xuo5jv" path="res://Assets/Titlemap/roguelikeSheet_transparent.png" id="1_d3jjw"]
-[ext_resource type="Script" path="res://Scripts/World/world_navigation.gd" id="1_n72i0"]
-[ext_resource type="Script" path="res://Scripts/World/world_map.gd" id="2_a1pwr"]
+[ext_resource type="Script" path="res://Scripts/World/world_resources.gd" id="2_a1pwr"]
 [ext_resource type="Script" path="res://Scripts/Player/player_cam.gd" id="2_wbf6d"]
-[ext_resource type="Resource" uid="uid://lbomgeivl84f" path="res://Scripts/Food/ProtoFood.tres" id="3_4j6hx"]
 [ext_resource type="PackedScene" uid="uid://b0r1g32c1xayf" path="res://BirdNavTest2.tscn" id="8_bkcdb"]
+
+[sub_resource type="GDScript" id="GDScript_6steo"]
+script/source = "extends Node
+
+class_name WorldNavigation
+
+@export
+var tile_map: TileMap
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	_setup_server()
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+
+func _setup_server():
+	pass
+	#for i in range(tile_map.get_layers_count()):
+	#	var map: RID = tile_map.get_navigation_map(i)
+	#	NavigationServer2D.map_set_active(map, true)
+	#	NavigationServer2D.map_set_cell_size(map, 0.25)
+	#	NavigationServer2D.map_force_update(map)
+	#print(NavigationServer2D.get_maps())
+	#for map in NavigationServer2D.get_maps():
+	#	print(NavigationServer2D.map_is_active(map))
+"
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_iy7di"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -9447,12 +9474,11 @@ sources/0 = SubResource("TileSetAtlasSource_8cjnl")
 [node name="Node2D" type="Node2D"]
 
 [node name="WorldNavigation" type="Node" parent="." node_paths=PackedStringArray("tile_map")]
-script = ExtResource("1_n72i0")
+script = SubResource("GDScript_6steo")
 tile_map = NodePath("../TileMap")
 
 [node name="WorldResources" type="Node2D" parent="."]
 script = ExtResource("2_a1pwr")
-food_resources = ExtResource("3_4j6hx")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_vurad")

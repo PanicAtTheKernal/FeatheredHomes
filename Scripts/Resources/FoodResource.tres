@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="FoodResouce" load_steps=2 format=3 uid="uid://dnnyqwsbjfbe8"]
 
-[ext_resource type="Script" path="res://Scripts/Food/food_resouce.gd" id="2_tifqw"]
+[ext_resource type="Script" path="res://Scripts/Resources/world_resource_template.gd" id="2_tifqw"]
 
 [resource]
 script = ExtResource("2_tifqw")

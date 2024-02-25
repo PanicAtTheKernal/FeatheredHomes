@@ -8,7 +8,8 @@ enum States {
 	MIGRATING
 }
 
-const SPEED = 40**2 
+const SPEED = 40
+const SPEED_INSANE = 40**2
 const ARRIVAL_THRESHOLD = 5.0
 const CALORIES_BURNED = 10
 
@@ -19,7 +20,7 @@ var animatated_spite: BirdAnimation
 @export
 var behavioural_tree: BirdBehaviouralTree
 @export
-var tile_map: TileMap
+var tile_map: TileMapManager
 @export
 var species: BirdSpecies
 @export
@@ -38,22 +39,35 @@ var is_distance_calculated: bool = false
 var is_standing_on_branch: bool = false
 var state: States = States.AIR
 var current_tile: String
-var physics_delta: float
-
+var current_partition: Vector2i
+var mass: float
+var logger_key = {
+	"type": Logger.LogType.NAVIGATION,
+	"obj": "Bird <ID:"+str(id)+">"
+}
 signal change_state(new_state: String, should_flip_h: bool)
 
 func _ready():
+	mass = info.species.size * 1
 	animatated_spite.sprite_frames = species.animations
 	animatated_spite.animation_finished.connect(_on_animation_finished)
 	current_stamina = species.stamina
+	current_partition = tile_map.get_partition_index(tile_map.world_to_map_space(global_position))
 	# TODO Look into removing this
 	$NavigationTimer.autostart = true
 	# Start the navaiagation timer at differnet times for each bird
 	await get_tree().create_timer(randf_range(0.5, 3.0)).timeout
 	$NavigationTimer.start()
 
-func _physics_process(delta: float)->void:
-	physics_delta = delta
+func _physics_process(_delta: float) -> void:
+	# Physics process starts before ready is called
+	#await get_tree().create_timer(0.5, true, true).timeout
+	var new_partition = tile_map.get_partition_index(tile_map.world_to_map_space(global_position))
+	if current_partition != new_partition:
+		Logger.print_debug("Entered new partition: " + str(new_partition), logger_key)
+		#world_resources.add_resource(WorldResources.BIRD_RESOURCE, tile_map.world_to_map_space(global_position), self)
+		current_partition = new_partition
+
 
 func update_target(new_target: Vector2):
 	target = new_target

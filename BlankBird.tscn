@@ -21,6 +21,7 @@ radius = 6.0
 [node name="Bird" type="CharacterBody2D" node_paths=PackedStringArray("nav_agent", "animatated_spite", "behavioural_tree")]
 z_index = 2
 collision_layer = 0
+collision_mask = 4
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_4h2vl")

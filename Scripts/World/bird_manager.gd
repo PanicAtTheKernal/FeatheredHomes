@@ -18,7 +18,7 @@ var default_info: BirdInfo
 @onready
 var player_camera: Camera2D = %PlayerCam
 @onready
-var tilemap:TileMap = %TileMap
+var tilemap:TileMapManager = %TileMap
 @onready
 var world_resources: WorldResources = $"../WorldResources"
 
@@ -26,6 +26,10 @@ var logger_key = {
 	"type": Logger.LogType.RESOURCE,
 	"obj": "BirdManager"
 }
+
+func _ready() -> void:
+	for i in range(1):
+		BirdResourceManager.add_bird("Dunnock")
 
 func create_bird(bird_info: BirdInfo)->void:
 	var new_bird: Bird = blank_bird.instantiate()

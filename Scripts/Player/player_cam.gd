@@ -10,9 +10,15 @@ const MIN_ZOOM_VEC: Vector2 = Vector2(MIN_ZOOM, MIN_ZOOM)
 var zoom_increment: float = 1.0
 @onready
 var tile_map: TileMap = %TileMap
+@onready
+var world_resources: WorldResources = %WorldResources
 
 var dragging: bool = false
 var isActive: bool = true
+var update_states = {
+	"Empty": "Full",
+	"Full": "Empty"
+}
 var logger_key = {
 	"type": Logger.LogType.UI,
 	"obj": "PlayerCamera"
@@ -44,6 +50,16 @@ func _input(event)->void:
 	if event is InputEventMagnifyGesture:
 		Logger.print_debug(event, logger_key)	
 		zoom = clamp(zoom * event.factor, MIN_ZOOM_VEC, MAX_ZOOM_VEC)
+
+
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
+			var mouse_position = get_global_mouse_position()
+			var mouse_position_to_tile_position = tile_map.local_to_map(mouse_position)
+			var resource = world_resources.get_resource_from_loc(mouse_position_to_tile_position)
+			if resource:
+				world_resources.set_resource_state_from_loc(mouse_position_to_tile_position, update_states[resource.current_state])
+
 
 func zoom_in()->void:
 	if zoom < MAX_ZOOM_VEC:

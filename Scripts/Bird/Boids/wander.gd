@@ -38,11 +38,11 @@ func _init(parent_bird: Bird, node_name:String="Wander") -> void:
 func run()->void:
 	force = Vector2.ZERO
 	force += _wander()
-	#force += _seek(Vector2(0,0))
 	force += _avoidance()
 	if DebugGizmos.enabled:
 		debug_velocity.draw([bird.global_position, (bird.global_position+force)])
 	var acceleration = force/ bird.mass
+	bird.animatated_spite.flip_h = bird.velocity.normalized().x < 0
 	bird.velocity = bird.velocity + acceleration * get_physics_process_delta_time()
 	bird.move_and_slide()
 	super.success()

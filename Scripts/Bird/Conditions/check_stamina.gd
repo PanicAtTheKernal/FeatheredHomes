@@ -3,7 +3,7 @@ extends Task
 class_name CheckStamina
 
 # TODO Randomise this
-var threshold: float = 0.9
+var threshold: float = 0.1
 
 var bird: Bird
 

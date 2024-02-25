@@ -8,7 +8,7 @@ enum States {
 	MIGRATING
 }
 
-const SPEED = 40
+const SPEED = 60
 const SPEED_INSANE = 40**2
 const ARRIVAL_THRESHOLD = 5.0
 const CALORIES_BURNED = 10
@@ -48,7 +48,7 @@ var logger_key = {
 signal change_state(new_state: String, should_flip_h: bool)
 
 func _ready():
-	mass = info.species.size * 1
+	mass = info.species.size * 0.1
 	animatated_spite.sprite_frames = species.animations
 	animatated_spite.animation_finished.connect(_on_animation_finished)
 	current_stamina = species.stamina

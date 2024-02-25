@@ -26,7 +26,7 @@ func _create_partition_keys() -> void:
 	for i in range(partition_size):
 		for j in range(partition_size):
 			partition_keys.push_back(Vector2i(i, j))
-
+			
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
@@ -42,10 +42,10 @@ func get_partition_index(map_cords: Vector2)->Vector2i:
 	return Vector2i(floori(map_cords.x/partition_width), floori(map_cords.y/partition_height))
 
 func world_to_map_space(world_cords: Vector2)->Vector2i:
-	return Vector2i(world_cords/TILE_SIZE-(Vector2(TILE_SIZE/2.0, TILE_SIZE/2.0)))
+	return local_to_map(world_cords)
 
 func map_to_world_space(map_cords: Vector2i)->Vector2:
-	return Vector2(map_cords)*TILE_SIZE+(Vector2(TILE_SIZE/2.0, TILE_SIZE/2.0))
+	return map_to_local(map_cords)
 	
 func check_if_within_bounds(world_cords: Vector2)->bool:
 	var tile_loc = world_to_map_space(world_cords)

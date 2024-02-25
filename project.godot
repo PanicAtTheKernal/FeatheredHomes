@@ -24,6 +24,7 @@ Database="*res://Scripts/database.gd"
 PlayerResourceManager="*res://Scripts/player_resource_manager.gd"
 BirdResourceManager="*res://Scripts/bird_resource_manager.gd"
 Camera="*res://Scripts/camera.gd"
+DebugGizmos="*res://Scripts/Util/debug_gizmos.gd"
 
 [dotnet]
 

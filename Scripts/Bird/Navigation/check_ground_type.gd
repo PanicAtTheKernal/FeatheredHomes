@@ -9,10 +9,10 @@ func _init(parent_bird: Bird, node_name:String="CheckGroundType") -> void:
 	bird = parent_bird
 
 func run()->void:
-	var tile_map_loc = bird.tile_map.local_to_map(bird.global_position)
-	var tile_data = bird.tile_map.get_cell_tile_data(0, tile_map_loc)
+	var bird_map_cords = bird.tile_map.world_to_map_space(bird.global_position)
+	var tile_data = bird.tile_map.get_cell_tile_data(0, bird_map_cords)
 	if tile_data == null:
-		printerr("Tile loc is missing type data; ", tile_map_loc)
+		printerr("Tile loc is missing type data; ", bird_map_cords)
 		return
 	var type = tile_data.get_custom_data("Type")
 	if bird.current_tile != type:

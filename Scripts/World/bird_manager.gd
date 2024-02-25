@@ -4,9 +4,9 @@ class_name BirdManager
 
 const MAX_STAMINA = 10000
 const MIN_STAMINA = 500
-const MAX_GROUND_DISTANCE = 10
-const MIN_GROUND_DISTANCE = 4
-const MAX_FLIGHT_DISTANCE = 30
+const MAX_GROUND_DISTANCE = 70
+const MIN_GROUND_DISTANCE = 50
+const MAX_FLIGHT_DISTANCE = 200
 
 @export
 var blank_bird: PackedScene = preload("res://BlankBird.tscn")

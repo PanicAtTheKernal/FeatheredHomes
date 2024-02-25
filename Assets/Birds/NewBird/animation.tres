@@ -2,6 +2,10 @@
 
 [ext_resource type="Texture2D" uid="uid://bd8ik77kpqfpk" path="res://Assets/Birds/Chickadee-Sprite-Sheet-2.png" id="1_0m73c"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_kqbbo"]
+atlas = ExtResource("1_0m73c")
+region = Rect2(0, 0, 96, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_n3rwa"]
 atlas = ExtResource("1_0m73c")
 region = Rect2(1152, 0, 96, 64)
@@ -50,15 +54,17 @@ region = Rect2(864, 0, 96, 64)
 atlas = ExtResource("1_0m73c")
 region = Rect2(960, 0, 96, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kqbbo"]
-atlas = ExtResource("1_0m73c")
-region = Rect2(0, 0, 96, 64)
-
 [resource]
 animations = [{
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kqbbo")
+}, {
 "duration": 1.5,
 "texture": SubResource("AtlasTexture_n3rwa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kqbbo")
 }],
 "loop": false,
 "name": &"Eating",

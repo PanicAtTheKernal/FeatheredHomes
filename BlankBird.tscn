@@ -32,9 +32,10 @@ behavioural_tree = NodePath("BirdBehaviouralTree")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.15, 0.15)
 sprite_frames = ExtResource("2_8dhfy")
-animation = &"Flight"
+animation = &"Eating"
 autoplay = "default"
-frame_progress = 0.191165
+frame = 2
+frame_progress = 1.0
 script = ExtResource("3_x8tx3")
 
 [node name="Button" type="Button" parent="."]

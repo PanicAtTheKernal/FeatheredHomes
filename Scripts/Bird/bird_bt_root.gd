@@ -10,8 +10,8 @@ func _ready():
 
 # Start running the tree
 func _physics_process(_delta):
-	run()
+	await run()
 
 func run()->void:
 	for child in get_children():
-		child.run()
+		await child.run()

@@ -9,7 +9,8 @@ func _init(parent_bird: Bird, node_name:String="CheckIfMovingOnGround") -> void:
 	bird = parent_bird
 
 func run()->void:
-	if bird.state == bird.States.GROUND:
+	var distance = bird.global_position.distance_to(bird.target)
+	if distance <= bird.species.ground_max_distance:
 		super.success()
 		return
 	else:

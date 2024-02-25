@@ -9,9 +9,12 @@ func _init(parent_bird: Bird, node_name:String="Walk") -> void:
 	bird = parent_bird
 
 func run()->void:
-	bird.animatated_spite.update_state("Ground")
-	bird.animatated_spite.play_walking_animation()
-	super.success()
+	# await bird.animatated_spite.update_state("Ground")
+	await bird.animatated_spite.play_walking_animation()
+	if bird.animatated_spite.animation == "Walking":
+		super.success()
+	else:
+		super.fail()
 	
 func start()->void:
 	super.start()

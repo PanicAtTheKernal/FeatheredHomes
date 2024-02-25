@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://dsps58agtajiu"]
+[gd_scene load_steps=35 format=3 uid="uid://dsps58agtajiu"]
 
 [ext_resource type="Texture2D" uid="uid://cnuew56xuo5jv" path="res://Assets/Titlemap/roguelikeSheet_transparent.png" id="1_q8hc6"]
 [ext_resource type="Script" path="res://Scripts/World/world_resources.gd" id="2_g4m67"]
@@ -8,7 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://cc7jo7b3cgbem" path="res://Scripts/World/ui.tscn" id="8_k080l"]
 [ext_resource type="Resource" uid="uid://b25tuaxl75q5k" path="res://Assets/Birds/NewBird/eurasian-blue-tit.tres" id="8_xwsb6"]
 [ext_resource type="Resource" uid="uid://hxbky8sm223l" path="res://Assets/Birds/NewBird/sample_bird_info.tres" id="9_naqma"]
+[ext_resource type="Script" path="res://Scripts/Util/partition_debug.gd" id="10_binhm"]
 [ext_resource type="Script" path="res://Scripts/World/bird_manager.gd" id="10_tep2h"]
+[ext_resource type="FontFile" uid="uid://nxmuchvunil1" path="res://Assets/Silkscreen/Silkscreen-Bold.ttf" id="11_ice53"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_tt3tg"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -12698,5 +12700,10 @@ position = Vector2(363, 191)
 script = ExtResource("10_tep2h")
 default_bird = ExtResource("8_xwsb6")
 default_info = ExtResource("9_naqma")
+
+[node name="PartitionDebug" type="Node2D" parent="."]
+visible = false
+script = ExtResource("10_binhm")
+font = ExtResource("11_ice53")
 
 [connection signal="timeout" from="RegenFood" to="WorldResources" method="_on_regen_food_timeout"]

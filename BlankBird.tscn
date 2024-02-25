@@ -59,6 +59,7 @@ debug_enabled = true
 debug_use_custom = true
 
 [node name="CalorieTimer" type="Timer" parent="."]
+autostart = true
 
 [node name="NavigationTimer" type="Timer" parent="."]
 autostart = true

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WorldResourceTemplateGroup" load_steps=5 format=3 uid="uid://lbomgeivl84f"]
+
+[ext_resource type="Resource" uid="uid://cb6dl2gjaqw73" path="res://Scripts/Resources/Food/FruitTree.tres" id="1_tpnry"]
+[ext_resource type="Resource" uid="uid://0gg1d0tvylfk" path="res://Scripts/Resources/Food/FruitShrub.tres" id="2_775ym"]
+[ext_resource type="Script" path="res://Scripts/Resources/world_resource_group.gd" id="2_qfgs0"]
+[ext_resource type="Resource" uid="uid://b8bvf6yqswddv" path="res://Scripts/Resources/Food/FruitBush.tres" id="3_irpt3"]
+
+[resource]
+script = ExtResource("2_qfgs0")
+group_name = "Fruit"
+resource_templates = Array[Resource("res://Scripts/Resources/world_resource_template.gd")]([ExtResource("1_tpnry"), ExtResource("2_775ym"), ExtResource("3_irpt3")])

@@ -14,7 +14,7 @@ func run()->void:
 		return
 	var target_map_cords: Vector2i = bird.tile_map.world_to_map_space(bird.target)
 	# Make sure that there is still food at the target location
-	var resource = bird.world_resources.get_resource("Food", target_map_cords)
+	var resource = bird.world_resources.get_resource(bird.species.diet, target_map_cords)
 	if resource != null and resource.current_state == "Full":
 		var food_value = resource.value
 		await bird.animatated_spite.play_eating_animation()

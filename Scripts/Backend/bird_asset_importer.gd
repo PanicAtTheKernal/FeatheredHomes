@@ -55,4 +55,7 @@ func _build_diet()->void:
 func _build_image()->void:
 	var shape = await Database.fetch_shape(bird_supa_data["birdShapeId"])
 	var url = bird_supa_data["birdImages"]["image"] if bird_supa_data["birdUnisex"] else bird_supa_data["birdImages"][bird.gender]
-	bird.species.animations = await AnimationBuilder.new(shape["BirdShapeAnimationTemplate"], url).build()
+	var animation_builder = AnimationBuilder.new(shape["BirdShapeAnimationTemplate"], url)
+	add_child(animation_builder)
+	bird.species.animations = await animation_builder.build()
+	animation_builder.queue_free()

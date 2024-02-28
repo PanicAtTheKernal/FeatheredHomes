@@ -8,7 +8,8 @@ export class WikiPageRequest {
 
     constructor(wikiPageName: string | URL) {
         if ((typeof wikiPageName) == "string") {
-            this._wikiPageName = wikiPageName as string;
+            // You get different results if the name is uppercase
+            this._wikiPageName = (wikiPageName as string).toLowerCase();
             this._searchRequest = new URL(WikiPageRequest.wikiApi);
             this.prepareSearchRequest();
         } else {

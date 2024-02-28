@@ -57,15 +57,23 @@ export class LabelSorter {
         if (this.isLabelBlacklisted(label)) {
             return;
         }
+        if (!this.filterLabels(label)) {
+            await this.sortUnknownLabel(label);
+            this.filterLabels(label);
+        }
+    }
+
+    private filterLabels(label: string): boolean {
         if (this.isLabelAFamily(label)) {
             this._sortedLabels.birdFamilyLabels.push(label);
+            return true;
         }
         else if (this.isLabelASpecies(label)) {
             this._sortedLabels.birdSpeciesLabels.push(label);
+            return true;
         }
         else {
-            await this.sortUnknownLabel(label);
-            await this.sortLabel(label);
+            return false;
         }
     }
 
@@ -96,14 +104,13 @@ export class LabelSorter {
                 await Supabase.instantiate().addBirdLabel({
                     Label: label,
                     IsSpecific: false,
-                    DefaultBird: defaultBirdName
+                    DefaultBird: defaultBirdName.toUpperCase()
                 })
                 this._birdFamilyLabels.set(label, defaultBirdName);
             } else {
                 // This is the case if the bird wiki page is missing important information that make it unviable for the bird asset generator
             }
         } catch (error) {
-            console.log(`LabelSorter (${label}): ${error}`);
             // There is no wiki page for it then it gets add to the blacklist
             await Supabase.instantiate().addBlacklistLabel({
                 Label: label
@@ -119,7 +126,6 @@ export class LabelSorter {
         }
         await this.fetchLabelLists();
         for(const label of this._labels) {
-            console.log(label);
             await this.sortLabel(label.toUpperCase());
         }
         this.sortedLabels.isBird = true;

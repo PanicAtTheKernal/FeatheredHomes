@@ -25,6 +25,8 @@ func _create_file_name()->String:
 	return image_name.split("/")[1]
 
 func _download_image()->void:
+	# Just wait for the image to process incase it's not done yet
+	await get_tree().create_timer(3.0, false).timeout
 	await Database.download_image(image_name, file_name)
 
 func _load_image()->ImageTexture:

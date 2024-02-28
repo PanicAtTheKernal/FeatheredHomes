@@ -7,6 +7,7 @@ var auth_header: String
 var content_type_header: String
 var request_headers: Array
 var response_body: Dictionary
+var response_code: int
 var logger_key = {
 	"type": Logger.LogType.RESOURCE,
 	"obj": "FetchBirdRequest"

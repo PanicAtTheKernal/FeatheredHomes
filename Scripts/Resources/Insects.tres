@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WorldResourceTemplateGroup" load_steps=3 format=3 uid="uid://bjb2h71puk7jc"]
+
+[ext_resource type="Resource" uid="uid://cwfsnr57qre58" path="res://Scripts/Resources/Food/InsectWorm.tres" id="1_j65em"]
+[ext_resource type="Script" path="res://Scripts/Resources/world_resource_group.gd" id="1_wrrie"]
+
+[resource]
+script = ExtResource("1_wrrie")
+group_name = "Insects"
+resource_templates = Array[Resource("res://Scripts/Resources/world_resource_template.gd")]([ExtResource("1_j65em")])
+regenerate = true

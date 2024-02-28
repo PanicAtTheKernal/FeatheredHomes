@@ -95,7 +95,7 @@ func _get_resources_from_tile_map() -> void:
 		# Doesn't add a new resource if there is no state assigned in the tile map
 		if state != "":
 			var partition_index = tile_map.get_partition_index(tile)
-			var resource_group = get_resource_group(resource_template)
+			var resource_group = get_resource_group_name(resource_template)
 			resource_counter[resource_group][state] += 1
 			resource_partitions[partition_index][resource_group][tile] = WorldResource.new(resource_template, tile, state, tile_map, 1, value, amount)
 			# Create the inital state for the resource
@@ -132,11 +132,29 @@ func get_resource_partition_group(partition_index: Vector2i, group: String) -> D
 		return {}
 	return partition[group]
 
-func get_resource_group(resource: WorldResourceTemplate) -> String:
+func get_resource_group_name(resource: WorldResourceTemplate) -> String:
 	if resource_group_reference.has(resource):
 		return resource_group_reference[resource]
 	else:
 		return ""
+
+func get_resource_group_from_name(group_name: String) -> WorldResourceTemplateGroup:
+	for group in resource_templates_groups:
+		if group.group_name == group_name:
+			return group
+	return null
+
+func get_resource_group(resource: WorldResourceTemplate) -> WorldResourceTemplateGroup:
+	for group in resource_templates_groups:
+		if group.resource_templates.has(resource):
+			return group
+	return null
+
+func can_resource_regenerate(resource: WorldResourceTemplate) -> bool:
+	var group = get_resource_group(resource)
+	if group == null:
+		return false
+	return group.regenerate
 
 func add_resource(resource_group: String, map_cords: Vector2i, resource: Variant) -> void:
 	var partition_index = tile_map.get_partition_index(map_cords)
@@ -169,7 +187,7 @@ func set_resource_state_from_loc(map_cords: Vector2i, new_state: String) -> void
 func set_resource_state(resource: WorldResource, new_state: String) -> void:
 	var old_state = resource.current_state
 	if resource.update_state(new_state):
-		var resource_group = get_resource_group(resource.template)
+		var resource_group = get_resource_group_name(resource.template)
 		resource_counter[resource_group][old_state] -= 1
 		resource_counter[resource_group][new_state] += 1
 		tile_map.update_resource_sprite(resource, new_state)

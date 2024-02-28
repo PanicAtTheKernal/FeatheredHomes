@@ -59,7 +59,7 @@ func _input(event)->void:
 			var resource = world_resources.get_resource_from_loc(mouse_position_to_tile_position)
 			if resource:
 				# Check if the resource can regernerate first
-				if world_resources.regenerate_groups.has(world_resources.get_resource_group(resource.template)):
+				if world_resources.can_resource_regenerate(resource.template):
 					world_resources.set_resource_state_from_loc(mouse_position_to_tile_position, update_states[resource.current_state])
 
 

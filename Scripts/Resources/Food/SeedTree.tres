@@ -19,6 +19,7 @@ alternative_tile = 0
 script = ExtResource("1_ioj3p")
 name = "SeedTree"
 respawn_rate = 0.2
+initial_state = "Full"
 states = {
 "Empty": SubResource("Resource_e87ui"),
 "Full": SubResource("Resource_hcyys")

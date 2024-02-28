@@ -6,6 +6,8 @@ class_name WorldResourceTemplateGroup
 var group_name: String
 @export
 var resource_templates: Array[WorldResourceTemplate]
+@export
+var regenerate: bool
 
 # Build a dictionary where the key is the atlas cord and the value is the WorldResourceTemplate
 func get_resources()->Dictionary:

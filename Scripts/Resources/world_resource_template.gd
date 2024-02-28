@@ -6,7 +6,8 @@ class_name WorldResourceTemplate
 var name:String = ""
 @export_range(0.1, 1.0)
 var respawn_rate: float = 0.5
-
+@export
+var initial_state: String
 @export
 var states: Dictionary
 

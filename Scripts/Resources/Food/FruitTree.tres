@@ -19,6 +19,7 @@ alternative_tile = 0
 script = ExtResource("1_drrvb")
 name = "FruitTree"
 respawn_rate = 0.4
+initial_state = "Full"
 states = {
 "Empty": SubResource("Resource_fxcdt"),
 "Full": SubResource("Resource_lbotu")

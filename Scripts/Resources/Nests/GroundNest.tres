@@ -1,0 +1,61 @@
+[gd_resource type="Resource" script_class="WorldResourceTemplate" load_steps=10 format=3 uid="uid://seiy3x170vw7"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/world_resource_template.gd" id="1_u2f1c"]
+[ext_resource type="Script" path="res://Scripts/Resources/resource_state.gd" id="2_4vhyb"]
+
+[sub_resource type="Resource" id="Resource_1mu0e"]
+script = ExtResource("2_4vhyb")
+source_id = 0
+altas_cords = Vector2i(14, 7)
+alternative_tile = 0
+
+[sub_resource type="Resource" id="Resource_px11b"]
+script = ExtResource("2_4vhyb")
+source_id = 0
+altas_cords = Vector2i(17, 7)
+alternative_tile = 0
+
+[sub_resource type="Resource" id="Resource_3sc4c"]
+script = ExtResource("2_4vhyb")
+source_id = 0
+altas_cords = Vector2i(13, 7)
+alternative_tile = 0
+
+[sub_resource type="Resource" id="Resource_4y27b"]
+script = ExtResource("2_4vhyb")
+source_id = 0
+altas_cords = Vector2i(55, 18)
+alternative_tile = 0
+
+[sub_resource type="Resource" id="Resource_h2bnx"]
+script = ExtResource("2_4vhyb")
+source_id = 0
+altas_cords = Vector2i(13, 8)
+alternative_tile = 0
+
+[sub_resource type="Resource" id="Resource_26lix"]
+script = ExtResource("2_4vhyb")
+source_id = 0
+altas_cords = Vector2i(16, 7)
+alternative_tile = 0
+
+[sub_resource type="Resource" id="Resource_8nx7t"]
+script = ExtResource("2_4vhyb")
+source_id = 0
+altas_cords = Vector2i(16, 8)
+alternative_tile = 0
+
+[resource]
+script = ExtResource("1_u2f1c")
+name = "GroundNest"
+respawn_rate = 0.5
+initial_state = "Empty"
+states = {
+"Alive": SubResource("Resource_1mu0e"),
+"Dead": SubResource("Resource_px11b"),
+"Egg": SubResource("Resource_3sc4c"),
+"Empty": SubResource("Resource_4y27b"),
+"EmptyNest": SubResource("Resource_h2bnx"),
+"Hatch": SubResource("Resource_26lix"),
+"StartBuild": SubResource("Resource_8nx7t")
+}

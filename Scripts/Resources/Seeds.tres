@@ -7,3 +7,4 @@
 script = ExtResource("1_6056s")
 group_name = "Seeds"
 resource_templates = Array[Resource("res://Scripts/Resources/world_resource_template.gd")]([ExtResource("1_y0a04")])
+regenerate = true

@@ -58,7 +58,9 @@ func _input(event)->void:
 			var mouse_position_to_tile_position = tile_map.local_to_map(mouse_position)
 			var resource = world_resources.get_resource_from_loc(mouse_position_to_tile_position)
 			if resource:
-				world_resources.set_resource_state_from_loc(mouse_position_to_tile_position, update_states[resource.current_state])
+				# Check if the resource can regernerate first
+				if world_resources.regenerate_groups.has(world_resources.get_resource_group(resource.template)):
+					world_resources.set_resource_state_from_loc(mouse_position_to_tile_position, update_states[resource.current_state])
 
 
 func zoom_in()->void:

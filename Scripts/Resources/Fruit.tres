@@ -9,3 +9,4 @@
 script = ExtResource("2_qfgs0")
 group_name = "Fruit"
 resource_templates = Array[Resource("res://Scripts/Resources/world_resource_template.gd")]([ExtResource("1_tpnry"), ExtResource("2_775ym"), ExtResource("3_irpt3")])
+regenerate = true

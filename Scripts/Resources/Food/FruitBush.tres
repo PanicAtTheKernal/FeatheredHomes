@@ -19,6 +19,7 @@ alternative_tile = 0
 script = ExtResource("1_bi6jm")
 name = "FruitBush"
 respawn_rate = 0.5
+initial_state = "Full"
 states = {
 "Empty": SubResource("Resource_ixa2b"),
 "Full": SubResource("Resource_ysb76")

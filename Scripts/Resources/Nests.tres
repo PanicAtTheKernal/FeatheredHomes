@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WorldResourceTemplateGroup" load_steps=5 format=3 uid="uid://btin6hacyprgx"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/world_resource_group.gd" id="1_hjwal"]
+[ext_resource type="Resource" uid="uid://seiy3x170vw7" path="res://Scripts/Resources/Nests/GroundNest.tres" id="1_tkkwl"]
+[ext_resource type="Resource" uid="uid://bvh3psy1f5303" path="res://Scripts/Resources/Nests/BranchNest.tres" id="2_ei60l"]
+[ext_resource type="Resource" uid="uid://cvho62koemebb" path="res://Scripts/Resources/Nests/TreeNest.tres" id="3_c165y"]
+
+[resource]
+script = ExtResource("1_hjwal")
+group_name = "Nests"
+resource_templates = Array[Resource("res://Scripts/Resources/world_resource_template.gd")]([ExtResource("1_tkkwl"), ExtResource("2_ei60l"), ExtResource("3_c165y")])
+regenerate = false

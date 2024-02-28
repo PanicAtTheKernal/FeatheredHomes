@@ -151,8 +151,13 @@ autostart = true
 [node name="BirdBehaviouralTree" type="Node" parent="."]
 script = ExtResource("4_vfg7a")
 
+[node name="AgeTimer" type="Timer" parent="."]
+wait_time = 30.0
+autostart = true
+
 [connection signal="animation_finished" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_animation_finished"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="navigation_finished" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_navigation_finished"]
 [connection signal="path_changed" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_path_changed"]
 [connection signal="timeout" from="CalorieTimer" to="." method="_on_calorie_timer_timeout"]
+[connection signal="timeout" from="AgeTimer" to="." method="_on_age_timer_timeout"]

@@ -32,7 +32,7 @@ func _get_nests() -> void:
 
 func request_nest(nest_type: String) -> WorldResource:
 	if nests[nest_type][FREE_NEST].size() > 0:
-		var nest = nests[nest_type][FREE_NEST].pop_back()
+		var nest = nests[nest_type][FREE_NEST].pop_front()
 		nests[nest_type][TAKEN_NEST].push_back(nest)
 		return nest
 	else:

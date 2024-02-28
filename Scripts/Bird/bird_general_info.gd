@@ -5,6 +5,10 @@ class_name BirdInfo
 enum StatusTypes {
 	NOT_GENERATED,
 	GENERATED,
+	TEEN,
+	YOUNG_ADULT,
+	ADULT,
+	ELDER,
 	DEAD
 }
 
@@ -30,7 +34,11 @@ var unisex: bool
 var status_messages: Dictionary = {
 	StatusTypes.NOT_GENERATED: "Not generated",
 	StatusTypes.GENERATED: "Generated",
-	StatusTypes.DEAD: "Dead"
+	StatusTypes.DEAD: "Dead",
+	StatusTypes.TEEN: "Teen",
+	StatusTypes.YOUNG_ADULT: "Young Adult",
+	StatusTypes.ADULT: "Adult",
+	StatusTypes.ELDER: "Elder",
 }
 
 func _init():

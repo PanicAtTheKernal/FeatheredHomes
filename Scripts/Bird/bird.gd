@@ -53,6 +53,7 @@ func _ready():
 	animatated_spite.animation_finished.connect(_on_animation_finished)
 	current_stamina = species.stamina
 	current_partition = tile_map.get_partition_index(tile_map.world_to_map_space(global_position))
+	world_resources.add_bird_resource(current_partition,Vector2i(0,0), self)
 	# TODO Look into removing this
 	$NavigationTimer.autostart = true
 	# Start the navaiagation timer at differnet times for each bird
@@ -65,6 +66,7 @@ func _physics_process(_delta: float) -> void:
 	var new_partition = tile_map.get_partition_index(tile_map.world_to_map_space(global_position))
 	if current_partition != new_partition:
 		Logger.print_debug("Entered new partition: " + str(new_partition), logger_key)
+		world_resources.add_bird_resource(new_partition, current_partition, self)
 		#world_resources.add_resource(WorldResources.BIRD_RESOURCE, tile_map.world_to_map_space(global_position), self)
 		current_partition = new_partition
 

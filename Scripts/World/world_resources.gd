@@ -13,6 +13,7 @@ var resource_partitions: Dictionary
 var template_atlas: Dictionary
 var resource_counter: Dictionary
 var resource_group_reference: Dictionary
+var bird_partitions: Dictionary
 
 func _ready():
 	_build_resource_dictionaries()
@@ -38,6 +39,7 @@ func _build_resource_dictionaries()->void:
 		_initalise_template_atlas(template_group)
 		_intialise_resource_counter(template_group)
 		_intialise_resource_group_reference(template_group)
+		_intialise_bird_resources()
 
 						
 # Build a dictionary where the key is the atlas cords and the value is the template those atlas cords are used
@@ -61,12 +63,15 @@ func _intialise_resource_group_reference(template_group: WorldResourceTemplateGr
 	for template in template_group.resource_templates:
 		resource_group_reference[template] = template_group.group_name
 
+func _intialise_bird_resources()->void:
+	for key in tile_map.partition_keys:
+		bird_partitions[key] = []
+
 func _intialise_partition_resources()->void:
 	for key in tile_map.partition_keys:
 		var partition_dict = {}
 		for resource_template_group in resource_templates_groups:
 			partition_dict[resource_template_group.group_name] = {}
-		partition_dict[BIRD_RESOURCE] = {}
 		resource_partitions[key] = partition_dict
 
 func _get_resources_from_tile_map()->void:
@@ -135,6 +140,10 @@ func add_resource(resource_group: String, map_cords: Vector2i, resource: Variant
 	# For some reason, it won't add the bird unless this line is here
 	var magic_bird = resource_partitions[partition_index][resource_group][map_cords]
 	return
+
+func add_bird_resource(parition_index: Vector2i, old_index: Vector2i, bird: Bird)->void:
+	bird_partitions[old_index].erase(bird)
+	bird_partitions[parition_index].push_back(bird)
 
 func update_partition(old_map_cords: Vector2i, new_map_cords: Vector2i, group: String)->void:
 	var old_partition_key = tile_map.get_partition_index(old_map_cords)

@@ -27,9 +27,9 @@ var logger_key = {
 	"obj": "BirdManager"
 }
 
-func _ready() -> void:
-	for i in range(1):
-		BirdResourceManager.add_bird("Dunnock")
+#func _ready() -> void:
+	#for i in range(1):
+		#BirdResourceManager.add_bird("Dunnock")
 
 func create_bird(bird_info: BirdInfo)->void:
 	var new_bird: Bird = blank_bird.instantiate()

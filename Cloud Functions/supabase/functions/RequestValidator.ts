@@ -8,7 +8,8 @@ export type BirdRequest = {
 export class RequestValidator {
     private readonly _request: Request;
     private _body!: BirdRequest;
-  
+    private _error!: string;
+
     constructor (request: Request) {
       this._request = request;
     }
@@ -24,6 +25,7 @@ export class RequestValidator {
      
     public async validate(): Promise<Response | null> {
       if (!this.validatePostRequest()) {
+        this._error = "Request must be a POST";
         return new Response(
           JSON.stringify({
             error: "Request must be a POST"
@@ -33,6 +35,7 @@ export class RequestValidator {
         );
       }
       if (!(await this.validateBodyRequest())) {
+        this._error = "Missing birdSpecies in request body";
         return new Response(
           JSON.stringify({
             error: "Missing birdSpecies in request body"
@@ -46,6 +49,10 @@ export class RequestValidator {
   
     public get body(): BirdRequest {
       return this._body;
+    }
+
+    public get error(): string {
+      return this._error;
     }
   }
 

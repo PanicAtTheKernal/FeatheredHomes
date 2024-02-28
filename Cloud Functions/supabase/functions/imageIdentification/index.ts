@@ -3,12 +3,13 @@
 // This enables autocomplete, go to definition, etc.
 
 import { LabelSorter, SortedLabels } from "../LabelSorter.ts";
-import { Supabase } from "../SupabaseClient.ts";
+import { Log, Supabase } from "../SupabaseClient.ts";
 import { ReferralWikiPage } from "../WikiPage.ts";
 import { LabelDetection } from "./LabelDetection.ts";
 
 const CONTENT_TYPE = "application/json; charset=utf-8";
 const HEADERS = { "Content-Type": CONTENT_TYPE };
+const FUNCTION_NAME = "imageIdentification";
 
 type ImageIdentificationResponse = {
   isBird: boolean,
@@ -19,6 +20,7 @@ type ImageIdentificationResponse = {
 
 export const server = Deno.serve(async (req: Request) => {  
   if (req.method != "POST") {
+    Supabase.instantiate().uploadLog(FUNCTION_NAME, {}, "Request must be a POST");
     return new Response(
       JSON.stringify({
         error: "Request must be a POST"
@@ -37,11 +39,13 @@ export const server = Deno.serve(async (req: Request) => {
       approximate: birdName.approximate,
       error: ""
     } 
+    Supabase.instantiate().uploadLog(FUNCTION_NAME, response);
     return new Response(
       JSON.stringify(response),
       { headers: HEADERS },
     );
   } catch(error) {
+    Supabase.instantiate().uploadLog(FUNCTION_NAME, {}, error.message);
     const response: ImageIdentificationResponse = {
       isBird: false,
       error: error.message

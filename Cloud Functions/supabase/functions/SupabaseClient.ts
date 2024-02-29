@@ -27,6 +27,13 @@ export type BirdShape = {
     BirdShapeTemplateJson: object;
 }
 
+export type Log = {
+    Function: string;
+    Request: object;
+    IsError: boolean;
+    Error: object | null;
+}
+
 export type BirdSpecies = {
     birdId: string;
     birdName: string;
@@ -63,6 +70,7 @@ export class Supabase {
     private readonly _dietTable = "Diet";
     private readonly _traitTable = "Traits";
     private readonly _birdAssetBucket = "BirdAssets";
+    private readonly _logTable = "Log";
 
     private constructor() {
         this._supabaseServiceRoleKey = Deno.env.get("SERVICE_ROLE_KEY") as string;
@@ -239,6 +247,19 @@ export class Supabase {
         const response = await this._supabaseAdminClient.from(this._birdSpeciesTable).insert(bird);
         if(response.error) {
             throw new Error(`Inserting a new label resulted in this error "${response.error.message}"`);
+        }
+    }
+
+    public async uploadLog(endpoint_name: string, request: object, error?: string): Promise<void> {
+        const log: Log = {
+            Function: endpoint_name,
+            Request: request,
+            IsError: (error != undefined),
+            Error: (error != undefined) ? {error: error} : null
+        }
+        const response = await this._supabaseAdminClient.from(this._logTable).insert(log);
+        if(response.error) {
+            console.log(`Inserting a new log resulted in this error "${response.error.message}"`);
         }
     }
 

@@ -11,10 +11,10 @@ func _init(parent_bird: Bird, node_name: String="FindNearestFood") -> void:
 
 func run()->void:
 	var bird_map_cords: Vector2 = bird.tile_map.world_to_map_space(bird.global_position)
-	var shortest_distance = find_shortest_path_min_heap(bird_map_cords, bird.current_partition, "Food")
+	var shortest_distance = find_shortest_path_min_heap(bird_map_cords, bird.current_partition, bird.species.diet)
 	# If no food is found then return fail
 	if shortest_distance == null:
-		shortest_distance = check_closest_adjacent_cells(bird_map_cords, "Food")
+		shortest_distance = check_closest_adjacent_cells(bird_map_cords, bird.species.diet)
 		if shortest_distance == null:
 			super.fail()
 			return
@@ -53,7 +53,7 @@ func check_closest_adjacent_cells(map_cords: Vector2, group: String)->MinHeap.He
 	for neighbour in neighbours:
 		if not bird.tile_map.check_if_within_partition_bounds(neighbour):
 			continue
-		if bird.world_resources.get_resource_partition_group(neighbour, "Food").is_empty():
+		if bird.world_resources.get_resource_partition_group(neighbour, bird.species.diet).is_empty():
 			continue
 		var bird_map_cords: Vector2 = bird.tile_map.world_to_map_space(bird.global_position)	
 		var distance = bird_map_cords.distance_to(bird.tile_map.get_partition_midpoint(neighbour))

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WorldResourceTemplateGroup" load_steps=3 format=3 uid="uid://5ga1vwaeetfc"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/world_resource_group.gd" id="1_4ohpm"]
+[ext_resource type="Resource" uid="uid://dkoascp5tcewi" path="res://Scripts/Resources/Other/Stick.tres" id="1_dm68l"]
+
+[resource]
+script = ExtResource("1_4ohpm")
+group_name = "Stick"
+resource_templates = Array[Resource("res://Scripts/Resources/world_resource_template.gd")]([ExtResource("1_dm68l")])
+regenerate = true

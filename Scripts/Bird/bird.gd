@@ -8,7 +8,7 @@ enum States {
 	MIGRATING
 }
 
-const SPEED = 40
+const SPEED = 60
 const SPEED_INSANE = 40**2
 const ARRIVAL_THRESHOLD = 5.0
 const CALORIES_BURNED = 10
@@ -28,7 +28,9 @@ var world_resources: WorldResources
 @export
 var info: BirdInfo
 
+
 var id: int
+var current_age: int
 var target: Vector2
 var direction: Vector2
 var next_path_position: Vector2
@@ -48,11 +50,13 @@ var logger_key = {
 signal change_state(new_state: String, should_flip_h: bool)
 
 func _ready():
-	mass = info.species.size * 1
+	_increament_age()
+	mass = info.species.size * 0.1
 	animatated_spite.sprite_frames = species.animations
 	animatated_spite.animation_finished.connect(_on_animation_finished)
 	current_stamina = species.stamina
 	current_partition = tile_map.get_partition_index(tile_map.world_to_map_space(global_position))
+	world_resources.add_bird_resource(current_partition,Vector2i(0,0), self)
 	# TODO Look into removing this
 	$NavigationTimer.autostart = true
 	# Start the navaiagation timer at differnet times for each bird
@@ -65,6 +69,7 @@ func _physics_process(_delta: float) -> void:
 	var new_partition = tile_map.get_partition_index(tile_map.world_to_map_space(global_position))
 	if current_partition != new_partition:
 		Logger.print_debug("Entered new partition: " + str(new_partition), logger_key)
+		world_resources.add_bird_resource(new_partition, current_partition, self)
 		#world_resources.add_resource(WorldResources.BIRD_RESOURCE, tile_map.world_to_map_space(global_position), self)
 		current_partition = new_partition
 
@@ -96,8 +101,7 @@ func burn_caloires():
 	info.species.stamina = current_stamina
 	# Death State
 	if current_stamina == 0:
-		info.status = BirdInfo.StatusTypes.DEAD
-		queue_free()
+		_die()
 	
 func add_caloires(amount:float):
 	current_stamina = clamp(current_stamina + amount, 0, species.max_stamina)
@@ -108,6 +112,10 @@ func _on_animation_finished()->void:
 	behavioural_tree.set_physics_process(true)
 		
 
+func _die() -> void:
+	info.status = BirdInfo.StatusTypes.DEAD
+	queue_free()
+
 func _on_button_pressed():
 	get_tree().call_group("BirdStat", "show")	
 	get_tree().call_group("BirdStat", "load_new_bird", info)
@@ -115,3 +123,20 @@ func _on_button_pressed():
 
 func _on_calorie_timer_timeout() -> void:
 	burn_caloires()
+
+func _increament_age()->void:
+	current_age += 1
+	if current_age < 4:
+		info.status = info.StatusTypes.TEEN
+	elif current_age < 8:
+		info.status = info.StatusTypes.YOUNG_ADULT
+	elif current_age < 20:
+		info.status = info.StatusTypes.ADULT
+	else:
+		info.status = info.StatusTypes.ELDER
+		
+
+func _on_age_timer_timeout() -> void:
+	_increament_age()
+	if current_age >= species.max_age:
+		_die()

@@ -37,12 +37,8 @@ func build_exploration()->void:
 	exploration_condition_selector.add_child(is_energetic)
 	exploration_condition_selector.add_child(is_barren)
 	exploration_sequence.add_child(exploration_condition_selector)
-	# FindRandomSpot
-	#exploration_sequence.add_child(FindRandomSpot.new(bird,id+": FindRandomSpot"))
 	# Navigation
 	exploration_sequence.add_child(_build_wander())
-	# ReachedTarget
-	#exploration_sequence.add_child(ReachedTarget.new(bird,id+": ReachedTarget"))
 	root_selector.add_child(exploration_sequence)
 
 func build_foraging()->void:
@@ -55,8 +51,6 @@ func build_foraging()->void:
 
 func _build_navigation()->Sequence:
 	var navigation_sequence = Sequence.new(id+": NavigationSequence")
-	# CalculateDistance
-	navigation_sequence.add_child(CalculateDistance.new(bird, id+": CalculateDistance"))
 	# MovementSelector
 	var movement_selector = Selector.new(id+": MovementSelector")
 	movement_selector.add_child(_build_ground_sequence())
@@ -73,6 +67,7 @@ func _build_navigation()->Sequence:
 
 func _build_wander()->Sequence:
 	var wander_sequence = Sequence.new(id+": WanderSequence")
+	wander_sequence.add_child(Fly.new(bird, id+": Fly"))
 	wander_sequence.add_child(Wander.new(bird, id+": Wander"))
 	return wander_sequence
 
@@ -99,6 +94,5 @@ func _build_swimming_sequence()->Sequence:
 
 func _build_flying_sequence()->Sequence:
 	var flying_sequence = Sequence.new(id+": FlyingSequence")
-	flying_sequence.add_child(CheckIfFlying.new(bird, id+": CheckIfFlying"))
 	flying_sequence.add_child(Fly.new(bird, id+": Fly"))
 	return flying_sequence

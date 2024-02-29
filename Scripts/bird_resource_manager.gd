@@ -74,6 +74,11 @@ func add_bird(bird_species: String)->void:
 		var bird_request: FetchBirdRequest = FetchBirdRequest.new()#
 		add_child(bird_request)
 		var bird_data: Dictionary = await bird_request.fetch_bird_species(bird_species, Database.get_fetch_species_endpoint())
+		# If it's empty then the request return an error
+		if bird_data.is_empty():
+			get_tree().call_group("LoadingButton", "hide_loading")
+			get_tree().call_group("LoadingSearchButton", "hide_loading")
+			return
 		bird_request.queue_free()
 		if bird_data["birdUnisex"]:
 			bird = await  _import_bird(bird_data, "Unisex")

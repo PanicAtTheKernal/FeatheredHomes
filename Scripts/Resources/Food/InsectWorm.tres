@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WorldResourceTemplate" load_steps=5 format=3 uid="uid://cwfsnr57qre58"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/world_resource_template.gd" id="1_bpr3i"]
+[ext_resource type="Script" path="res://Scripts/Resources/resource_state.gd" id="2_fs6ln"]
+
+[sub_resource type="Resource" id="Resource_e87ui"]
+script = ExtResource("2_fs6ln")
+source_id = 0
+altas_cords = Vector2i(54, 18)
+alternative_tile = 0
+
+[sub_resource type="Resource" id="Resource_hcyys"]
+script = ExtResource("2_fs6ln")
+source_id = 0
+altas_cords = Vector2i(18, 8)
+alternative_tile = 0
+
+[resource]
+script = ExtResource("1_bpr3i")
+name = "InsectWorm"
+respawn_rate = 0.4
+initial_state = "Full"
+states = {
+"Empty": SubResource("Resource_e87ui"),
+"Full": SubResource("Resource_hcyys")
+}

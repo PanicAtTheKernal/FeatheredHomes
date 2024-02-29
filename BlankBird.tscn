@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://d0u2seapj875g"]
+[gd_scene load_steps=24 format=3 uid="uid://d0u2seapj875g"]
 
 [ext_resource type="Script" path="res://Scripts/Bird/bird.gd" id="1_4h2vl"]
 [ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="2_8dhfy"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_animation.gd" id="3_x8tx3"]
+[ext_resource type="Texture2D" uid="uid://bqktaeoiu24v8" path="res://Assets/heart.png" id="4_m0w2r"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="4_vfg7a"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qhqa7"]
@@ -18,6 +19,74 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_2ghpp"]
 radius = 6.0
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_cg52r"]
+light_mode = 1
+particles_animation = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_mect0"]
+max_value = 200.0
+_data = [Vector2(0, 100), 0.0, 0.0, 0, 1, Vector2(1, 100), 0.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_oe4ym"]
+curve = SubResource("Curve_mect0")
+
+[sub_resource type="Curve" id="Curve_qypys"]
+max_value = 100.0
+_data = [Vector2(0.253012, 0), 0.0, 0.0, 0, 0, Vector2(0.578313, 100), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_tb8ab"]
+curve = SubResource("Curve_qypys")
+
+[sub_resource type="Curve" id="Curve_8ni4x"]
+_data = [Vector2(0, 1), 0.0, 1.4, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3trfv"]
+curve = SubResource("Curve_8ni4x")
+
+[sub_resource type="Curve" id="Curve_s6a4d"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.947791, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_nylcf"]
+curve = SubResource("Curve_s6a4d")
+
+[sub_resource type="Curve" id="Curve_1b46h"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.785441, 0.235294), 0.0, 0.0, 0, 0, Vector2(1, 0.67965), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_rcj6b"]
+curve = SubResource("Curve_1b46h")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t6och"]
+particle_flag_disable_z = true
+radial_velocity_max = 1.0
+radial_velocity_curve = SubResource("CurveTexture_3trfv")
+gravity = Vector3(0, -20, 0)
+damping_min = 0.4
+damping_max = 0.4
+damping_curve = SubResource("CurveTexture_tb8ab")
+attractor_interaction_enabled = false
+scale_min = 0.85
+scale_curve = SubResource("CurveTexture_nylcf")
+scale_over_velocity_min = 1.4
+scale_over_velocity_max = 1.4
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+anim_speed_curve = SubResource("CurveTexture_oe4ym")
+turbulence_enabled = true
+turbulence_noise_speed_random = 0.59
+turbulence_influence_min = 0.3
+turbulence_influence_max = 0.3
+turbulence_initial_displacement_min = 3.0
+turbulence_initial_displacement_max = 3.0
+turbulence_influence_over_life = SubResource("CurveTexture_rcj6b")
+
 [node name="Bird" type="CharacterBody2D" node_paths=PackedStringArray("nav_agent", "animatated_spite", "behavioural_tree")]
 z_index = 2
 collision_layer = 0
@@ -32,9 +101,10 @@ behavioural_tree = NodePath("BirdBehaviouralTree")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.15, 0.15)
 sprite_frames = ExtResource("2_8dhfy")
-animation = &"Flight"
+animation = &"Eating"
 autoplay = "default"
-frame_progress = 0.191165
+frame = 2
+frame_progress = 1.0
 script = ExtResource("3_x8tx3")
 
 [node name="Button" type="Button" parent="."]
@@ -50,6 +120,20 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_q0nww")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2ghpp")
+
+[node name="LoveParticles" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_cg52r")
+position = Vector2(2, -4)
+scale = Vector2(0.1, 0.1)
+emitting = false
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_t6och")
+texture = ExtResource("4_m0w2r")
+lifetime = 3.0
+one_shot = true
+fixed_fps = 60
+local_coords = true
+trail_lifetime = 0.5
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
 navigation_layers = 3
@@ -67,8 +151,13 @@ autostart = true
 [node name="BirdBehaviouralTree" type="Node" parent="."]
 script = ExtResource("4_vfg7a")
 
+[node name="AgeTimer" type="Timer" parent="."]
+wait_time = 30.0
+autostart = true
+
 [connection signal="animation_finished" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_animation_finished"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="navigation_finished" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_navigation_finished"]
 [connection signal="path_changed" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_path_changed"]
 [connection signal="timeout" from="CalorieTimer" to="." method="_on_calorie_timer_timeout"]
+[connection signal="timeout" from="AgeTimer" to="." method="_on_age_timer_timeout"]

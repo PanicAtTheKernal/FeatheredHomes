@@ -4,23 +4,28 @@ import { BirdAssetGenerator } from "./BirdAssetGenerator.ts";
 
 const CONTENT_TYPE = "application/json; charset=utf-8";
 const HEADERS = { "Content-Type": CONTENT_TYPE };
-
+const FUNCTION_NAME = "findSpecies";
 
 
 Deno.serve(async (req) => {
   // Validation
   const validation = new RequestValidator(req);
   const validationResponse = await validation.validate();
-  if (validationResponse != null) return validationResponse;
+  if (validationResponse != null) {
+    Supabase.instantiate().uploadLog(FUNCTION_NAME, validation.body, validation.error);
+    return validationResponse;
+  };
   try {
     const findSpecies = new FindSpecies(validation.body.birdSpecies.toUpperCase());
     const bird = await findSpecies.getBird();
+    Supabase.instantiate().uploadLog(FUNCTION_NAME, validation.body);
     return new Response(
       JSON.stringify(bird),
       { headers: HEADERS,
         status: 200 },
     );
   } catch (error) {
+    Supabase.instantiate().uploadLog(FUNCTION_NAME, validation.body, error.message);
     return new Response(
       JSON.stringify({error:error.message}),
       { headers: HEADERS,

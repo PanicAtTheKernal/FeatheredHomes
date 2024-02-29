@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WorldResourceTemplate" load_steps=5 format=3 uid="uid://co51ccp0v5nud"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/world_resource_template.gd" id="1_2x2ll"]
+[ext_resource type="Script" path="res://Scripts/Resources/resource_state.gd" id="2_5xdcj"]
+
+[sub_resource type="Resource" id="Resource_e87ui"]
+script = ExtResource("2_5xdcj")
+source_id = 0
+altas_cords = Vector2i(54, 18)
+alternative_tile = 0
+
+[sub_resource type="Resource" id="Resource_hcyys"]
+script = ExtResource("2_5xdcj")
+source_id = 0
+altas_cords = Vector2i(17, 8)
+alternative_tile = 0
+
+[resource]
+script = ExtResource("1_2x2ll")
+name = "SeedLoose"
+respawn_rate = 0.1
+initial_state = "Full"
+states = {
+"Empty": SubResource("Resource_e87ui"),
+"Full": SubResource("Resource_hcyys")
+}

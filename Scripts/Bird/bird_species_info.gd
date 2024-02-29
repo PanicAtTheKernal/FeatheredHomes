@@ -9,6 +9,8 @@ var name: String
 var size: float
 @export
 var diet: String
+@export_range(20, 30)
+var max_age
 
 @export 
 var animations: SpriteFrames

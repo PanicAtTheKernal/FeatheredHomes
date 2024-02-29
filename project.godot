@@ -39,6 +39,26 @@ version_control/autoload_on_startup=true
 
 enabled=PackedStringArray("res://addons/GodotGetImage/plugin.cfg", "res://addons/supabase/plugin.cfg")
 
+[file_customization]
+
+folder_colors={
+"res://Assets/": "red",
+"res://Cloud Functions/": "gray",
+"res://Scripts/": "blue",
+"res://Scripts/Backend/": "teal",
+"res://Scripts/Behaviour Tree/": "yellow",
+"res://Scripts/Bird/": "orange",
+"res://Scripts/Player/": "purple",
+"res://Scripts/Resources/": "green",
+"res://Scripts/Resources/Food/": "green",
+"res://Scripts/Resources/Nests/": "green",
+"res://Scripts/UI/": "purple",
+"res://Scripts/Util/": "pink",
+"res://Scripts/World/": "green",
+"res://addons/": "gray",
+"res://android/": "gray"
+}
+
 [input]
 
 on_mouse_left_click={

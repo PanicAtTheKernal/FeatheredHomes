@@ -54,7 +54,9 @@ export class BirdWikiPage extends WikiPage {
         if (this._hasSummaryBeenChecked) return this._isSummaryAboutBirds;
         this.isParserSetup();
         const summary = this._wikiParser.getSummary() as string;
+        console.log(summary);
         this._isSummaryAboutBirds = await ChatGPT.instantiate().checkIfSummaryIsAboutBirds(summary);
+        console.log("ChatGPT returned: " + this._isSummaryAboutBirds);
         this._hasSummaryBeenChecked = true;
         return this._isSummaryAboutBirds;
     }
@@ -129,11 +131,11 @@ export class BirdWikiPage extends WikiPage {
         if(!this._wikiParser.hasInfoBoxProperty("Family") && !this._wikiParser.hasInfoBoxProperty("Species")) {
             console.log(this._wikiParser.hasInfoBoxProperty("Family"));
             console.log(this._wikiParser.hasInfoBoxProperty("Species"));
-
+            console.log("No family or species");
             return false;
         }
         if(!(await this.isSummaryAboutBirds())) {
-            // console.log(await this.isSummaryAboutBirds());
+            console.log(await this.isSummaryAboutBirds());
             return false;
         }
         return true;

@@ -4,9 +4,11 @@ class_name BirdManager
 
 const MAX_STAMINA = 10000
 const MIN_STAMINA = 500
-const MAX_GROUND_DISTANCE = 10
-const MIN_GROUND_DISTANCE = 4
-const MAX_FLIGHT_DISTANCE = 30
+const MAX_GROUND_DISTANCE = 70
+const MIN_GROUND_DISTANCE = 50
+const MAX_FLIGHT_DISTANCE = 200
+const MIN_AGE = 20
+const MAX_AGE = 30
 
 @export
 var blank_bird: PackedScene = preload("res://BlankBird.tscn")
@@ -27,9 +29,9 @@ var logger_key = {
 	"obj": "BirdManager"
 }
 
-func _ready() -> void:
-	for i in range(1):
-		BirdResourceManager.add_bird("Dunnock")
+#func _ready() -> void:
+	#for i in range(1):
+		#BirdResourceManager.add_bird("Dunnock")
 
 func create_bird(bird_info: BirdInfo)->void:
 	var new_bird: Bird = blank_bird.instantiate()
@@ -42,6 +44,7 @@ func randomise_stats(bird_info:BirdInfo)->BirdInfo:
 	bird_info.species.stamina = randf_range(MIN_STAMINA, bird_info.species.max_stamina)
 	bird_info.species.ground_max_distance = randf_range(MIN_GROUND_DISTANCE, MAX_GROUND_DISTANCE)
 	bird_info.species.flight_max_distance = randf_range(bird_info.species.ground_max_distance, MAX_FLIGHT_DISTANCE)
+	bird_info.species.max_age = randi_range(MIN_AGE, MAX_AGE)
 	return bird_info
 
 func setup_bird(new_bird:Bird, bird_info: BirdInfo)->void:
@@ -50,6 +53,7 @@ func setup_bird(new_bird:Bird, bird_info: BirdInfo)->void:
 	new_bird.world_resources = world_resources
 	new_bird.info = bird_info
 	new_bird.id = get_child_count()+1
+	new_bird.current_age = 4
 
 func add_bird(new_bird: Bird)->void:
 	new_bird.global_position = player_camera.get_screen_center_position()

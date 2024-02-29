@@ -127,14 +127,14 @@ export class OpenAIRequestDirector {
         return this._builder.getRequest();
     }
 
-    public buildSummaryRequest(summary: string, focus: string): OpenAIRequest {
+    public buildSummaryRequest(summary: string, focus: string, model: GPTModels = GPTModels.gpt3): OpenAIRequest {
         const replacement: ReplacementValues = {
             placeholder: "<>",
             replacement: focus
         };
         this._builder.addContent(summary);
         this._builder.replaceSystemMsgPlaceholder([replacement]);
-        this._builder.setGPTModel(GPTModels.gpt3);
+        this._builder.setGPTModel(model);
         return this._builder.getRequest();
     }
 
@@ -188,8 +188,8 @@ export class ChatGPT {
         return this._instance;
     }
 
-    private async generateSummary(summary: string, focus: string, openaiDirector: OpenAIRequestDirector): Promise<string> {
-        const nameExtractionRequest = openaiDirector.buildSummaryRequest(summary, focus) as any;
+    private async generateSummary(summary: string, focus: string, openaiDirector: OpenAIRequestDirector, model?:GPTModels): Promise<string> {
+        const nameExtractionRequest = openaiDirector.buildSummaryRequest(summary, focus, model) as any;
         const chatGPTResponse = await this._openAIClient.chat.completions.create(nameExtractionRequest);
         if (chatGPTResponse.choices[0].message.content == null) {
             throw new Error("ChatGPT: There was an error with chatGPT and the simplified bird summary");
@@ -272,6 +272,29 @@ export class ChatGPT {
         }
         console.log(chatGPTResponse.choices[0].message.content);
         return chatGPTResponse.choices[0].message.content;
+    }
+
+    public async generateSound(birdName: string, sounds: string): Promise<string> {
+        const openAIRequestDirector = new OpenAIRequestDirector();
+        await openAIRequestDirector.setSystemMessage("Sound");
+        return await this.generateSummary(birdName, sounds, openAIRequestDirector, GPTModels.gpt4Turbo);
+    }
+
+    public async checkIfBirdIsPredator(description: string): Promise<boolean> {
+        const openAIRequestDirector = new OpenAIRequestDirector();
+        await openAIRequestDirector.setSystemMessage("Predator");
+        const request = openAIRequestDirector.buildGPT3request(description) as any;
+        const chatGPTResponse = await this._openAIClient.chat.completions.create(request);
+        if (chatGPTResponse.choices[0].message.content == null) {
+            throw new Error("ChatGPT: There was an error with chatGPT and the bird appearance");
+        }
+        return (chatGPTResponse.choices[0].message.content == "True");
+    }
+
+    public async generateNest(description: string, nestTypes: string): Promise<string> {
+        const openAIRequestDirector = new OpenAIRequestDirector();
+        await openAIRequestDirector.setSystemMessage("Nest");
+        return await this.generateSummary(description, nestTypes, openAIRequestDirector, GPTModels.gpt4Turbo);
     }
 }
 

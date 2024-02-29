@@ -1,5 +1,5 @@
 import { BirdSpecies, Supabase } from "../SupabaseClient.ts";
-import { BirdWikiPage } from "../WikiPage.ts";
+import WikiPage, { BirdWikiPage } from "../WikiPage.ts";
 import { crypto } from "https://deno.land/std@0.202.0/crypto/crypto.ts";
 import { ChatGPT } from "../OpenAIClient.ts";
 import { ImageGenerator } from "./ImageGenerator.ts";
@@ -29,7 +29,10 @@ export class BirdAssetGenerator {
             dietId: "",
             version: "",
             birdUnisex: true,
-            birdColourMap: { image: "" }
+            birdColourMap: { image: "" },
+            birdNest: "",
+            birdSound: "",
+            isPredator: false,
         };
         // Label is in upper case but the request will only work if it's lowercase
         this._wikiPage = new BirdWikiPage(birdName.toLowerCase());
@@ -97,6 +100,27 @@ export class BirdAssetGenerator {
         this._generatedBird.dietId = await dietGenerator.generate();
     }
 
+    private async generateSound(): Promise<void> {
+        const sounds = await Supabase.instantiate().fetchSounds();
+        const soundsString = `${sounds.join(", ").replace(/[,]$/, "")}`;
+        const soundId = await ChatGPT.instantiate().generateSound(this._wikiPage.getBirdName(), soundsString);
+        this._generatedBird.birdSound = await Supabase.instantiate().fetchSoundId(soundId);
+    }
+    private async isPredator(): Promise<void> {
+        const description = await this._wikiPage.getBehaviourSection();
+        const isPredator = await ChatGPT.instantiate().checkIfBirdIsPredator(description);
+        this._generatedBird.isPredator = isPredator;
+    }
+
+    private async generateNest(): Promise<void> {
+        const nests = await Supabase.instantiate().fetchNests();
+        const description = await this._wikiPage.getBehaviourSection();
+        const shortenDescription = await ChatGPT.instantiate().generateCustomSummary(description, "breeding, nesting and behaviour");
+        const nestsString = `${nests.join(", ").replace(/[,]$/, "")}`;
+        const nest = await ChatGPT.instantiate().generateNest(shortenDescription.concat(` BirdName: ${this._wikiPage.getBirdName}`), nestsString);
+        this._generatedBird.birdNest = await Supabase.instantiate().fetchNestId(nest);
+    }
+
     private setVersion(): void {
         this._generatedBird.version = this._version;
     }
@@ -115,6 +139,9 @@ export class BirdAssetGenerator {
         await this.generateTraits();
         this.generateDate();
         await this.generateDiet();
+        await this.generateSound();
+        await this.isPredator();
+        await this.generateNest();
         this.setVersion();
         await Supabase.instantiate().uploadNewBird(this._generatedBird);
     }

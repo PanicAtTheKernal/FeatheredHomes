@@ -6,18 +6,196 @@
 [ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="6_lv1sx"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/selector.gd" id="7_7tjyf"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/sequence.gd" id="8_eo2tt"]
-[ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_stamina.gd" id="9_2lpgj"]
-[ext_resource type="Script" path="res://Scripts/Bird/Conditions/find_nearest_food.gd" id="10_e2vsf"]
-[ext_resource type="Script" path="res://Scripts/Bird/Actions/calculate_distances.gd" id="11_cigv8"]
+[ext_resource type="Script" path="res://Scripts/Bird/Actions/find_nearest_food.gd" id="10_e2vsf"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/move.gd" id="11_latg4"]
-[ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_ground_is_efficient.gd" id="12_7233k"]
-[ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_flying_is_efficient.gd" id="14_nx48i"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/consume_food.gd" id="16_uergt"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Decorators/inverter.gd" id="17_h46m4"]
-[ext_resource type="Script" path="res://Scripts/Bird/Actions/find_random_spot.gd" id="18_g2rg0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2ghpp"]
 radius = 6.0
+
+[sub_resource type="GDScript" id="GDScript_ukm72"]
+script/source = "# extends Task
+
+# class_name CheckStamina
+
+# # TODO Randomise this
+# var threshold: float = 0.5
+
+# var bird: Bird
+
+# func _init(parent_bird: Bird, node_name: String=\"CheckStamina\") -> void:
+# 	super(node_name)
+# 	bird = parent_bird
+
+# func run()->void:
+# 	if bird.current_stamina > (bird.species.max_stamina * threshold):
+# 		super.fail()
+# 	else:
+# 		super.success()
+
+# func start()->void:
+# 	pass
+"
+
+[sub_resource type="GDScript" id="GDScript_0x7ax"]
+script/source = "extends Task
+
+class_name CalculateDistances
+
+var ground_agent: NavigationAgent2D
+var flight_agent: NavigationAgent2D
+var character_body: CharacterBody2D
+var ground_cost: float
+var flight_cost: float
+var take_off_cost: float
+
+## Not needed anymore
+## @deprecated
+##
+
+@export
+var mid_flight_calculations: bool = true
+
+func run()->void:
+	# Prevent calculate distance to once per second instead of 60 a second  
+	if data[\"calculate_distances\"] == false:
+		get_child(0).run()
+		super.success()
+		return
+	
+	# It won't build the path unless this function is called
+	ground_agent.get_next_path_position()
+	flight_agent.get_next_path_position()
+	
+	var ground_path = ground_agent.get_current_navigation_result().path
+	var flight_path = flight_agent.get_current_navigation_result().path
+	
+	var ground_dist = BirdHelperFunctions.total_distance(ground_path)	
+	var flight_dist = BirdHelperFunctions.total_distance(flight_path)
+	
+	var ground_dist_index = ground_agent.get_current_navigation_path_index()#
+	var ground_path_actual = ground_path.slice(ground_dist_index, len(ground_path)-1)
+	var ground_dist_actual = BirdHelperFunctions.total_distance(ground_path_actual)
+	
+	var flight_dist_index = flight_agent.get_current_navigation_path_index()#
+	var flight_path_actual = flight_path.slice(flight_dist_index, len(flight_path)-1)
+	var flight_dist_actual = BirdHelperFunctions.total_distance(flight_path_actual)
+	
+	var total_ground_energy_cost = BirdHelperFunctions.calculate_energy_cost(ground_dist_actual, 0.0, ground_cost)
+	var total_flight_energy_cost = BirdHelperFunctions.calculate_energy_cost(flight_dist_actual, take_off_cost, flight_cost)
+	
+	data[\"ground_dist\"] = ground_dist
+	data[\"flight_dist\"] = flight_dist
+	data[\"ground_dist_actual\"] = ground_dist_actual
+	data[\"flight_dist_actual\"] = flight_dist_actual
+	data[\"total_ground_energy_cost\"] = total_ground_energy_cost
+	data[\"total_flight_energy_cost\"] = total_flight_energy_cost
+	data[\"calculate_distances\"] = false
+
+	get_child(0).run()
+	# Waiting for the movement nodes to succeed will prevent this node from calculating mid_flight
+	if mid_flight_calculations:
+		super.success()
+	else:
+		super.running()
+	
+func child_success():
+	super.success()
+
+func start()->void:
+	ground_agent = self.data[\"ground_agent\"]
+	flight_agent = self.data[\"flight_agent\"]
+	character_body = self.data[\"character_body\"]
+	ground_cost = self.data[\"ground_cost\"]
+	flight_cost = self.data[\"flight_cost\"]
+	take_off_cost = self.data[\"take_off_cost\"]
+	super.start()
+"
+
+[sub_resource type="GDScript" id="GDScript_rxyt5"]
+script/source = "extends Task
+
+class_name CheckIfGroundIsEfficient
+
+## Not needed anymore
+## @deprecated
+##
+
+@export
+
+var tile_map: TileMap
+var ground_agent: NavigationAgent2D
+var character_body: CharacterBody2D
+
+func run()->void:
+	var flight_cost:float = data[\"total_flight_energy_cost\"]
+	var ground_cost:float = data[\"total_ground_energy_cost\"]
+	
+	if ground_cost == null:
+		printerr(\"calculate distances node is missing\")
+	
+	if not ground_agent.is_target_reachable() or ground_agent.get_current_navigation_result().path == PackedVector2Array([]):
+		super.fail()
+		return
+	
+	if ground_cost > flight_cost:
+		super.fail()
+		return
+		
+
+	self.data[\"preferred_agent\"] = \"ground\"
+	self.data[\"is_flying\"] = false
+	character_body.set_collision_mask_value(1, true)
+	character_body.set_collision_mask_value(2, false)
+	super.success()
+
+func start()->void:
+	tile_map = self.data[\"tile_map\"]
+	ground_agent = self.data[\"ground_agent\"]
+	character_body = self.data[\"character_body\"]
+"
+
+[sub_resource type="GDScript" id="GDScript_vd0rp"]
+script/source = "extends Task
+
+class_name CheckIfFlyingIsEfficient
+
+## Not needed anymore
+## @deprecated
+##
+
+var character_body: CharacterBody2D
+var flight_agent: NavigationAgent2D
+
+func run()->void:
+	var flight_cost:float = data[\"total_flight_energy_cost\"]
+	var ground_cost:float = data[\"total_ground_energy_cost\"]
+	var path: PackedVector2Array = flight_agent.get_current_navigation_result().path
+	
+	if flight_cost == null:
+		printerr(\"calculate distances node is missing\")
+	
+	if not flight_agent.is_target_reachable() or flight_agent.get_current_navigation_result().path == PackedVector2Array([]):
+		super.fail()
+		return
+	
+	if flight_cost > ground_cost:
+		super.fail()
+		return
+	
+	data[\"preferred_agent\"] = \"flight\"
+	if data[\"is_flying\"] == false:
+		BirdHelperFunctions.burn_caloires(data[\"take_off_cost\"], data)
+		data[\"is_flying\"] = true
+	character_body.set_collision_mask_value(1, false)
+	character_body.set_collision_mask_value(2, true)
+	super.success()
+
+func start()->void:
+	character_body = data[\"character_body\"]
+	flight_agent = data[\"flight_agent\"]
+"
 
 [sub_resource type="GDScript" id="GDScript_v6lxm"]
 script/source = "extends Task
@@ -52,6 +230,28 @@ func start()->void:
 	flight_agent = self.data[\"flight_agent\"]
 	character_body = self.data[\"character_body\"]
 	super.start()
+"
+
+[sub_resource type="GDScript" id="GDScript_7lcj5"]
+script/source = "#extends Task
+#
+#class_name FindRandomSpot
+#
+#var bird: Bird
+#
+#func _init(parent_bird, node_name:=\"FindRandomSpot\") -> void:
+	#super(node_name)
+	#bird = parent_bird
+#
+#func run()->void:
+	## TODO Fix the issue where the random spot can be on water
+	#var random_tile = BirdHelperFunctions.find_random_point_within_tile_map(bird.tile_map, bird.global_position, bird.species.flight_max_distance)
+	#var target = BirdHelperFunctions.calculate_tile_position(random_tile)
+	#await bird.update_target(target)
+	#super.success()
+	#
+#func start()->void:
+	#pass
 "
 
 [node name="Bird" type="CharacterBody2D"]
@@ -101,13 +301,13 @@ script = ExtResource("7_7tjyf")
 script = ExtResource("8_eo2tt")
 
 [node name="CheckStamina" type="Node" parent="BirdBehaviouralTree/Selector/Sequence"]
-script = ExtResource("9_2lpgj")
+script = SubResource("GDScript_ukm72")
 
 [node name="FindNearestFood" type="Node" parent="BirdBehaviouralTree/Selector/Sequence"]
 script = ExtResource("10_e2vsf")
 
 [node name="CalculateDistances" type="Node" parent="BirdBehaviouralTree/Selector/Sequence"]
-script = ExtResource("11_cigv8")
+script = SubResource("GDScript_0x7ax")
 mid_flight_calculations = false
 
 [node name="MovementSelector" type="Node" parent="BirdBehaviouralTree/Selector/Sequence/CalculateDistances"]
@@ -117,7 +317,7 @@ script = ExtResource("7_7tjyf")
 script = ExtResource("8_eo2tt")
 
 [node name="CheckIfGroundIsEfficient" type="Node" parent="BirdBehaviouralTree/Selector/Sequence/CalculateDistances/MovementSelector/GroundSequence"]
-script = ExtResource("12_7233k")
+script = SubResource("GDScript_rxyt5")
 
 [node name="MoveOnGround" type="Node" parent="BirdBehaviouralTree/Selector/Sequence/CalculateDistances/MovementSelector/GroundSequence"]
 script = ExtResource("11_latg4")
@@ -126,7 +326,7 @@ script = ExtResource("11_latg4")
 script = ExtResource("8_eo2tt")
 
 [node name="CheckIfFlyingIsEfficient" type="Node" parent="BirdBehaviouralTree/Selector/Sequence/CalculateDistances/MovementSelector/FlightSequence"]
-script = ExtResource("14_nx48i")
+script = SubResource("GDScript_vd0rp")
 
 [node name="FlyToTarget" type="Node" parent="BirdBehaviouralTree/Selector/Sequence/CalculateDistances/MovementSelector/FlightSequence"]
 script = SubResource("GDScript_v6lxm")
@@ -144,7 +344,7 @@ script = ExtResource("7_7tjyf")
 script = ExtResource("17_h46m4")
 
 [node name="CheckStamina" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/Selector/ExcessStaminaInverter"]
-script = ExtResource("9_2lpgj")
+script = SubResource("GDScript_ukm72")
 
 [node name="NoFoodFoundInverter" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/Selector"]
 script = ExtResource("17_h46m4")
@@ -153,10 +353,10 @@ script = ExtResource("17_h46m4")
 script = ExtResource("10_e2vsf")
 
 [node name="FindRandomSpot" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence"]
-script = ExtResource("18_g2rg0")
+script = SubResource("GDScript_7lcj5")
 
 [node name="CalculateDistances" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence"]
-script = ExtResource("11_cigv8")
+script = SubResource("GDScript_0x7ax")
 
 [node name="MovementSelector" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances"]
 script = ExtResource("7_7tjyf")
@@ -165,7 +365,7 @@ script = ExtResource("7_7tjyf")
 script = ExtResource("8_eo2tt")
 
 [node name="CheckIfGroundIsEfficient" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector/GroundSequence"]
-script = ExtResource("12_7233k")
+script = SubResource("GDScript_rxyt5")
 
 [node name="MoveOnGround" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector/GroundSequence"]
 script = ExtResource("11_latg4")
@@ -174,7 +374,7 @@ script = ExtResource("11_latg4")
 script = ExtResource("8_eo2tt")
 
 [node name="CheckIfFlyingIsEfficient" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector/FlightSequence"]
-script = ExtResource("14_nx48i")
+script = SubResource("GDScript_vd0rp")
 
 [node name="FlyToTarget" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamSequence/CalculateDistances/MovementSelector/FlightSequence"]
 script = SubResource("GDScript_v6lxm")

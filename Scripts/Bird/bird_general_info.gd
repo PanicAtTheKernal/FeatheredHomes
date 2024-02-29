@@ -30,6 +30,8 @@ var scientific_name: String
 var gender: String
 @export
 var unisex: bool
+@export_range(0.1, 10.0)
+var version: float
 
 var status_messages: Dictionary = {
 	StatusTypes.NOT_GENERATED: "Not generated",

@@ -69,6 +69,9 @@ func get_fetch_species_endpoint()->String:
 func get_search_endpoint()->String:
 	return config.get_value(ENVIRONMENT_VARIABLES, "URL", "") + config.get_value(ENVIRONMENT_VARIABLES, "SEARCH_ENDPOINT", "")
 
+func get_version()->float:
+	return float(config.get_value(ENVIRONMENT_VARIABLES, "VERSION", "0.1"))
+
 func fetch_row(table_name: String, id: String)->Dictionary:
 	var query: SupabaseQuery = SupabaseQuery.new().from(DATABASE_NAME[table_name]).select().eq(ID_COLS[table_name], id)
 	var result = await Supabase.database.query(query).completed

@@ -6,13 +6,10 @@
 [ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="4_jplix"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/selector.gd" id="5_2vo8c"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/sequence.gd" id="5_fp2u6"]
-[ext_resource type="Script" path="res://Scripts/Bird/Conditions/check_stamina.gd" id="6_1osyh"]
-[ext_resource type="Script" path="res://Scripts/Bird/Conditions/find_nearest_food.gd" id="7_r32vh"]
+[ext_resource type="Script" path="res://Scripts/Bird/Actions/find_nearest_food.gd" id="7_r32vh"]
 [ext_resource type="PackedScene" uid="uid://b1fricmhq2rje" path="res://Scripts/Bird/Navigation/navigation_behaviour.tscn" id="8_3ugb4"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/consume_food.gd" id="9_84hpu"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Decorators/inverter.gd" id="11_u4n4o"]
-[ext_resource type="Script" path="res://Scripts/Bird/Actions/find_random_spot.gd" id="12_44fqo"]
-[ext_resource type="Script" path="res://Scripts/Bird/Actions/reached_target.gd" id="13_t35c5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qhqa7"]
 
@@ -26,6 +23,74 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2ghpp"]
 radius = 6.0
+
+[sub_resource type="GDScript" id="GDScript_ukm72"]
+script/source = "# extends Task
+
+# class_name CheckStamina
+
+# # TODO Randomise this
+# var threshold: float = 0.5
+
+# var bird: Bird
+
+# func _init(parent_bird: Bird, node_name: String=\"CheckStamina\") -> void:
+# 	super(node_name)
+# 	bird = parent_bird
+
+# func run()->void:
+# 	if bird.current_stamina > (bird.species.max_stamina * threshold):
+# 		super.fail()
+# 	else:
+# 		super.success()
+
+# func start()->void:
+# 	pass
+"
+
+[sub_resource type="GDScript" id="GDScript_7lcj5"]
+script/source = "#extends Task
+#
+#class_name FindRandomSpot
+#
+#var bird: Bird
+#
+#func _init(parent_bird, node_name:=\"FindRandomSpot\") -> void:
+	#super(node_name)
+	#bird = parent_bird
+#
+#func run()->void:
+	## TODO Fix the issue where the random spot can be on water
+	#var random_tile = BirdHelperFunctions.find_random_point_within_tile_map(bird.tile_map, bird.global_position, bird.species.flight_max_distance)
+	#var target = BirdHelperFunctions.calculate_tile_position(random_tile)
+	#await bird.update_target(target)
+	#super.success()
+	#
+#func start()->void:
+	#pass
+"
+
+[sub_resource type="GDScript" id="GDScript_o1ex5"]
+script/source = "#extends Task
+#
+#class_name ReachedTarget
+#
+#var bird: Bird
+#
+#func _init(parent_bird: Bird, node_name:String=\"ReachedTarget\") -> void:
+	#super(node_name)
+	#bird = parent_bird
+#
+#func run()->void:
+	#if not bird.at_target():
+		#super.fail()
+		#return
+	#bird.target_reached = false
+	#super.success()
+	#
+#func start()->void:
+	#super.start()
+"
 
 [node name="Bird" type="CharacterBody2D"]
 z_index = 2
@@ -84,7 +149,7 @@ script = ExtResource("5_2vo8c")
 script = ExtResource("5_fp2u6")
 
 [node name="CheckStamina" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence"]
-script = ExtResource("6_1osyh")
+script = SubResource("GDScript_ukm72")
 
 [node name="FindNearestFood" type="Node" parent="BirdBehaviouralTree/Selector/FoodSequence"]
 script = ExtResource("7_r32vh")
@@ -108,7 +173,7 @@ script = ExtResource("5_2vo8c")
 script = ExtResource("11_u4n4o")
 
 [node name="CheckStamina" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamFlyingSequence/FreeRoamConditionSelector/ExcessStaminaInverter"]
-script = ExtResource("6_1osyh")
+script = SubResource("GDScript_ukm72")
 
 [node name="NoFoodFoundInverter" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamFlyingSequence/FreeRoamConditionSelector"]
 script = ExtResource("11_u4n4o")
@@ -117,7 +182,7 @@ script = ExtResource("11_u4n4o")
 script = ExtResource("7_r32vh")
 
 [node name="FindRandomSpot" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamFlyingSequence"]
-script = ExtResource("12_44fqo")
+script = SubResource("GDScript_7lcj5")
 
 [node name="Navigation" parent="BirdBehaviouralTree/Selector/FreeRoamFlyingSequence" node_paths=PackedStringArray("nav_agent", "character_body", "animated_sprite", "navigation_timer") instance=ExtResource("8_3ugb4")]
 nav_agent = NodePath("../../../../GroundAgent")
@@ -126,7 +191,7 @@ animated_sprite = NodePath("../../../../AnimatedSprite2D")
 navigation_timer = NodePath("../../../../NavigationTimer")
 
 [node name="ReachedTarget" type="Node" parent="BirdBehaviouralTree/Selector/FreeRoamFlyingSequence"]
-script = ExtResource("13_t35c5")
+script = SubResource("GDScript_o1ex5")
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_animation_finished"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

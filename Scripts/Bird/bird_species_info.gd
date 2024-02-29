@@ -26,6 +26,8 @@ var animations: SpriteFrames
 var max_stamina: float 
 @export_range(100, 10000) 
 var stamina: float
+@export_range(0.2, 0.9)
+var threshold: float
 
 @export_group("Ground")
 @export_range(5.0, 300.0)

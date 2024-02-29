@@ -47,6 +47,7 @@ func _build_info()->void:
 	bird.family = (bird_supa_data.get("birdFamily") as String).capitalize()
 	bird.scientific_name = (bird_supa_data.get("birdScientificName") as String).capitalize()
 	bird.unisex = bird_supa_data["birdUnisex"]
+	bird.version = Database.get_version()
 
 func _build_shape()->void:
 	var shape = await Database.fetch_row(Database.TABLES.SHAPE, bird_supa_data["birdShapeId"])

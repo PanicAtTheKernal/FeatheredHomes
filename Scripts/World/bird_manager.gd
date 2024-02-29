@@ -9,6 +9,8 @@ const MIN_GROUND_DISTANCE = 50
 const MAX_FLIGHT_DISTANCE = 200
 const MIN_AGE = 20
 const MAX_AGE = 30
+const MIN_FOOD_THRESHOLD = 0.2
+const MAX_FOOD_THRESHOLD = 0.9
 
 @export
 var blank_bird: PackedScene = preload("res://BlankBird.tscn")
@@ -45,6 +47,7 @@ func randomise_stats(bird_info:BirdInfo)->BirdInfo:
 	bird_info.species.ground_max_distance = randf_range(MIN_GROUND_DISTANCE, MAX_GROUND_DISTANCE)
 	bird_info.species.flight_max_distance = randf_range(bird_info.species.ground_max_distance, MAX_FLIGHT_DISTANCE)
 	bird_info.species.max_age = randi_range(MIN_AGE, MAX_AGE)
+	bird_info.species.threshold = randf_range(MIN_FOOD_THRESHOLD, MAX_FOOD_THRESHOLD)
 	return bird_info
 
 func setup_bird(new_bird:Bird, bird_info: BirdInfo)->void:

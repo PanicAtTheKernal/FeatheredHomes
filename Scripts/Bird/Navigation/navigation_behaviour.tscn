@@ -4,17 +4,119 @@
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/sequence.gd" id="2_a4ouu"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/calculate_distance.gd" id="3_e24xc"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/selector.gd" id="4_odi5h"]
-[ext_resource type="Script" path="res://Scripts/Bird/Navigation/check_if_moving_on_ground.gd" id="5_h5rat"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/check_ground_type.gd" id="6_3qoab"]
-[ext_resource type="Script" path="res://Scripts/Bird/Navigation/check_if_walking.gd" id="7_6fsov"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/walk.gd" id="8_ecqlb"]
-[ext_resource type="Script" path="res://Scripts/Bird/Navigation/check_if_swimming.gd" id="9_2u1we"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/swim.gd" id="10_3744t"]
-[ext_resource type="Script" path="res://Scripts/Bird/Navigation/check_if_flying.gd" id="11_64j4j"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/fly.gd" id="12_yyq6m"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/move.gd" id="13_8b7lm"]
-[ext_resource type="Script" path="res://Scripts/Bird/Navigation/check_if_reached_target.gd" id="14_xpql5"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/stop.gd" id="15_l7lnx"]
+
+[sub_resource type="GDScript" id="GDScript_vwm08"]
+script/source = "extends Task
+
+class_name CheckIfMovingOnGround
+
+var bird: Bird
+
+func _init(parent_bird: Bird, node_name:String=\"CheckIfMovingOnGround\") -> void:
+	super(node_name)
+	bird = parent_bird
+
+func run()->void:
+	var distance = bird.global_position.distance_to(bird.target)
+	if distance <= bird.species.ground_max_distance:
+		super.success()
+		return
+	else:
+		super.fail()
+	
+func start()->void:
+	super.start()
+"
+
+[sub_resource type="GDScript" id="GDScript_alpn2"]
+script/source = "# extends Task
+
+# class_name CheckIfWalking
+
+# var bird: Bird
+
+# func _init(parent_bird: Bird, node_name:String=\"CheckIfWalking\") -> void:
+# 	super(node_name)
+# 	bird = parent_bird
+
+# func run()->void:
+# 	if bird.current_tile == \"Ground\" and not bird.target_reached:
+# 		super.success()
+# 	else:
+# 		super.fail()
+	
+# func start()->void:
+# 	super.start()
+"
+
+[sub_resource type="GDScript" id="GDScript_chsi2"]
+script/source = "# extends Task
+
+# class_name CheckIfSwimming
+
+# var bird: Bird
+
+# func _init(parent_bird: Bird, node_name:String=\"CheckIfSwimming\") -> void:
+# 	super(node_name)
+# 	bird = parent_bird
+
+# func run()->void:
+# 	if bird.current_tile == \"Water\" and not bird.target_reached:
+# 		super.success()
+# 	else:
+# 		super.fail()
+	
+# func start()->void:
+# 	super.start()
+"
+
+[sub_resource type="GDScript" id="GDScript_l5lsx"]
+script/source = "#extends Task
+#
+#class_name CheckIfFlying
+#
+#var bird: Bird
+#
+#func _init(parent_bird: Bird, node_name:String=\"CheckIfFlying\") -> void:
+	#super(node_name)
+	#bird = parent_bird
+#
+#func run()->void:
+	#if bird.state == bird.States.AIR and not bird.target_reached:
+		#super.success()
+	#else:
+		#super.fail()
+	#
+#func start()->void:
+	#super.start()
+"
+
+[sub_resource type="GDScript" id="GDScript_ydxn5"]
+script/source = "#extends Task
+#
+#class_name CheckIfReachedTarget
+#
+#var bird: Bird
+#
+#func _init(parent_bird: Bird, node_name:String=\"CheckIfReachedTarget\") -> void:
+	#super(node_name)
+	#bird = parent_bird
+#
+#func run()->void:
+	#if bird.at_target():
+		#super.success()
+	#else:
+		#super.fail()
+	#
+#func start()->void:
+	#super.start()
+"
 
 [node name="NavigationData" type="Node" node_paths=PackedStringArray("calulate_distance")]
 script = ExtResource("1_vftuf")
@@ -34,7 +136,7 @@ script = ExtResource("4_odi5h")
 script = ExtResource("2_a4ouu")
 
 [node name="CheckIfMovingOnGround" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence"]
-script = ExtResource("5_h5rat")
+script = SubResource("GDScript_vwm08")
 
 [node name="CheckGroundType" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence"]
 script = ExtResource("6_3qoab")
@@ -46,7 +148,7 @@ script = ExtResource("4_odi5h")
 script = ExtResource("2_a4ouu")
 
 [node name="CheckIfWalking" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/WalkingSequence"]
-script = ExtResource("7_6fsov")
+script = SubResource("GDScript_alpn2")
 
 [node name="Walk" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/WalkingSequence"]
 script = ExtResource("8_ecqlb")
@@ -55,7 +157,7 @@ script = ExtResource("8_ecqlb")
 script = ExtResource("2_a4ouu")
 
 [node name="CheckIfSwimming" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/SwimmingSequence"]
-script = ExtResource("9_2u1we")
+script = SubResource("GDScript_chsi2")
 
 [node name="Swim" type="Node" parent="NavigationSequence/MovementSelector/GroundSequence/GroundSelector/SwimmingSequence"]
 script = ExtResource("10_3744t")
@@ -64,7 +166,7 @@ script = ExtResource("10_3744t")
 script = ExtResource("2_a4ouu")
 
 [node name="CheckIfMovingOnAir" type="Node" parent="NavigationSequence/MovementSelector/AirSequence"]
-script = ExtResource("11_64j4j")
+script = SubResource("GDScript_l5lsx")
 
 [node name="Fly" type="Node" parent="NavigationSequence/MovementSelector/AirSequence"]
 script = ExtResource("12_yyq6m")
@@ -73,7 +175,7 @@ script = ExtResource("12_yyq6m")
 script = ExtResource("13_8b7lm")
 
 [node name="CheckIfReachedTarget" type="Node" parent="NavigationSequence"]
-script = ExtResource("14_xpql5")
+script = SubResource("GDScript_ydxn5")
 
 [node name="Stop" type="Node" parent="NavigationSequence"]
 script = ExtResource("15_l7lnx")

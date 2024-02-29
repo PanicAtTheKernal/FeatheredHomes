@@ -244,6 +244,7 @@ function setDenoEnvStub(denoEnvStub: SinonStubbedInstance<Deno.Env>): void {
 function setupRequestValidator(requestValidator: SinonStubbedInstance<RequestValidator>): void {
     requestValidator.validate.resolves(null);
     sinon.stub(requestValidator, "body").get(() => { return {birdSpecies: "Test Bird"}});
+    sinon.stub(requestValidator, "error").get(() => { return {birdSpecies: "Test Error"}});
 }
 
 function setupBirdAssetGeneratorStub(birdAssetGenerator: SinonStubbedInstance<BirdAssetGenerator>): void {

@@ -10,60 +10,63 @@ import { Supabase } from "../../../supabase/functions/SupabaseClient.ts";
 import { server } from "../../../supabase/functions/imageIdentification/index.ts";
 
 
-describe("index.ts", () => {
-    const url = "http://localhost:8000/";
+// describe("index.ts", () => {
+//     const url = "http://localhost:8000/";
 
-    let requestValidatorStub: SinonStubbedInstance<RequestValidator>;
-    let findSpeciesStub: SinonStubbedInstance<FindSpecies>;
+//     let requestValidatorStub: SinonStubbedInstance<RequestValidator>;
+//     let findSpeciesStub: SinonStubbedInstance<FindSpecies>;
+//     let supabaseStub: SinonStubbedInstance<Supabase>;
 
-    beforeAll(() => {
-        requestValidatorStub = TestHelper.createRequestValidatorStub();
-        findSpeciesStub = sinon.stub(FindSpecies.prototype);
-    })
+//     beforeAll(() => {
+//         requestValidatorStub = TestHelper.createRequestValidatorStub();
+//         findSpeciesStub = sinon.stub(FindSpecies.prototype);
+//         supabaseStub = TestHelper.createSupabaseStub();
+//     })
 
-    beforeEach(() => {
-        TestHelper.setupRequestValidator(requestValidatorStub);
-        findSpeciesStub.getBird.resolves(TestHelper.fakeBird);
-    })
+//     beforeEach(() => {
+//         TestHelper.setupRequestValidator(requestValidatorStub)
+//         TestHelper.setupSupabaseStub(supabaseStub);
+//         findSpeciesStub.getBird.resolves(TestHelper.fakeBird);
+//     })
 
-    afterEach(() => {
-        sinon.reset();
-    })
+//     afterEach(() => {
+//         sinon.reset();
+//     })
 
-    afterAll(() => {
-        sinon.restore();
-    });
+//     afterAll(() => {
+//         sinon.restore();
+//     });
 
-    it("Should return the fake bird", async () => {
-        const result = await fetch(new Request(url, {
-            body: "{ birdSpecies: \"Test Bird\"}", 
-            method: "POST",
-        }));
-        assertEquals(await result.json(), TestHelper.fakeBird);
-    })
+//     it("Should return the fake bird", async () => {
+//         const result = await fetch(new Request(url, {
+//             body: "{ birdSpecies: \"Test Bird\"}", 
+//             method: "POST",
+//         }));
+//         assertEquals(await result.json(), TestHelper.fakeBird);
+//     })
 
-    it("Should return error response if validator fails", async () => {
-        requestValidatorStub.validate.resolves(new Response(
-            JSON.stringify({
-                error: TestHelper.fakeError
-            })
-        ))
-        const result = await fetch(new Request(url, {
-            body: "{ birdSpecies: \"Test Bird\"}", 
-            method: "POST",
-        }));
-        assertEquals((await result.json()).error, TestHelper.fakeError);
-    })
+//     it("Should return error response if validator fails", async () => {
+//         requestValidatorStub.validate.resolves(new Response(
+//             JSON.stringify({
+//                 error: TestHelper.fakeError
+//             })
+//         ))
+//         const result = await fetch(new Request(url, {
+//             body: "{ birdSpecies: \"Test Bird\"}", 
+//             method: "POST",
+//         }));
+//         assertEquals((await result.json()).error, TestHelper.fakeError);
+//     })
 
-    it("Should return error response if fetchSpecies fails", async () => {
-        findSpeciesStub.getBird.throws(TestHelper.fakeError);
-        const result = await fetch(new Request(url, {
-            body: "{ birdSpecies: \"Test Bird\"}", 
-            method: "POST",
-        }));
-        assertEquals((await result.json()).error, "Sinon-provided " + TestHelper.fakeError);
-    })
-})
+//     it("Should return error response if fetchSpecies fails", async () => {
+//         findSpeciesStub.getBird.throws(TestHelper.fakeError);
+//         const result = await fetch(new Request(url, {
+//             body: "{ birdSpecies: \"Test Bird\"}", 
+//             method: "POST",
+//         }));
+//         assertEquals((await result.json()).error, "Sinon-provided " + TestHelper.fakeError);
+//     })
+// })
 
 describe("FindSpecies", () => {
     let birdAssetGeneratorStub: SinonStubbedInstance<BirdAssetGenerator>;

@@ -8,6 +8,7 @@ script = ExtResource("1_dfoau")
 name = "Blue Tit"
 size = 0.0
 diet = ""
+max_age = null
 animations = ExtResource("1_k8gkr")
 max_stamina = 1000.0
 stamina = 400.0

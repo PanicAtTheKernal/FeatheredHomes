@@ -9,8 +9,14 @@ var name: String
 var size: float
 @export
 var diet: String
+@export
+var sound: String
+@export
+var nest_type: String
 @export_range(20, 30)
-var max_age
+var max_age: int
+@export
+var is_predator: bool
 
 @export 
 var animations: SpriteFrames

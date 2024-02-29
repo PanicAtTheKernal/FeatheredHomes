@@ -103,8 +103,6 @@ scale = Vector2(0.15, 0.15)
 sprite_frames = ExtResource("2_8dhfy")
 animation = &"Eating"
 autoplay = "default"
-frame = 2
-frame_progress = 1.0
 script = ExtResource("3_x8tx3")
 
 [node name="Button" type="Button" parent="."]

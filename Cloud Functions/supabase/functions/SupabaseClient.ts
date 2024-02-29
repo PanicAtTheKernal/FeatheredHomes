@@ -48,6 +48,9 @@ export type BirdSpecies = {
     birdSimulationInfo: object;
     birdUnisex: boolean;
     birdColourMap: object;
+    birdSound: string;
+    birdNest: string;
+    isPredator: boolean;
 }
 
 
@@ -71,6 +74,8 @@ export class Supabase {
     private readonly _traitTable = "Traits";
     private readonly _birdAssetBucket = "BirdAssets";
     private readonly _logTable = "Log";
+    private readonly _soundTable = "Sound";
+    private readonly _nestTable = "Nest";
 
     private constructor() {
         this._supabaseServiceRoleKey = Deno.env.get("SERVICE_ROLE_KEY") as string;
@@ -217,6 +222,44 @@ export class Supabase {
             throw new Error(`Supabase: ${error.message}`);
         }
         return data.map(entry => entry.traitName); 
+    }
+
+    public async fetchSounds(): Promise<string[]> {
+        const { data, error } = await this._supabaseAdminClient.from(this._soundTable)
+        .select("Name");
+        if (error != null) {
+            throw new Error(`Supabase: ${error.message}`);
+        }
+        return data.map(entry => entry.Name); 
+    }
+
+    public async fetchSoundId(sound: string): Promise<string> {
+        const { data, error } = await this._supabaseAdminClient.from(this._soundTable)
+            .select("Id")
+            .eq("Name", sound);
+        if (error != null) {
+            throw new Error(`Supabase: ${error.message}`);
+        }
+        return data[0].Id as string;
+    }
+
+    public async fetchNests(): Promise<string[]> {
+        const { data, error } = await this._supabaseAdminClient.from(this._nestTable)
+        .select("Type");
+        if (error != null) {
+            throw new Error(`Supabase: ${error.message}`);
+        }
+        return data.map(entry => entry.Type); 
+    }
+
+    public async fetchNestId(nest: string): Promise<string> {
+        const { data, error } = await this._supabaseAdminClient.from(this._nestTable)
+            .select("Id")
+            .eq("Type", nest);
+        if (error != null) {
+            throw new Error(`Supabase: ${error.message}`);
+        }
+        return data[0].Id as string;
     }
 
     public async addBlacklistLabel(label: BlacklistLabel): Promise<void> {

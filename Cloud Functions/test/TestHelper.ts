@@ -40,7 +40,10 @@ const fakeBird: BirdSpecies = {
     dietId: "",
     version: "",
     birdUnisex: true,
-    birdColourMap: { image: "" }
+    birdColourMap: { image: "" },
+    birdNest: "",
+    birdSound: "",
+    isPredator: false,
 };
 const fakeColourMap = new Map(
     [["#000000","#FFFFFF"],["#FFFFFF","#000000"]]
@@ -175,6 +178,9 @@ function setupChatGPTStub(chatGPTStub: SinonStubbedInstance<ChatGPT>): void {
     chatGPTStub.generateColoursFromDescription.resolves(JSON.stringify(fakeColours));
     chatGPTStub.generateCustomSummary.resolves("Shorten description");
     chatGPTStub.generateTraits.resolves("{ \"fakeTrait\": true }");
+    chatGPTStub.checkIfBirdIsPredator.resolves(false);
+    chatGPTStub.generateSound.resolves("Fake sound");
+    chatGPTStub.generateNest.resolves("Fake nest");
 }
 
 function setupSupabaseStub(supabaseStub: SinonStubbedInstance<Supabase>): void {
@@ -190,6 +196,10 @@ function setupSupabaseStub(supabaseStub: SinonStubbedInstance<Supabase>): void {
     supabaseStub.fetchBlacklistedLabels.resolves(fakeBlacklistedLabels);
     supabaseStub.fetchDefaultBirdName.resolves(fakeLabel);
     supabaseStub.fetchSystemMessage.resolves(fakeSystemMessage);
+    supabaseStub.fetchNests.resolves(fakeDiets);
+    supabaseStub.fetchSounds.resolves(fakeDiets);
+    supabaseStub.fetchSoundId.resolves(fakeLabel);
+    supabaseStub.fetchNestId.resolves(fakeLabel);
 }
 
 function setupImageManipulatorStub(imageManipulatorStub: SinonStubbedInstance<ImageManipulator>): void {

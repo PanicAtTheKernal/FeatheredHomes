@@ -55,14 +55,23 @@ func play_landing_animation():
 	finished = "landing"
 	play("default")
 
+func play_nesting_animation():
+	if animation == "Nest": return
+	await _wait_for_animation()
+	play("Nest")
+	Logger.print_debug("Playing nest", logger_key)
+	await animation_to_play
+	animation_group_finished.emit()
+	finished = "nesting"
+	play("default")
 
 func play_swimming_animation():
 	if animation == "defualt": return
 	await _wait_for_animation()
-	play("default")
-	Logger.print_debug("Playing default", logger_key)
+	play("Nest")
+	Logger.print_debug("Playing swimming", logger_key)
 	animation_group_finished.emit()
-
+	play("default")
 
 func play_eating_animation():
 	if animation == "Eating": return

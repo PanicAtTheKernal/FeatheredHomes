@@ -59,3 +59,25 @@ func lay_egg(nest_map_cords: Vector2) -> bool:
 		world_resources.set_resource_state(nest, "Egg")
 		return true
 	return false
+
+func hatch_egg(nest_map_cords: Vector2) -> bool:
+	var nest = world_resources.get_resource("Nests", nest_map_cords)
+	if nest != null and nest.current_state == "Egg":
+		world_resources.set_resource_state(nest, "Hatch")
+		await get_tree().create_timer(1).timeout
+		world_resources.set_resource_state(nest, "Alive")
+		return true
+	return false
+
+func leave_nest(nest_map_cords: Vector2, bird_info: BirdInfo) -> bool:
+	var nest = world_resources.get_resource("Nests", nest_map_cords)
+	if nest != null and nest.current_state == "Alive":
+		world_resources.set_resource_state(nest, "Empty")
+		var type = nest.template.name
+		nests[type][TAKEN_NEST].erase(nest)
+		nests[type][FREE_NEST].push_back(nest)
+		BirdResourceManager.add_bird(bird_info.species.name)
+		#get_tree().call_group("BirdManager", "create_bird", bird_info)
+		#BirdResourceManager.add_bird_to_list(bird_info)
+		return true
+	return false

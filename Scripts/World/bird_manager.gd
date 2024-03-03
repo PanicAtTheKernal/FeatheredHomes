@@ -52,7 +52,7 @@ func _intialise_bird_resources() -> void:
 	for key in tile_map.partition_keys:
 		partitions[key] = []
 
-func create_bird(bird_info: BirdInfo)->void:
+func create_bird(bird_info: BirdInfo, hide_dialog:bool=false)->void:
 	var new_bird: Bird = blank_bird.instantiate()
 	setup_bird(new_bird, randomise_stats(bird_info))
 	create_traits(new_bird)
@@ -78,15 +78,16 @@ func setup_bird(new_bird:Bird, bird_info: BirdInfo)->void:
 	# TODO Testing setup for bird mating/parenting
 	new_bird.current_age = 4
 
-func add_bird(new_bird: Bird)->void:
+func add_bird(new_bird: Bird, hide_dialog:bool=false)->void:
 	new_bird.global_position = player_camera.get_screen_center_position()
 	# TODO REMOVE THIS 
 	if new_bird.info.gender == "female":
 		new_bird.global_position.x += 75
 	Logger.print_debug("New bird has been added ID: "+str(new_bird.id), logger_key)
 	add_child(new_bird)
-	get_tree().call_group("Dialog", "display", str("You found a ",new_bird.info.species.name.capitalize()))
-	get_tree().call_group("LoadingButton", "hide_loading")
+	if not hide_dialog:
+		get_tree().call_group("Dialog", "display", str("You found a ",new_bird.info.species.name.capitalize()))
+		get_tree().call_group("LoadingButton", "hide_loading")
 
 func create_traits(new_bird: Bird)->void:
 	var trait_builder: TraitBuilder = TraitBuilder.new(new_bird)
@@ -98,7 +99,10 @@ func create_traits(new_bird: Bird)->void:
 	trait_builder.build_exploration()
 
 func get_bird(id: int)->Bird:
-	return get_child(id) as Bird
+	for bird in get_children():
+		if bird.id == id:
+			return bird
+	return null
 
 func add_bird_resource(parition_index: Vector2i, old_index: Vector2i, bird: Bird) -> void:
 	partitions[old_index].erase(bird)

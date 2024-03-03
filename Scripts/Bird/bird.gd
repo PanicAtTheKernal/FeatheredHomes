@@ -10,8 +10,8 @@ enum States {
 
 enum BirdCalls {
 	STOP,
-	AVAILABLE_TO_MATE,
 	LOVE,
+	NEST_BUILT
 }
 
 const SPEED = 60
@@ -56,7 +56,6 @@ var current_stamina: float
 var distance_to_target: float
 var target_reached: bool = false
 var is_distance_calculated: bool = false
-var is_standing_on_branch: bool = false
 var state: States = States.AIR
 var current_tile: String
 var current_partition: Vector2i
@@ -269,5 +268,5 @@ func _on_call(call_message: BirdCalls, messager_id: int, data: Variant) -> void:
 			partner = messager_id
 			stop_now = false
 			#animatated_spite.play("defualt")
-		BirdCalls.AVAILABLE_TO_MATE:
-			bird_manager.get_bird(messager_id)
+		BirdCalls.NEST_BUILT:
+			nest = null

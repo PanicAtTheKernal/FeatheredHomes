@@ -19,7 +19,10 @@ func run()->void:
 	elif bird.animatated_spite.animation != "Dance" and started_animation:
 		bird.love_particles.emitting = true
 		var nest = bird.nest_manager.request_nest(bird.species.nest_type)
-		bird.bird_manager.get_bird(bird.partner).listener.emit(bird.BirdCalls.LOVE, bird.id, nest)
+		var nearby_bird = bird.bird_manager.get_bird(bird.partner)
+		if nearby_bird == null:
+			super.fail()
+		nearby_bird.listener.emit(bird.BirdCalls.LOVE, bird.id, nest)
 		if bird.species.coparent:
 			bird.nest = nest
 		bird.mate = false

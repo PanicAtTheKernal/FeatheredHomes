@@ -11,6 +11,7 @@ var animated_sprite: AnimatedSprite2D
 var at_target_lambda: Callable
 var is_nest_available: Callable
 var is_bird_ready_to_mate: Callable
+var nest_location: Callable
 
 var logger_key = {
 	"type": Logger.LogType.BUILDER,
@@ -24,6 +25,7 @@ func _init(new_bird: Bird) -> void:
 	animated_sprite = new_bird.animatated_spite
 	at_target_lambda = func(): return bird.at_target()
 	is_nest_available = func(): return bird.nest_manager.has_available_nest(bird.species.nest_type)
+	nest_location = func(): if bird.nest != null: return bird.tile_map.map_to_world_space(bird.nest.position)		
 	is_bird_ready_to_mate = func(): return bird.mate
 	id = str(new_bird.id)
 
@@ -86,20 +88,19 @@ func build_partner()->void:
 	root_selector.add_child(partner_sequence)
 
 func build_parenting()->void:
-	var nest_location = func(): if bird.nest != null: return bird.tile_map.map_to_world_space(bird.nest.position)
-	# If the male doesn't participate in the parenting then if won't have this behaviour
+	# If the male doesn't participate in the parenting then it won't have this behaviour
 	if bird.info.gender == "male" and not bird.species.coparent:
 		return
 	var parenting_sequence = Sequence.new(id+": ParentingSequence")
 	var has_nest = Inverter.new(id+": HasNest")
 	has_nest.add_child(Equal.new(bird, "nest", null, id+": NoNest"))
 	parenting_sequence.add_child(has_nest)
-	parenting_sequence.add_child(UpdateStatus.new(bird, "parenting", id+": StartingParentingBehaviour"))
-	parenting_sequence.add_child(FindNearestResource.new(bird, "Stick", id+": FindNearestStick"))
+	parenting_sequence.add_child(_build_nest_sequence())
+	parenting_sequence.add_child(FindNearestResource.new(bird, bird.species.diet, id+": GetFood"))
 	parenting_sequence.add_child(_build_navigation())
-	parenting_sequence.add_child(Consume.new(bird, "Stick", id+": GatherStick"))
 	parenting_sequence.add_child(FlyToTarget.new(bird, nest_location, id+": FlyToNest"))
 	parenting_sequence.add_child(_build_navigation())
+	parenting_sequence.add_child(LeaveNest.new(bird, id+": LeaveNest"))
 	root_selector.add_child(parenting_sequence)
 
 func _build_navigation()->Sequence:
@@ -173,3 +174,17 @@ func _build_check_if_walking()->Sequence:
 	not_at_targert_inverter.add_child(Equal.new(bird, "target_reached", true, id+": AtTarget"))
 	check_if_walking_sequence.add_child(not_at_targert_inverter)
 	return check_if_walking_sequence
+
+func _build_nest_sequence()->UntilSuccess:
+	var nest_success = UntilSuccess.new(id+": UntilNestIsBuilt")
+	var nest_sequence = Sequence.new(id+": NestBuildingSequence")
+	nest_sequence.add_child(UpdateStatus.new(bird, "parenting", id+": StartingParentingBehaviour"))
+	nest_sequence.add_child(FindNearestResource.new(bird, "Stick", id+": FindNearestStick"))
+	nest_sequence.add_child(_build_navigation())
+	nest_sequence.add_child(Consume.new(bird, "Stick", id+": GatherStick"))
+	nest_sequence.add_child(FlyToTarget.new(bird, nest_location, id+": FlyToNest"))
+	nest_sequence.add_child(_build_navigation())
+	nest_sequence.add_child(PlayAnimation.new(bird, id+": PlayPlaceAnimation"))
+	nest_sequence.add_child(BuildNest.new(bird, id+": BuildNest"))
+	nest_success.add_child(nest_sequence)
+	return nest_success

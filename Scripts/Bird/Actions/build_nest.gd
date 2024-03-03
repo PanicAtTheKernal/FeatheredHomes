@@ -15,7 +15,19 @@ func run()->void:
 	var nest_map_cords: Vector2i = bird.nest.position
 	if bird.nest_manager.build_nest(nest_map_cords):
 		if bird.info.gender == "female" and bird.nest_manager.lay_egg(nest_map_cords):
-			pass # Play the nesting animation, then wait a bit then stop and hatch the egg
+			var partner: Bird = bird.bird_manager.get_bird(bird.partner)
+			if partner != null:
+				partner.listener.emit()
+			await bird.animatated_spite.play_nesting_animation()
+			await bird.animatated_spite.animation_group_finished
+			if bird.animatated_spite.finished != "nesting":
+				super.fail()
+				return
+			if await bird.nest_manager.hatch_egg(nest_map_cords):
+				super.success()
+			super.fail()
+		if bird.info.gender == "male":
+			super.success()
 	else:
 		super.fail()
 		return

@@ -82,7 +82,7 @@ func save_bird(bird_data: BirdInfo)->void:
 	if error != OK:
 		Logger.print_debug(str("Error saving player data",error), logger_key)
 
-func add_bird(bird_species: String)->void:
+func add_bird(bird_species: String, hide_dialog: bool=false)->void:
 	var bird_files: Array[String] = _find_bird_files(bird_species)
 	var bird: BirdInfo
 	if not bird_files.is_empty():
@@ -113,7 +113,7 @@ func add_bird(bird_species: String)->void:
 			bird_infos.push_back(male_bird)
 			bird_infos.push_back(female_bird)
 			bird = bird_infos.pick_random()
-	get_tree().call_group("BirdManager", "create_bird", bird)
+	get_tree().call_group("BirdManager", "create_bird", bird, hide_dialog)
 	birds.push_back(bird)
 	Logger.print_debug("Added new bird", logger_key)
 	get_tree().call_group("LoadingButton", "hide_loading")
@@ -128,3 +128,6 @@ func get_bird_list_items()->PackedStringArray:
 
 func get_bird(index: int)->BirdInfo:
 	return birds[index]
+
+func add_bird_to_list(bird: BirdInfo)->void:
+	birds.push_back(bird)

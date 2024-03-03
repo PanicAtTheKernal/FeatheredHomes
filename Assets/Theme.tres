@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=31 format=3 uid="uid://sct70k5b8gxf"]
+[gd_resource type="Theme" load_steps=33 format=3 uid="uid://sct70k5b8gxf"]
 
 [ext_resource type="Texture2D" uid="uid://bxdhaypp45ddw" path="res://Assets/big-button-sprite.png" id="1_4d5x0"]
 [ext_resource type="FontFile" uid="uid://c4xvfnmsiyw7t" path="res://Assets/Silkscreen/Silkscreen-Regular.ttf" id="1_b40rr"]
@@ -54,6 +54,18 @@ texture_margin_left = 12.0
 texture_margin_top = 12.0
 texture_margin_right = 12.0
 texture_margin_bottom = 12.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ooebg"]
+atlas = ExtResource("1_4d5x0")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xp1h0"]
+texture = SubResource("AtlasTexture_ooebg")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+modulate_color = Color(0.282353, 0.282353, 0.282353, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fxstj"]
 
@@ -170,6 +182,12 @@ Button/styles/disabled = SubResource("StyleBoxTexture_dtxb1")
 Button/styles/hover = SubResource("StyleBoxTexture_s7ie2")
 Button/styles/normal = SubResource("StyleBoxTexture_ty6y7")
 Button/styles/pressed = SubResource("StyleBoxTexture_26cjl")
+HeaderInfo/base_type = &"Label"
+HeaderInfo/font_sizes/font_size = 56
+HeaderSubInfo/base_type = &"Label"
+HeaderSubInfo/font_sizes/font_size = 40
+InfoBox/base_type = &"PanelContainer"
+InfoBox/styles/panel = SubResource("StyleBoxTexture_xp1h0")
 ItemList/colors/font_color = Color(0.65098, 0.65098, 0.65098, 1)
 ItemList/constants/h_separation = 11
 ItemList/constants/line_separation = 8
@@ -187,6 +205,20 @@ RichTextLabel/font_sizes/bold_font_size = 36
 RichTextLabel/font_sizes/normal_font_size = 36
 RichTextLabel/fonts/bold_font = ExtResource("3_k1sf3")
 ScrollContainer/styles/panel = SubResource("StyleBoxTexture_j6qq7")
+StatText/base_type = &"Label"
+StatText/font_sizes/font_size = 40
+StatTextRich/base_type = &"RichTextLabel"
+StatTextRich/colors/default_color = Color(0.623529, 0.623529, 0.623529, 1)
+StatTextRich/constants/line_separation = 0
+StatTextRich/constants/outline_size = 0
+StatTextRich/constants/shadow_offset_x = 0
+StatTextRich/constants/shadow_offset_y = 0
+StatTextRich/constants/shadow_outline_size = 0
+StatTextRich/constants/table_h_separation = 0
+StatTextRich/constants/table_v_separation = 0
+StatTextRich/constants/text_highlight_h_padding = 0
+StatTextRich/constants/text_highlight_v_padding = 0
+StatTextRich/font_sizes/normal_font_size = 40
 VScrollBar/styles/grabber = SubResource("StyleBoxTexture_movi6")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxTexture_fu2f6")
 VScrollBar/styles/grabber_pressed = SubResource("StyleBoxTexture_ruulr")

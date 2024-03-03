@@ -2,8 +2,6 @@ extends Control
 
 class_name Dialog
 
-const NON_MOBLIE_SIZE = 1080
-
 @onready 
 var dialog_text : RichTextLabel = %Text
 @onready
@@ -18,7 +16,7 @@ func _ready()->void:
 
 func _process(delta: float) -> void:
 	var window = get_window()
-	if window.size.x > NON_MOBLIE_SIZE:
+	if window.size.x > Startup.NON_MOBLIE_SIZE:
 		panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		panel.custom_minimum_size.x = 960
 	else:

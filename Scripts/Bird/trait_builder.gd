@@ -45,6 +45,7 @@ func build_exploration()->void:
 	# exploration_condition_selector.add_child(Equal.new(bird, "stop_now", false, id+": NotStopped"))
 	exploration_sequence.add_child(exploration_condition_selector)
 	# Navigation
+	exploration_sequence.add_child(UpdateStatus.new(bird, "exploring", id+": StartingExploringBehaviour"))
 	exploration_sequence.add_child(_build_wander())
 	root_selector.add_child(exploration_sequence)
 
@@ -55,6 +56,7 @@ func build_foraging()->void:
 	# foraging_sequence.add_child(is_middle_of_love)
 	# foraging_sequence.add_child(Equal.new(bird, "stop_now", false, id+": NotStopped"))
 	foraging_sequence.add_child(LessThan.new(bird, "current_stamina", (bird.species.max_stamina * bird.species.threshold),id+": CheckStamina"))
+	foraging_sequence.add_child(UpdateStatus.new(bird, "foraging", id+": StartingForagingBehaviour"))
 	foraging_sequence.add_child(FindNearestResource.new(bird, bird.species.diet, id+": FindNearestFood"))
 	foraging_sequence.add_child(_build_navigation())
 	foraging_sequence.add_child(Consume.new(bird, bird.species.diet, id+": ConsumeFood"))
@@ -72,12 +74,14 @@ func build_partner()->void:
 		partner_sequence.add_child(Equal.new(bird, is_bird_ready_to_mate, true, id+": ReadyToMate"))
 		partner_sequence.add_child(Equal.new(bird, "partner", -1, id+": HasNoMate"))
 		partner_sequence.add_child(Equal.new(bird, is_nest_available, true, id+": NestAvailable"))
+		partner_sequence.add_child(UpdateStatus.new(bird, "mating", id+": StartingMatingBehaviour"))
 		partner_sequence.add_child(FindNearestBird.new(bird, id+": FindNearestBird"))
 		partner_sequence.add_child(_build_navigation())
 		partner_sequence.add_child(Love.new(bird, id+": Love"))
 	elif bird.info.gender == "female":
 		var condition= func(): return bird.stop_now
 		partner_sequence.add_child(Stop.new(bird,condition, id+": Stop"))
+		partner_sequence.add_child(UpdateStatus.new(bird, "mating", id+": StartingMatingBehaviour"))
 		partner_sequence.add_child(Land.new(bird,id+": Land"))	
 	root_selector.add_child(partner_sequence)
 
@@ -90,6 +94,7 @@ func build_parenting()->void:
 	var has_nest = Inverter.new(id+": HasNest")
 	has_nest.add_child(Equal.new(bird, "nest", null, id+": NoNest"))
 	parenting_sequence.add_child(has_nest)
+	parenting_sequence.add_child(UpdateStatus.new(bird, "parenting", id+": StartingParentingBehaviour"))
 	parenting_sequence.add_child(FindNearestResource.new(bird, "Stick", id+": FindNearestStick"))
 	parenting_sequence.add_child(_build_navigation())
 	parenting_sequence.add_child(Consume.new(bird, "Stick", id+": GatherStick"))

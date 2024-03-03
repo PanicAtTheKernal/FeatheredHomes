@@ -1,6 +1,8 @@
 extends Control
 
 @onready
+var panel: PanelContainer = %Panel
+@onready
 var image: TextureRect = %BirdImage
 @onready
 var bird_name_label: Label = %BirdNameData
@@ -28,6 +30,12 @@ var swim_label: Label = %SwimData
 var cleaning_label: Label = %CleaningMethodsData
 @onready
 var current_stamina: Label = %CurrentStaminaData
+@onready
+var age_label: Label = %AgeData
+@onready
+var parenting_style_label: Label = %ParentingStyleData
+@onready
+var predator_label: Label = %PredatorData
 
 @export
 var default_frames: SpriteFrames
@@ -47,27 +55,44 @@ func _ready()->void:
 	if not is_visible_in_tree():
 		new_frame_timer.stop()
 
+func _process(delta: float) -> void:
+	var window = get_window()
+	if window.size.x > Startup.NON_MOBLIE_SIZE:
+		panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		panel.custom_minimum_size.x = 960
+	else:
+		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		panel.custom_minimum_size.x = 0
+
 func load_new_bird(bird: BirdInfo)->void:
 	var date_dict = Time.get_datetime_dict_from_datetime_string(bird.date_found, false)
 	var date_found = str(date_dict.get("day"),"/",date_dict.get("month"),"/",date_dict.get("year"))
+	# Stats
 	bird_name_label.text = bird.species.name
+	status_label.text = bird.status
+	age_label.text = bird.age_status
+	# General
 	family_label.text = bird.family
 	scientific_label.text = bird.scientific_name
 	gender_label.text = bird.gender
 	diet_label.text = bird.species.diet
 	date_found_label.text = date_found
-	status_label.text = bird.get_status_message(bird.status)
+	# Description
 	description.text = bird.description
+	# Traits
 	fly_label.text = "Yes" if bird.species.can_fly else "No"
 	swim_label.text = "Yes" if bird.species.can_swim else "No"
+	predator_label.text = "Yes" if bird.species.is_predator else "No"
+	_build_parenting_label(bird)
 	_build_cleaning_label(bird)
-	current_stamina.text = str(bird.species.stamina/bird.species.max_stamina * 100,"%")
-	if bird.status != BirdInfo.StatusTypes.NOT_GENERATED:
+	current_stamina.text = str(snapped(bird.species.stamina/bird.species.max_stamina * 100,0.1),"%")
+	if bird.status != "Not generated":
 		_load_image(bird.species.animations)
 	else:
 		Logger.print_debug("Bird isn't generated, using image placeholder", logger_key)
 		_load_image(default_frames)
 	Logger.print_debug(str("Updated UI with ",bird.species.name), logger_key)
+	
 	
 func _build_cleaning_label(bird: BirdInfo)->void:
 	var cleaning_methods: String = ""
@@ -78,6 +103,16 @@ func _build_cleaning_label(bird: BirdInfo)->void:
 	if bird.species.does_sunbathing:
 		cleaning_methods += "Sunbathing, "
 	cleaning_label.text = cleaning_methods.trim_suffix(", ")
+
+func _build_parenting_label(bird: BirdInfo)->void:
+	var parenting_style: String = ""
+	if bird.species.female_single_parent:
+		parenting_style += "Single Mother"
+	elif bird.species.male_single_parent:
+		parenting_style += "Single Father"
+	elif bird.species.coparent:
+		parenting_style += "Both Parents"
+	parenting_style_label.text = parenting_style.trim_suffix(", ")
 
 func _load_image(frames: SpriteFrames)->void:
 	if len(frames.get_animation_names()) > 0:

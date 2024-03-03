@@ -226,7 +226,7 @@ func _on_animation_finished()->void:
 		
 
 func _die() -> void:
-	info.status = BirdInfo.StatusTypes.DEAD
+	info.status = "Dead"
 	queue_free()
 
 func _on_button_pressed():
@@ -240,13 +240,13 @@ func _on_calorie_timer_timeout() -> void:
 func _increament_age()->void:
 	current_age += 1
 	if current_age < TEEN_THRESHOLD:
-		info.status = info.StatusTypes.TEEN
+		info.age_status = "Teen"
 	elif current_age < YOUNG_ADULT_THRESHOLD:
-		info.status = info.StatusTypes.YOUNG_ADULT
+		info.age_status = "Young adult"
 	elif current_age < ADULT_THRESHOLD:
-		info.status = info.StatusTypes.ADULT
+		info.age_status = "Adult"
 	else:
-		info.status = info.StatusTypes.ELDER
+		info.age_status = "Elder"
 	if mate == false:
 		mate = true
 		

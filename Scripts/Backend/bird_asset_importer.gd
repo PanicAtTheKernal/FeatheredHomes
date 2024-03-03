@@ -26,7 +26,7 @@ func import()->BirdInfo:
 	await _build_image()
 	await _build_sound()
 	await _build_nest()
-	bird.status = BirdInfo.StatusTypes.GENERATED
+	bird.status = "Generated"
 	return bird
 
 func _build_species()->void:

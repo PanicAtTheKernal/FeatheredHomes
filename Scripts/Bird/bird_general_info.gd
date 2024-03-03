@@ -17,7 +17,9 @@ var date_found: String
 @export
 var id: int
 @export
-var status: StatusTypes
+var status: String
+@export
+var age_status: String
 @export
 var species: BirdSpecies
 @export
@@ -46,7 +48,8 @@ var status_messages: Dictionary = {
 func _init():
 	date_found = Time.get_datetime_string_from_system()
 	id = _create_id()
-	status = StatusTypes.NOT_GENERATED
+	status = "Not generated"
+	age_status = "Teen"
 	
 func _create_id()->int:
 	var date_dict = Time.get_datetime_dict_from_datetime_string(date_found, false)
@@ -56,6 +59,3 @@ func _create_id()->int:
 	
 func set_bird_species(species: BirdSpecies):
 	self.species = species
-
-func get_status_message(status: StatusTypes)->String:
-	return status_messages.get(status)

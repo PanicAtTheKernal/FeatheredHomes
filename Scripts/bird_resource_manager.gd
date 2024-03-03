@@ -123,7 +123,7 @@ func add_bird(bird_species: String)->void:
 func get_bird_list_items()->PackedStringArray:
 	var bird_list_items: PackedStringArray = []
 	for bird in birds:
-		bird_list_items.push_back(bird.species.name)
+		bird_list_items.push_back(str("-",bird.species.name))
 	return bird_list_items
 
 func get_bird(index: int)->BirdInfo:

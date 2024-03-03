@@ -4,11 +4,22 @@ extends Control
 var line_edit: LineEdit = %LineEdit
 @onready
 var families: RichTextLabel = %SupportedFamiles
+@onready
+var panel: PanelContainer = %Panel
 
 func _ready() -> void:
 	var supported_families = await Database.fetch_supported_familes()
 	for family in supported_families:
 		families.text += family + "\n"
+
+func _process(delta: float) -> void:
+	var window = get_window()
+	if window.size.x > Startup.NON_MOBLIE_SIZE:
+		panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		panel.custom_minimum_size.x = 960
+	else:
+		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		panel.custom_minimum_size.x = 0
 
 func show_search()->void:
 	show()

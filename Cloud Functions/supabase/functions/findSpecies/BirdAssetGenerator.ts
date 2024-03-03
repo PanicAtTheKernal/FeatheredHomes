@@ -6,7 +6,6 @@ import { ImageGenerator } from "./ImageGenerator.ts";
 import { DietGenerator } from "./DietGenerator.ts";
 import { TraitGenerator } from "./TraitGenerator.ts";
 
-
 export class BirdAssetGenerator {
     private readonly _birdName: string;
     private readonly _version: string;

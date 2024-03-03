@@ -92,6 +92,8 @@ func create_traits(new_bird: Bird)->void:
 	var trait_builder: TraitBuilder = TraitBuilder.new(new_bird)
 	trait_builder.build_root()
 	trait_builder.build_partner()
+	trait_builder.build_parenting()
+	# This is below partner and parenting because foraging and wander have very few condiditons to be active
 	trait_builder.build_foraging()
 	trait_builder.build_exploration()
 

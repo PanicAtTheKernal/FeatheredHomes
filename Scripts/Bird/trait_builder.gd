@@ -57,7 +57,7 @@ func build_foraging()->void:
 	foraging_sequence.add_child(LessThan.new(bird, "current_stamina", (bird.species.max_stamina * bird.species.threshold),id+": CheckStamina"))
 	foraging_sequence.add_child(FindNearestResource.new(bird, bird.species.diet, id+": FindNearestFood"))
 	foraging_sequence.add_child(_build_navigation())
-	foraging_sequence.add_child(ConsumeFood.new(bird, id+": ConsumeFood"))
+	foraging_sequence.add_child(Consume.new(bird, bird.species.diet, id+": ConsumeFood"))
 	root_selector.add_child(foraging_sequence)
 
 
@@ -75,23 +75,26 @@ func build_partner()->void:
 		partner_sequence.add_child(FindNearestBird.new(bird, id+": FindNearestBird"))
 		partner_sequence.add_child(_build_navigation())
 		partner_sequence.add_child(Love.new(bird, id+": Love"))
-		# partner_sequence.add_child(_build_navigation())		
-		# CheckIfTargetReached
 	elif bird.info.gender == "female":
 		var condition= func(): return bird.stop_now
 		partner_sequence.add_child(Stop.new(bird,condition, id+": Stop"))
 		partner_sequence.add_child(Land.new(bird,id+": Land"))	
-		# partner_sequence.add_child(not_stopped_by_inverter)
-		# partner_sequence.add_child(_build_navigation())		
 	root_selector.add_child(partner_sequence)
 
 func build_parenting()->void:
+	var nest_location = func(): if bird.nest != null: return bird.tile_map.map_to_world_space(bird.nest.position)
+	# If the male doesn't participate in the parenting then if won't have this behaviour
+	if bird.info.gender == "male" and not bird.species.coparent:
+		return
 	var parenting_sequence = Sequence.new(id+": ParentingSequence")
 	var has_nest = Inverter.new(id+": HasNest")
 	has_nest.add_child(Equal.new(bird, "nest", null, id+": NoNest"))
 	parenting_sequence.add_child(has_nest)
-	if bird.species.coparent:
-		pass
+	parenting_sequence.add_child(FindNearestResource.new(bird, "Stick", id+": FindNearestStick"))
+	parenting_sequence.add_child(_build_navigation())
+	parenting_sequence.add_child(Consume.new(bird, "Stick", id+": GatherStick"))
+	parenting_sequence.add_child(FlyToTarget.new(bird, nest_location, id+": FlyToNest"))
+	parenting_sequence.add_child(_build_navigation())
 	root_selector.add_child(parenting_sequence)
 
 func _build_navigation()->Sequence:

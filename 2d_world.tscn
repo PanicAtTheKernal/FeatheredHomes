@@ -12417,7 +12417,6 @@ separation = Vector2i(1, 1)
 22:8/0/physics_layer_2/linear_velocity = Vector2(0, 0)
 22:8/0/physics_layer_2/angular_velocity = 0.0
 22:8/0/custom_data_0 = "Full"
-22:8/0/custom_data_2 = 100.0
 22:8/0/custom_data_3 = 100.0
 
 [sub_resource type="TileSet" id="TileSet_qfn5v"]

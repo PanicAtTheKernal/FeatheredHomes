@@ -1,7 +1,7 @@
 extends Camera2D
 
-const MIN_ZOOM: float = 6.0
-const MAX_ZOOM: float = 9.0
+const MIN_ZOOM: float = 3.0
+const MAX_ZOOM: float = 12.0
 const TILE_SIZE: int = WorldResources.TILE_SIZE
 const MAX_ZOOM_VEC: Vector2 = Vector2(MAX_ZOOM, MAX_ZOOM)
 const MIN_ZOOM_VEC: Vector2 = Vector2(MIN_ZOOM, MIN_ZOOM)

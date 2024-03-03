@@ -1,9 +1,28 @@
 extends Node
 
+
 const ENVIRONMENT_VARIABLES = "environment" 
-const DIET_TABLE = "Diet"
-const SHAPE_TABLE = "BirdShape"
-const FAMILY_TO_SHAPE_TABLE = "FamilyToShape"
+const TABLES = {
+	DIET = "DIET",
+	SHAPE = "SHAPE",
+	FAMILY_TO_SHAPE = "FAMILY_TO_SHAPE",
+	SOUND = "SOUND",
+	NEST = "NEST",
+}
+const DATABASE_NAME = {
+	DIET = "Diet",
+	SHAPE = "BirdShape",
+	FAMILY_TO_SHAPE = "FamilyToShape",
+	SOUND = "Sound",
+	NEST = "Nest",
+}
+const ID_COLS = {
+	DIET = "DietId",
+	SHAPE = "BirdShapeId",
+	FAMILY_TO_SHAPE = "Family",
+	SOUND = "Id",
+	NEST = "Id",
+}
 
 var config: ConfigFile
 var is_connected_to_db: bool
@@ -50,18 +69,20 @@ func get_fetch_species_endpoint()->String:
 func get_search_endpoint()->String:
 	return config.get_value(ENVIRONMENT_VARIABLES, "URL", "") + config.get_value(ENVIRONMENT_VARIABLES, "SEARCH_ENDPOINT", "")
 
-func fetch_diet_name(diet_id: String)->String:
-	var diet_query: SupabaseQuery = SupabaseQuery.new().from(DIET_TABLE).select(["DietName"]).eq("DietId", diet_id)
-	var diet_result = await Supabase.database.query(diet_query).completed
-	return diet_result.data[0]["DietName"]
+func get_version()->float:
+	return float(config.get_value(ENVIRONMENT_VARIABLES, "VERSION", "0.1"))
 
-func fetch_shape(shape_id: String)->Dictionary:
-	var shape_query: SupabaseQuery = SupabaseQuery.new().from(SHAPE_TABLE).select().eq("BirdShapeId", shape_id)
-	var shape_result = await Supabase.database.query(shape_query).completed
-	return shape_result.data[0] as Dictionary
+func fetch_row(table_name: String, id: String)->Dictionary:
+	var query: SupabaseQuery = SupabaseQuery.new().from(DATABASE_NAME[table_name]).select().eq(ID_COLS[table_name], id)
+	var result = await Supabase.database.query(query).completed
+	return result.data[0] as Dictionary
+
+func fetch_value(table_name: String, id: String, col_name: String)->String:
+	var result = await fetch_row(table_name, id)
+	return result[col_name]
 
 func fetch_supported_familes()->Array[String]:
-	var family_query: SupabaseQuery = SupabaseQuery.new().from(FAMILY_TO_SHAPE_TABLE).select()
+	var family_query: SupabaseQuery = SupabaseQuery.new().from(DATABASE_NAME.FAMILY_TO_SHAPE).select()
 	var family_result = await Supabase.database.query(family_query).completed
 	var supported_familes: Array[String] = []
 	for family in family_result.data:

@@ -34,8 +34,12 @@ var log_colours: Dictionary = {
 	LogType.GENERAL: "[color=white][b]General (<>): [/b][/color]",
 	LogType.UI: "[color=purple][b]UI (<>): [/b][/color]",
 	LogType.BUILDER: "[color=blue][b]Builder (<>): [/b][/color]",
-	LogType.ANIMATION: "[color=pink][b]Builder (<>): [/b][/color]"
+	LogType.ANIMATION: "[color=pink][b]Animation (<>): [/b][/color]"
 }
+var log_file
+
+func _ready() -> void:
+	log_file = FileAccess.open("user://log.md", FileAccess.WRITE)
 
 func _is_log_allowed(type:LogType)->bool:
 	return allowed_logs.get(type)
@@ -48,6 +52,7 @@ func print_debug(message: Variant, key: Dictionary)->void:
 	var get_log_colour: String = log_colours.get(type)
 	var replace_obj_name: String = "<>" if object_name != "" else " (<>)" 
 	get_log_colour = get_log_colour.replace(replace_obj_name, object_name)
+	log_file.store_string(str(get_log_colour,message,"\n"))
 	print_rich(get_log_colour,message)
 	
 

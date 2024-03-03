@@ -13,7 +13,6 @@ var resource_partitions: Dictionary
 var template_atlas: Dictionary
 var resource_counter: Dictionary
 var resource_group_reference: Dictionary
-var bird_partitions: Dictionary
 var regenerate_groups: Array[String]
 
 func _ready():
@@ -38,7 +37,6 @@ func _build_resource_dictionaries() -> void:
 		_intialise_resource_counter(template_group)
 		_intialise_resource_group_reference(template_group)
 		_intialise_regenerative_resources(template_group)
-		_intialise_bird_resources()
 						
 # Build a dictionary where the key is the atlas cords and the value is the template those atlas cords are used
 # Speed up the search for specific template rather than going through each templates state sprites
@@ -66,9 +64,7 @@ func _intialise_regenerative_resources(template_group: WorldResourceTemplateGrou
 	if template_group.regenerate and not regenerate_groups.has(template_group.group_name):
 		regenerate_groups.push_back(template_group.group_name)
 
-func _intialise_bird_resources() -> void:
-	for key in tile_map.partition_keys:
-		bird_partitions[key] = []
+
 
 func _intialise_partition_resources() -> void:
 	for key in tile_map.partition_keys:
@@ -155,17 +151,6 @@ func can_resource_regenerate(resource: WorldResourceTemplate) -> bool:
 	if group == null:
 		return false
 	return group.regenerate
-
-func add_resource(resource_group: String, map_cords: Vector2i, resource: Variant) -> void:
-	var partition_index = tile_map.get_partition_index(map_cords)
-	resource_partitions[partition_index][resource_group][map_cords] = resource
-	# For some reason, it won't add the bird unless this line is here
-	var magic_bird = resource_partitions[partition_index][resource_group][map_cords]
-	return
-
-func add_bird_resource(parition_index: Vector2i, old_index: Vector2i, bird: Bird) -> void:
-	bird_partitions[old_index].erase(bird)
-	bird_partitions[parition_index].push_back(bird)
 
 func update_partition(old_map_cords: Vector2i, new_map_cords: Vector2i, group: String) -> void:
 	var old_partition_key = tile_map.get_partition_index(old_map_cords)

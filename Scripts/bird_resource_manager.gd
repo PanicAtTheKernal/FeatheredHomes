@@ -14,6 +14,7 @@ signal new_bird_added
 func _ready()->void:
 	_initalise_bird_data()
 	_create_birds_folder()
+	_remove_outdated_bird_data()
 
 func _initalise_bird_data()->void:
 	Logger.print_debug("Setting up bird data", logger_key)
@@ -23,6 +24,24 @@ func _create_birds_folder()->void:
 	if !DirAccess.dir_exists_absolute(BIRD_DATA_PATH):
 		Logger.print_debug("Creating Birds folder", logger_key)
 		DirAccess.make_dir_recursive_absolute(BIRD_DATA_PATH)
+
+func _remove_outdated_bird_data()->void:
+	var files = DirAccess.get_files_at(BIRD_DATA_PATH)
+	var file_regex = RegEx.new()
+	file_regex.compile(str("[A-Z-]*[-]*?[A-Z]*?-INFO[.]tres"))
+	var image_regex = RegEx.new()
+	image_regex.compile(str("(:?[A-Z-]*)[-]*?[A-Z]*?-INFO[.]tres"))
+	for file in files:
+		# Make sure to load the bird resource files
+		if !file_regex.search(file):
+			continue
+		var bird = ResourceLoader.load(BIRD_DATA_PATH+file)
+		if bird == null or bird.version < Database.get_version():
+			Logger.print_debug("Removing outdated file "+file, logger_key)
+			var image_file = file.replace("-INFO.tres", ".png").to_lower()
+			Logger.print_debug("Removing outdated image File "+image_file, logger_key)
+			DirAccess.remove_absolute(BIRD_DATA_PATH+file)
+			DirAccess.remove_absolute(BIRD_DATA_PATH+image_file)
 
 func _find_bird_files(bird_species: String)->Array[String]:
 	var bird_file_name = bird_species.replace(" ", "-").to_upper()
@@ -63,7 +82,7 @@ func save_bird(bird_data: BirdInfo)->void:
 	if error != OK:
 		Logger.print_debug(str("Error saving player data",error), logger_key)
 
-func add_bird(bird_species: String)->void:
+func add_bird(bird_species: String, hide_dialog: bool=false)->void:
 	var bird_files: Array[String] = _find_bird_files(bird_species)
 	var bird: BirdInfo
 	if not bird_files.is_empty():
@@ -94,7 +113,7 @@ func add_bird(bird_species: String)->void:
 			bird_infos.push_back(male_bird)
 			bird_infos.push_back(female_bird)
 			bird = bird_infos.pick_random()
-	get_tree().call_group("BirdManager", "create_bird", bird)
+	get_tree().call_group("BirdManager", "create_bird", bird, hide_dialog)
 	birds.push_back(bird)
 	Logger.print_debug("Added new bird", logger_key)
 	get_tree().call_group("LoadingButton", "hide_loading")
@@ -104,8 +123,11 @@ func add_bird(bird_species: String)->void:
 func get_bird_list_items()->PackedStringArray:
 	var bird_list_items: PackedStringArray = []
 	for bird in birds:
-		bird_list_items.push_back(bird.species.name)
+		bird_list_items.push_back(str("-",bird.species.name))
 	return bird_list_items
 
 func get_bird(index: int)->BirdInfo:
 	return birds[index]
+
+func add_bird_to_list(bird: BirdInfo)->void:
+	birds.push_back(bird)

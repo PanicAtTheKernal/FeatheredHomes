@@ -42,8 +42,9 @@ func fail()->void:
 	if parent != null:
 		parent.child_fail()
 
+# Modified this
 func cancel()->void:
-	if status == RUNNING:
+	if status != CANCELLED:
 		status = CANCELLED
 		for child in get_children():
 			child.cancel()

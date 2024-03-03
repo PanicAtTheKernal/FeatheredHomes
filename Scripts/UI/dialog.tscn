@@ -33,16 +33,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 20
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_top = 100
-theme_override_constants/margin_right = 20
+theme_override_constants/margin_right = 60
 theme_override_constants/margin_bottom = 100
 
 [node name="Panel" type="PanelContainer" parent="MarginContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(900, 200)
+custom_minimum_size = Vector2(600, 200)
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("3_2eewb")
 
@@ -86,7 +85,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_2eewb")
-theme_override_font_sizes/normal_font_size = 48
 theme_override_font_sizes/bold_font_size = 0
 text = "Place Holder asdfa sdf asd fas dfas dfas dfas dfa sdf asdf asd fasd fasd f asdf"
 fit_content = true

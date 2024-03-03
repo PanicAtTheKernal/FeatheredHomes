@@ -14,6 +14,15 @@ var panel: PanelContainer = %Panel
 func _ready()->void:
 	dialog.visible = false
 
+func _process(delta: float) -> void:
+	var window = get_window()
+	if window.size.x > Startup.NON_MOBLIE_SIZE:
+		panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		panel.custom_minimum_size.x = 960
+	else:
+		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		panel.custom_minimum_size.x = 0
+
 func display(message: String, heading: String = "Notice:", fit_content: bool = true)->void:
 	dialog.visible = true
 	dialog_text.text = message

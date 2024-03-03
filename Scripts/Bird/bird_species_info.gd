@@ -9,8 +9,14 @@ var name: String
 var size: float
 @export
 var diet: String
+@export
+var sound: String
+@export
+var nest_type: String
 @export_range(20, 30)
-var max_age
+var max_age: int
+@export
+var is_predator: bool
 
 @export 
 var animations: SpriteFrames
@@ -20,6 +26,8 @@ var animations: SpriteFrames
 var max_stamina: float 
 @export_range(100, 10000) 
 var stamina: float
+@export_range(0.2, 0.9)
+var threshold: float
 
 @export_group("Ground")
 @export_range(5.0, 300.0)
@@ -47,3 +55,9 @@ var preen: bool
 var takes_dust_baths: bool
 @export
 var does_sunbathing: bool
+@export
+var coparent: bool
+@export
+var male_single_parent: bool
+@export
+var female_single_parent: bool

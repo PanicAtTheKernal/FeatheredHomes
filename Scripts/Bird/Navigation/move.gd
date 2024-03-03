@@ -14,9 +14,12 @@ func run()->void:
 	bird.animatated_spite.flip_h = bird.direction.x < 0
 	bird.velocity = bird.direction * bird.SPEED_INSANE * get_physics_process_delta_time()
 	var bird_at_target = bird.at_target()
-	if not bird_at_target and bird.nav_agent.is_target_reachable():
+	# If the bird has been told to stop the this should not be running
+	if not bird_at_target and bird.nav_agent.is_target_reachable() and not bird.stop_now:
 		bird.move_and_slide()
 		super.running()	
+	elif bird.stop_now:
+		super.success()
 	elif bird_at_target:
 		bird.target_reached = true
 		super.success()

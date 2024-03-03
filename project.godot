@@ -26,6 +26,13 @@ BirdResourceManager="*res://Scripts/bird_resource_manager.gd"
 Camera="*res://Scripts/camera.gd"
 DebugGizmos="*res://Scripts/Util/debug_gizmos.gd"
 
+[display]
+
+window/size/viewport_width=720
+window/size/viewport_height=1280
+window/stretch/scale_mode="integer"
+window/handheld/orientation=1
+
 [dotnet]
 
 project/assembly_name="Fyp Prototype 1"

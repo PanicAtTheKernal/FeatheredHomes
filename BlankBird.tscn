@@ -87,7 +87,7 @@ turbulence_initial_displacement_min = 3.0
 turbulence_initial_displacement_max = 3.0
 turbulence_influence_over_life = SubResource("CurveTexture_rcj6b")
 
-[node name="Bird" type="CharacterBody2D" node_paths=PackedStringArray("nav_agent", "animatated_spite", "behavioural_tree")]
+[node name="Bird" type="CharacterBody2D" node_paths=PackedStringArray("nav_agent", "animatated_spite", "love_particles", "behavioural_tree")]
 z_index = 2
 collision_layer = 0
 collision_mask = 4
@@ -96,6 +96,7 @@ wall_min_slide_angle = 0.0
 script = ExtResource("1_4h2vl")
 nav_agent = NodePath("NavAgent")
 animatated_spite = NodePath("AnimatedSprite2D")
+love_particles = NodePath("LoveParticles")
 behavioural_tree = NodePath("BirdBehaviouralTree")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -158,4 +159,5 @@ autostart = true
 [connection signal="navigation_finished" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_navigation_finished"]
 [connection signal="path_changed" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_path_changed"]
 [connection signal="timeout" from="CalorieTimer" to="." method="_on_calorie_timer_timeout"]
+[connection signal="timeout" from="NavigationTimer" to="BirdBehaviouralTree" method="_on_navigation_timer_timeout"]
 [connection signal="timeout" from="AgeTimer" to="." method="_on_age_timer_timeout"]

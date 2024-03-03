@@ -55,3 +55,9 @@ var preen: bool
 var takes_dust_baths: bool
 @export
 var does_sunbathing: bool
+@export
+var coparent: bool
+@export
+var male_single_parent: bool
+@export
+var female_single_parent: bool

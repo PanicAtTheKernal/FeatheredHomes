@@ -26,3 +26,6 @@ flight_max_distance = 48.0
 preen = false
 takes_dust_baths = false
 does_sunbathing = false
+coparent = false
+male_single_parent = false
+female_single_parent = false

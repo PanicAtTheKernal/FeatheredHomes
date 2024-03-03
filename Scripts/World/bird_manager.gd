@@ -4,8 +4,8 @@ class_name BirdManager
 
 const MAX_STAMINA = 10000
 const MIN_STAMINA = 500
-const MAX_GROUND_DISTANCE = 70
-const MIN_GROUND_DISTANCE = 50
+const MAX_GROUND_DISTANCE = 40
+const MIN_GROUND_DISTANCE = 20
 const MAX_FLIGHT_DISTANCE = 200
 const MIN_AGE = 20
 const MAX_AGE = 30
@@ -22,18 +22,35 @@ var default_info: BirdInfo
 @onready
 var player_camera: Camera2D = %PlayerCam
 @onready
-var tilemap:TileMapManager = %TileMap
+var tile_map:TileMapManager = %TileMap
 @onready
 var world_resources: WorldResources = $"../WorldResources"
+@onready
+var nest_manager: NestManager = %NestManager
+
+var partitions: Dictionary : 
+	get:
+		return partitions
 
 var logger_key = {
 	"type": Logger.LogType.RESOURCE,
 	"obj": "BirdManager"
 }
 
-#func _ready() -> void:
-	#for i in range(1):
-		#BirdResourceManager.add_bird("Dunnock")
+@onready
+var female: BirdInfo = ResourceLoader.load("res://Assets/Birds/NewBird/EURASIAN-BLUE-TIT-FEMALE-INFO.tres")
+@onready
+var male: BirdInfo = ResourceLoader.load("res://Assets/Birds/NewBird/EURASIAN-BLUE-TIT-MALE-INFO.tres") 
+
+func _ready() -> void:
+	_intialise_bird_resources()
+	for i in range(1):
+		create_bird(female)
+		create_bird(male)
+	
+func _intialise_bird_resources() -> void:
+	for key in tile_map.partition_keys:
+		partitions[key] = []
 
 func create_bird(bird_info: BirdInfo)->void:
 	var new_bird: Bird = blank_bird.instantiate()
@@ -52,14 +69,20 @@ func randomise_stats(bird_info:BirdInfo)->BirdInfo:
 
 func setup_bird(new_bird:Bird, bird_info: BirdInfo)->void:
 	new_bird.species = bird_info.species
-	new_bird.tile_map = tilemap
+	new_bird.tile_map = tile_map
 	new_bird.world_resources = world_resources
+	new_bird.nest_manager = nest_manager
+	new_bird.bird_manager = self
 	new_bird.info = bird_info
-	new_bird.id = get_child_count()+1
+	new_bird.id = get_child_count()
+	# TODO Testing setup for bird mating/parenting
 	new_bird.current_age = 4
 
 func add_bird(new_bird: Bird)->void:
 	new_bird.global_position = player_camera.get_screen_center_position()
+	# TODO REMOVE THIS 
+	if new_bird.info.gender == "female":
+		new_bird.global_position.x += 75
 	Logger.print_debug("New bird has been added ID: "+str(new_bird.id), logger_key)
 	add_child(new_bird)
 	get_tree().call_group("Dialog", "display", str("You found a ",new_bird.info.species.name.capitalize()))
@@ -68,5 +91,13 @@ func add_bird(new_bird: Bird)->void:
 func create_traits(new_bird: Bird)->void:
 	var trait_builder: TraitBuilder = TraitBuilder.new(new_bird)
 	trait_builder.build_root()
+	trait_builder.build_partner()
 	trait_builder.build_foraging()
 	trait_builder.build_exploration()
+
+func get_bird(id: int)->Bird:
+	return get_child(id) as Bird
+
+func add_bird_resource(parition_index: Vector2i, old_index: Vector2i, bird: Bird) -> void:
+	partitions[old_index].erase(bird)
+	partitions[parition_index].push_back(bird)

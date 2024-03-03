@@ -37,3 +37,6 @@ func request_nest(nest_type: String) -> WorldResource:
 		return nest
 	else:
 		return null
+
+func has_available_nest(nest_type: String) -> bool:
+	return nests[nest_type][FREE_NEST].size() > 0

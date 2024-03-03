@@ -41,6 +41,9 @@ func _build_species()->void:
 	bird.species.takes_dust_baths = simulation_info.get("takesDustBaths")
 	bird.species.does_sunbathing = simulation_info.get("doesSunbathing")
 	bird.species.is_predator = bird_supa_data["isPredator"]	
+	bird.species.coparent = simulation_info.get("coparents")
+	bird.species.male_single_parent = simulation_info.get("singleMaleParent")
+	bird.species.female_single_parent = simulation_info.get("singleFemaleParent")
 
 func _build_info()->void:
 	bird.description = bird_supa_data.get("birdDescription")

@@ -12465,6 +12465,7 @@ script = ExtResource("2_g4m67")
 resource_templates_groups = Array[Resource("res://Scripts/Resources/world_resource_group.gd")]([ExtResource("3_vd1to"), ExtResource("5_ekd7m"), ExtResource("6_rd573"), ExtResource("7_3bfdd"), ExtResource("8_ijkck")])
 
 [node name="NestManager" type="Node2D" parent="."]
+unique_name_in_owner = true
 script = ExtResource("8_bx5sd")
 
 [node name="PlayerCam" type="Camera2D" parent="." groups=["Dialog", "PlayerCamera"]]

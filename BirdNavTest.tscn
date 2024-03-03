@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="6_lv1sx"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/selector.gd" id="7_7tjyf"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Composite/sequence.gd" id="8_eo2tt"]
-[ext_resource type="Script" path="res://Scripts/Bird/Actions/find_nearest_food.gd" id="10_e2vsf"]
+[ext_resource type="Script" path="res://Scripts/Bird/Actions/find_nearest_resource.gd" id="10_e2vsf"]
 [ext_resource type="Script" path="res://Scripts/Bird/Navigation/move.gd" id="11_latg4"]
 [ext_resource type="Script" path="res://Scripts/Bird/Actions/consume_food.gd" id="16_uergt"]
 [ext_resource type="Script" path="res://Scripts/Behaviour Tree/Decorators/inverter.gd" id="17_h46m4"]

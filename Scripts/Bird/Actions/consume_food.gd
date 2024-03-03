@@ -18,8 +18,9 @@ func run()->void:
 	if resource != null and resource.current_state == "Full":
 		var food_value = resource.value
 		await bird.animatated_spite.play_eating_animation()
+		await bird.animatated_spite.animation_group_finished
 		# Wait until the eating animation is completed before moving on
-		if bird.animatated_spite.animation != "default":
+		if bird.animatated_spite.finished != "eating":
 			super.fail()
 			return
 		bird.add_caloires(resource.value)

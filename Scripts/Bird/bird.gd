@@ -226,6 +226,8 @@ func _on_animation_finished()->void:
 
 func _die() -> void:
 	info.status = "Dead"
+	animatated_spite.play_dead()
+	BirdResourceManager.remove_bird(info)
 	queue_free()
 
 func _on_button_pressed():

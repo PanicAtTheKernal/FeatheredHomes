@@ -138,7 +138,6 @@ trail_lifetime = 0.5
 navigation_layers = 3
 avoidance_enabled = true
 avoidance_mask = 3
-debug_enabled = true
 debug_use_custom = true
 
 [node name="CalorieTimer" type="Timer" parent="."]

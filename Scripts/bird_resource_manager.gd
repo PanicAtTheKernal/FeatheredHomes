@@ -120,11 +120,20 @@ func add_bird(bird_species: String, hide_dialog: bool=false)->void:
 	get_tree().call_group("LoadingSearchButton", "hide_loading")
 	new_bird_added.emit()
 
-func get_bird_list_items()->PackedStringArray:
-	var bird_list_items: PackedStringArray = []
+func get_bird_list_items()->Array[BirdLog.ListItem]:
+	var bird_list_items: Array[BirdLog.ListItem] = []
 	for bird in birds:
-		bird_list_items.push_back(str("-",bird.species.name))
+		var new_bird_entry = BirdLog.ListItem.new().set_name(str("-",bird.species.name))
+		#if bird.status == "Dead":
+			#new_bird_entry.set_icon(bird.species.animations.get_frame_texture("Dead", 0))
+		#else:
+		new_bird_entry.set_icon(bird.species.animations.get_frame_texture("default", 0))
+		bird_list_items.push_back(new_bird_entry)
 	return bird_list_items
+
+func remove_bird(bird:BirdInfo)->void:
+	birds.erase(bird)
+	new_bird_added.emit()
 
 func get_bird(index: int)->BirdInfo:
 	return birds[index]

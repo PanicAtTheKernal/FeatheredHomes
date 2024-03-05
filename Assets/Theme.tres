@@ -193,6 +193,7 @@ ItemList/constants/h_separation = 11
 ItemList/constants/line_separation = 8
 ItemList/constants/outline_size = 0
 ItemList/constants/v_separation = 8
+ItemList/font_sizes/font_size = 40
 ItemList/styles/focus = SubResource("StyleBoxEmpty_fxstj")
 ItemList/styles/hovered = SubResource("StyleBoxTexture_q064h")
 ItemList/styles/panel = SubResource("StyleBoxTexture_nup3b")

@@ -44,6 +44,10 @@ var male: BirdInfo = ResourceLoader.load("res://Assets/Birds/NewBird/EURASIAN-BL
 
 func _ready() -> void:
 	_intialise_bird_resources()
+	for i in range(20):
+		BirdResourceManager.add_bird("Dunnock")
+	for i in range(15):
+		BirdResourceManager.add_bird("Blue tit")
 	for i in range(1):
 		create_bird(female)
 		create_bird(male)

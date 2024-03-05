@@ -44,6 +44,8 @@ func play_take_off_animation():
 	await animation_finished
 	animation_group_finished.emit()
 
+func play_dead():
+	play("Dead")
 
 func play_landing_animation():
 	if animation != "Flight": return

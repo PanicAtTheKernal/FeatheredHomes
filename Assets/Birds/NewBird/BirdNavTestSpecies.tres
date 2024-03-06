@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="BirdSpecies" load_steps=2 format=3 uid="uid://x1v6f8nk08mm"]
 
-[ext_resource type="Script" path="res://Scripts/Bird/bird_species_info.gd" id="2_c702t"]
+[ext_resource type="Script" path="res://Scripts/Bird/BirdResources/bird_species_info.gd" id="2_c702t"]
 
 [resource]
 script = ExtResource("2_c702t")

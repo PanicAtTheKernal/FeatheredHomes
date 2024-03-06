@@ -69,8 +69,9 @@ func zoom_in()->void:
 
 func zoom_out()->void:
 	if zoom > MIN_ZOOM_VEC:
-		zoom -= Vector2(zoom_increment, zoom_increment) 
-
+		if tile_map.get_used_rect().size.x < (get_window().size.x*zoom.x):
+			zoom = zoom - Vector2(zoom_increment, zoom_increment)
+			
 # This is when the dialog box show up the player camera stops
 func display(message: String, heading: String = "Notice:")->void:
 	Logger.print_debug("Player camera movement is disabled", logger_key)

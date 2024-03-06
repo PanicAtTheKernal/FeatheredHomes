@@ -90,7 +90,7 @@ func add_bird(new_bird: Bird, hide_dialog:bool=false)->void:
 	Logger.print_debug("New bird has been added ID: "+str(new_bird.id), logger_key)
 	add_child(new_bird)
 	if not hide_dialog:
-		get_tree().call_group("Dialog", "display", str("You found a ",new_bird.info.species.name.capitalize()))
+		get_tree().call_group("Dialog", "display", str("You found a ",new_bird.info.species.name.capitalize()), "Congratulations!", true)
 		get_tree().call_group("LoadingButton", "hide_loading")
 
 func create_traits(new_bird: Bird)->void:

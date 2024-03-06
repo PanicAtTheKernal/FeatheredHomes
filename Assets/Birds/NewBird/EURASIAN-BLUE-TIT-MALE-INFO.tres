@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="BirdInfo" load_steps=25 format=3 uid="uid://dtlclesb3r1vf"]
 
-[ext_resource type="Script" path="res://Scripts/Bird/bird_general_info.gd" id="1_4k66h"]
-[ext_resource type="Script" path="res://Scripts/Bird/bird_species_info.gd" id="2_nxsd4"]
+[ext_resource type="Script" path="res://Scripts/Bird/BirdResources/bird_general_info.gd" id="1_4k66h"]
+[ext_resource type="Script" path="res://Scripts/Bird/BirdResources/bird_species_info.gd" id="2_nxsd4"]
 
 [sub_resource type="Image" id="Image_bwbe7"]
 data = {

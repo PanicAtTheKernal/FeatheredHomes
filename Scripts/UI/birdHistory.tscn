@@ -1,26 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://p8xqyx3jr7kg"]
+[gd_scene load_steps=5 format=3 uid="uid://p8xqyx3jr7kg"]
 
 [ext_resource type="Script" path="res://Scripts/UI/bird_history.gd" id="1_qlrfw"]
 [ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="2_8oloa"]
-[ext_resource type="Texture2D" uid="uid://b6vrw8xc5pxjb" path="res://Assets/theme-topbar.png" id="4_35nqc"]
 [ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="4_wtagk"]
 [ext_resource type="Texture2D" uid="uid://b4jdxcjuaxy1t" path="res://addons/supabase/icon.svg" id="5_4kg40"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vige3"]
-atlas = ExtResource("4_35nqc")
-region = Rect2(320, 0, 64, 64)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y7q2j"]
-content_margin_left = 12.0
-content_margin_top = 12.0
-content_margin_right = 12.0
-content_margin_bottom = 12.0
-texture = SubResource("AtlasTexture_vige3")
-texture_margin_left = 12.0
-texture_margin_top = 12.0
-texture_margin_right = 12.0
-texture_margin_bottom = 12.0
-region_rect = Rect2(0, 9, 64, 46)
 
 [node name="BirdHistory" type="Control" groups=["BirdHistory"]]
 layout_mode = 3
@@ -75,12 +58,6 @@ layout_mode = 2
 theme = ExtResource("4_wtagk")
 theme_override_font_sizes/font_size = 80
 text = "X"
-
-[node name="Seperator" type="Panel" parent="Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(2, 8)
-layout_mode = 2
-theme = ExtResource("4_wtagk")
-theme_override_styles/panel = SubResource("StyleBoxTexture_y7q2j")
 
 [node name="Margin" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2

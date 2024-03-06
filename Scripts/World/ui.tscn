@@ -1,9 +1,10 @@
-[gd_scene load_steps=23 format=3 uid="uid://cc7jo7b3cgbem"]
+[gd_scene load_steps=25 format=3 uid="uid://cc7jo7b3cgbem"]
 
 [ext_resource type="Texture2D" uid="uid://b7a6fk0fwanx8" path="res://Assets/crosshair.png" id="3_48hw7"]
 [ext_resource type="Texture2D" uid="uid://ccuajxhacsxoy" path="res://Assets/camera.png" id="3_r2s6u"]
 [ext_resource type="Texture2D" uid="uid://cuxgo2rcoednf" path="res://Assets/settings.png" id="4_fmrdd"]
 [ext_resource type="Texture2D" uid="uid://8tx3qcoltkgt" path="res://Assets/loading-screen.png" id="4_h3nv2"]
+[ext_resource type="Script" path="res://Scripts/World/settings_button.gd" id="5_3gpal"]
 [ext_resource type="Script" path="res://Scripts/UI/circle_progress.gd" id="5_afy4f"]
 [ext_resource type="Script" path="res://Scripts/UI/zoom_out_button.gd" id="5_igraa"]
 [ext_resource type="Script" path="res://Scripts/UI/zoom_in_button.gd" id="7_7goe6"]
@@ -19,6 +20,7 @@
 [ext_resource type="Script" path="res://Scripts/World/bird_history_button.gd" id="14_iyxci"]
 [ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="18_a5cmg"]
 [ext_resource type="Script" path="res://Scripts/Util/fps_ui.gd" id="19_85rgr"]
+[ext_resource type="PackedScene" uid="uid://wu1rxyfuwmdt" path="res://Scripts/UI/settings.tscn" id="20_evmqt"]
 [ext_resource type="PackedScene" uid="uid://0w8vhuuiopaw" path="res://Scripts/UI/manual_search.tscn" id="20_uxstc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_55m4q"]
@@ -69,7 +71,7 @@ theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 80
 icon = ExtResource("4_fmrdd")
 expand_icon = true
-script = ExtResource("14_iyxci")
+script = ExtResource("5_3gpal")
 
 [node name="ZoomInButton" type="Button" parent="."]
 custom_minimum_size = Vector2(128, 128)
@@ -245,6 +247,10 @@ visible = false
 offset_left = -0.00012207
 
 [node name="ManualSearch" parent="." groups=["Search"] instance=ExtResource("20_uxstc")]
+visible = false
+
+[node name="Settings" parent="." instance=ExtResource("20_evmqt")]
+unique_name_in_owner = true
 visible = false
 
 [node name="Debug" type="RichTextLabel" parent="."]

@@ -23,12 +23,23 @@ func _process(delta: float) -> void:
 		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		panel.custom_minimum_size.x = 0
 
-func display(message: String, heading: String = "Notice:", fit_content: bool = true)->void:
+func display(message: String, heading: String = "Notice:",grand_sound: bool = false, fit_content: bool = true)->void:
+	var sound_player: AudioStreamPlayer = get_tree().root.find_child("NotificationPlayer", true, false)
+	var offset
+	if grand_sound:
+		sound_player.stream = Startup.grand_notification
+		offset = 0
+	else:
+		sound_player.stream = Startup.standard_notification
+		offset = 0.85
+	sound_player.play(offset)
+	var time_delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
+	await get_tree().create_timer(time_delay).timeout
 	dialog.visible = true
 	dialog_text.text = message
 	dialog_text.fit_content = fit_content
 	heading_text.text = str("[b]",heading,"[/b]")
-
+	
 func increase_dialog()->void:
 	panel.custom_minimum_size.y = 800
 

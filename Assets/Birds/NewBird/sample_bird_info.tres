@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="BirdInfo" load_steps=3 format=3 uid="uid://hxbky8sm223l"]
 
-[ext_resource type="Script" path="res://Scripts/Bird/bird_general_info.gd" id="1_2eap1"]
+[ext_resource type="Script" path="res://Scripts/Bird/BirdResources/bird_general_info.gd" id="1_2eap1"]
 [ext_resource type="Resource" uid="uid://b25tuaxl75q5k" path="res://Assets/Birds/NewBird/eurasian-blue-tit.tres" id="2_6a5tt"]
 
 [resource]

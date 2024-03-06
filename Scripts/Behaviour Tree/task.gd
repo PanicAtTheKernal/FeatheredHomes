@@ -26,19 +26,16 @@ func _init(node_name: String) -> void:
 
 func running()->void:
 	status = RUNNING
-	Logger.print_debug("Status: RUNNING", logger_key)
 	if parent != null:
 		parent.child_running()
 
 func success()->void:
 	status = SUCCEEDED
-	Logger.print_debug("Status: SUCCEEDED", logger_key)
 	if parent != null:
 		parent.child_success()
 
 func fail()->void:
 	status = FAILED
-	Logger.print_debug("Status: FAILED", logger_key)	
 	if parent != null:
 		parent.child_fail()
 

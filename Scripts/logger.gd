@@ -17,12 +17,12 @@ var allowed_logs: Dictionary = {
 	LogType.RESOURCE: true,
 	LogType.CAMERA: true,
 	LogType.DATABASE: true,
-	LogType.NAVIGATION: false,
-	LogType.AI: false,
+	LogType.NAVIGATION: true,
+	LogType.AI: true,
 	LogType.GENERAL: true,
 	LogType.UI: true,
 	LogType.BUILDER: true,
-	LogType.ANIMATION: false
+	LogType.ANIMATION: true
 }
 
 var log_colours: Dictionary = {

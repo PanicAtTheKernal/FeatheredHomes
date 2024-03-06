@@ -30,6 +30,8 @@ var animatated_spite: BirdAnimation
 @export
 var love_particles: GPUParticles2D
 @export
+var sound_player: AudioStreamPlayer2D
+@export
 var behavioural_tree: BirdBehaviouralTree
 @export
 var tile_map: TileMapManager
@@ -79,16 +81,12 @@ func _ready():
 	partner = -1
 	mass = info.species.size * 0.1
 	animatated_spite.sprite_frames = species.animations
-	animatated_spite.animation_finished.connect(_on_animation_finished)
 	listener.connect(_on_call)
 	current_stamina = species.stamina
 	current_partition = tile_map.get_partition_index(tile_map.world_to_map_space(global_position))
 	bird_manager.add_bird_resource(current_partition,Vector2i(0,0), self)
-	$NavigationTimer.autostart = true
-	# Start the navaiagation timer at differnet times for each bird
-	#await get_tree().create_timer(randf_range(0.5, 3.0)).timeout
-	$NavigationTimer.start()
-
+	 #Start the navaiagation timer at differnet times for each bird
+	
 func _physics_process(_delta: float) -> void:
 	# Physics process starts before ready is called
 	#await get_tree().create_timer(0.5, true, true).timeout
@@ -219,11 +217,6 @@ func check_closest_adjacent_cells_bird(condition: Callable)->MinHeap.HeapItem:
 			return shortest_distance
 	return null
 
-func _on_animation_finished()->void:
-	# Enable the AI after the animation is finished playing
-	behavioural_tree.set_physics_process(true)
-		
-
 func _die() -> void:
 	info.status = "Dead"
 	animatated_spite.play_dead()
@@ -262,7 +255,6 @@ func _on_call(call_message: BirdCalls, messager_id: int, data: Variant) -> void:
 	match call_message:
 		BirdCalls.STOP:
 			Logger.print_debug("Stopping bird", logger_key)
-			behavioural_tree.reset()
 			animatated_spite.flip_h = global_position.direction_to(data).x < 0
 			stop_now = true
 		BirdCalls.LOVE:
@@ -273,3 +265,6 @@ func _on_call(call_message: BirdCalls, messager_id: int, data: Variant) -> void:
 			#animatated_spite.play("defualt")
 		BirdCalls.NEST_BUILT:
 			nest = null
+
+func _on_timer_timeout() -> void:
+	sound_player.play()

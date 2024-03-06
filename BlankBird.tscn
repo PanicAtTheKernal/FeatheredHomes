@@ -1,9 +1,10 @@
-[gd_scene load_steps=24 format=3 uid="uid://d0u2seapj875g"]
+[gd_scene load_steps=25 format=3 uid="uid://d0u2seapj875g"]
 
 [ext_resource type="Script" path="res://Scripts/Bird/bird.gd" id="1_4h2vl"]
 [ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="2_8dhfy"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_animation.gd" id="3_x8tx3"]
 [ext_resource type="Texture2D" uid="uid://bqktaeoiu24v8" path="res://Assets/heart.png" id="4_m0w2r"]
+[ext_resource type="AudioStream" uid="uid://c61yk4dy58sb4" path="res://Assets/Sounds/TEMP/BIRD.mp3" id="4_njcr1"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="4_vfg7a"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qhqa7"]
@@ -87,7 +88,7 @@ turbulence_initial_displacement_min = 3.0
 turbulence_initial_displacement_max = 3.0
 turbulence_influence_over_life = SubResource("CurveTexture_rcj6b")
 
-[node name="Bird" type="CharacterBody2D" node_paths=PackedStringArray("nav_agent", "animatated_spite", "love_particles", "behavioural_tree")]
+[node name="Bird" type="CharacterBody2D" node_paths=PackedStringArray("nav_agent", "animatated_spite", "love_particles", "sound_player")]
 z_index = 2
 collision_layer = 0
 collision_mask = 4
@@ -97,7 +98,7 @@ script = ExtResource("1_4h2vl")
 nav_agent = NodePath("NavAgent")
 animatated_spite = NodePath("AnimatedSprite2D")
 love_particles = NodePath("LoveParticles")
-behavioural_tree = NodePath("BirdBehaviouralTree")
+sound_player = NodePath("AudioStreamPlayer2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.15, 0.15)
@@ -119,6 +120,12 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_q0nww")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2ghpp")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_njcr1")
+max_distance = 100.0
+attenuation = 2.0
+bus = &"SFX"
 
 [node name="LoveParticles" type="GPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_cg52r")
@@ -143,14 +150,19 @@ debug_use_custom = true
 [node name="CalorieTimer" type="Timer" parent="."]
 autostart = true
 
-[node name="NavigationTimer" type="Timer" parent="."]
+[node name="TreeTimer" type="Timer" parent="."]
 autostart = true
 
-[node name="BirdBehaviouralTree" type="Node" parent="."]
+[node name="BirdBehaviouralTree" type="Node" parent="." node_paths=PackedStringArray("root_timer")]
 script = ExtResource("4_vfg7a")
+root_timer = NodePath("../TreeTimer")
 
 [node name="AgeTimer" type="Timer" parent="."]
 wait_time = 30.0
+autostart = true
+
+[node name="SoundTimer" type="Timer" parent="."]
+wait_time = 4.0
 autostart = true
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_animation_finished"]
@@ -158,5 +170,5 @@ autostart = true
 [connection signal="navigation_finished" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_navigation_finished"]
 [connection signal="path_changed" from="NavAgent" to="BirdBehaviouralTree" method="_on_ground_agent_path_changed"]
 [connection signal="timeout" from="CalorieTimer" to="." method="_on_calorie_timer_timeout"]
-[connection signal="timeout" from="NavigationTimer" to="BirdBehaviouralTree" method="_on_navigation_timer_timeout"]
 [connection signal="timeout" from="AgeTimer" to="." method="_on_age_timer_timeout"]
+[connection signal="timeout" from="SoundTimer" to="." method="_on_timer_timeout"]

@@ -21,7 +21,8 @@ func _print_welcome_screen()->void:
 		get_tree().call_group("Dialog", "display", welcome_text, "Welcome!", true, false)
 		get_tree().call_group("PlayerCamera", "turn_off_movement")
 		get_tree().call_group("Dialog", "increase_dialog")
-	
+	# ;)
+	get_tree().root.find_child("EasterEgg", true, false).show()
 
 func _setup_screen_orientation()->void:
 	var os_name = OS.get_name()

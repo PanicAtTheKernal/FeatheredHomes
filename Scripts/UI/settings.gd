@@ -4,6 +4,8 @@ extends Control
 var music_bus_id: int = AudioServer.get_bus_index("Music")
 @onready
 var sound_bus_id: int = AudioServer.get_bus_index("SFX")
+@onready
+var ambiance_bus_id: int = AudioServer.get_bus_index("Ambiance")
 @onready 
 var sound_value: Label = $Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Sound/SoundValue
 @onready
@@ -35,6 +37,7 @@ func _load_player_settings() -> void:
 	music_slider.value = music_volume
 	sound_value.text = str(round(sound_volume*100),"%")
 	AudioServer.set_bus_volume_db(sound_bus_id, linear_to_db(sound_volume))
+	AudioServer.set_bus_volume_db(ambiance_bus_id, linear_to_db(sound_volume))
 	sound_slider.value = sound_volume
 
 func _on_music_slider_value_changed(value: float) -> void:
@@ -46,5 +49,6 @@ func _on_music_slider_value_changed(value: float) -> void:
 func _on_sound_slider_value_changed(value: float) -> void:
 	sound_value.text = str(round(value*100),"%")
 	AudioServer.set_bus_volume_db(sound_bus_id, linear_to_db(value))
+	AudioServer.set_bus_volume_db(ambiance_bus_id, linear_to_db(value))
 	PlayerResourceManager.player_data.sound_volume = value*1.5
 	PlayerResourceManager.save_player_data()	

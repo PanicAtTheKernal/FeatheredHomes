@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://nxgu1imsippy"]
+
+[ext_resource type="Script" path="res://Scripts/Player/player_cam.gd" id="1_om4pp"]
+[ext_resource type="AudioStream" uid="uid://cv3s86an35spl" path="res://Assets/Sounds/Music/Feathered Homes SOUNDTRACK 3.2 MOCKUP.mp3" id="2_74q62"]
+
+[node name="PlayerCam" type="Camera2D" groups=["Dialog", "PlayerCamera"]]
+position = Vector2(363, 266)
+zoom = Vector2(6, 6)
+limit_left = 0
+limit_top = 0
+limit_smoothed = true
+script = ExtResource("1_om4pp")
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_74q62")
+autoplay = true
+bus = &"Music"
+
+[node name="NotificationPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+current = true

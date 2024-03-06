@@ -30,6 +30,10 @@ func run()->void:
 		Logger.print_debug("RUNNING: ("+child.logger_key.obj+")", logger_key)
 		child.run()
 
+func cancel()->void:
+	Logger.print_debug("CANCELING: ROOT", logger_key)
+	super.reset()
+
 func pause_execution(time: float)->void:
 	pause = true
 	root_timer.start(time)

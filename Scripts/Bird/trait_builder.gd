@@ -14,7 +14,9 @@ var is_bird_ready_to_mate: Callable
 var nest_location: Callable
 var bird_avaliable_check: Callable
 var resource_available_check: Callable
+var nest_still_exists: Callable
 var nest_built: Callable
+var is_egg_hatched: Callable
 
 var logger_key = {
 	"type": Logger.LogType.BUILDER,
@@ -38,7 +40,9 @@ func _init(new_bird: Bird) -> void:
 			return false
 		else:
 			return true
+	is_egg_hatched = func(): return bird.nest_manager.is_chick_alive(bird.nest.position)
 	nest_built = func(): return bird.nest_manager.is_nest_built(bird.nest.position)
+	nest_still_exists = func(): return bird.nest != null
 	id = str(new_bird.id)
 
 
@@ -65,10 +69,6 @@ func build_exploration()->void:
 
 func build_foraging()->void:
 	var foraging_sequence = Sequence.new(id+": ForagingSequence")
-	# var is_middle_of_love = Inverter.new(id+": IsNotMiddleOfLove")
-	# is_middle_of_love.add_child(Equal.new(bird, "middle_of_love", true, id+": IsMiddleOfLove"))
-	# foraging_sequence.add_child(is_middle_of_love)
-	# foraging_sequence.add_child(Equal.new(bird, "stop_now", false, id+": NotStopped"))
 	foraging_sequence.add_child(LessThan.new(bird, "current_stamina", (bird.species.max_stamina * bird.species.threshold),id+": CheckStamina"))
 	foraging_sequence.add_child(UpdateStatus.new(bird, "foraging", id+": StartingForagingBehaviour"))
 	foraging_sequence.add_child(FindNearestResource.new(bird, bird.species.diet, id+": FindNearestFood"))
@@ -82,7 +82,6 @@ func build_partner()->void:
 	# CheckIfOldEnough
 	partner_sequence.add_child(GreaterThan.new(bird, "current_age", bird.TEEN_THRESHOLD, id+": CheckIfOldEnough"))
 	partner_sequence.add_child(Equal.new(bird, "nest", null, id+": NoNest"))
-	#partner_sequence.add_child(Equal.new(bird, "partner", null, id+": HaveNest"))	
 	if bird.info.gender == "male":
 		# Male mating conditions
 		partner_sequence.add_child(Equal.new(bird, is_bird_ready_to_mate, true, id+": ReadyToMate"))
@@ -115,7 +114,7 @@ func build_nest_building()->void:
 	nest_building_sequence.add_child(_build_navigation(resource_available_check.bind("Stick")))
 	nest_building_sequence.add_child(Consume.new(bird, "Stick", id+": GatherStick"))
 	nest_building_sequence.add_child(FlyToTarget.new(bird, nest_location, id+": FlyToNest"))
-	nest_building_sequence.add_child(_build_navigation())
+	nest_building_sequence.add_child(_build_navigation(nest_still_exists))
 	nest_building_sequence.add_child(PlayAnimation.new(bird, id+": PlayPlaceAnimation"))
 	nest_building_sequence.add_child(BuildNest.new(bird, id+": BuildNest"))
 	root_selector.add_child(nest_building_sequence)
@@ -131,18 +130,24 @@ func build_parenting()->void:
 	has_nest.add_child(Equal.new(bird, "nest", null, id+": NoNest"))
 	parenting_sequence.add_child(has_nest)
 	parenting_sequence.add_child(Equal.new(bird, nest_built, true, id+": NestBuilt"))
+	if bird.info.gender == "male":
+		parenting_sequence.add_child(Equal.new(bird, is_egg_hatched, true, id+": EggHatched"))
 	# Actions
 	if bird.info.gender == "female":
 		parenting_sequence.add_child(UpdateStatus.new(bird, "nesting", id+": StartingNestingBehaviou"))
+		parenting_sequence.add_child(FlyToTarget.new(bird, nest_location, id+": FlyToNest"))
+		parenting_sequence.add_child(_build_navigation(nest_still_exists))
 		parenting_sequence.add_child(LayEgg.new(bird, id+": LayEgg"))
 		parenting_sequence.add_child(Nest.new(bird, id+": Nest"))
 	elif bird.info.gender == "male":
 		parenting_sequence.add_child(UpdateStatus.new(bird, "parenting", id+": StartingParentingBehaviou"))
-	# parenting_sequence.add_child(FindNearestResource.new(bird, bird.species.diet, id+": GetFood"))
-	# parenting_sequence.add_child(_build_navigation(resource_available_check.bind(bird.species.diet)))
-	# parenting_sequence.add_child(FlyToTarget.new(bird, nest_location, id+": FlyToNest"))
-	# parenting_sequence.add_child(_build_navigation())
-	# parenting_sequence.add_child(LeaveNest.new(bird, id+": LeaveNest"))
+	parenting_sequence.add_child(FindNearestResource.new(bird, bird.species.diet, id+": GetFood"))
+	parenting_sequence.add_child(_build_navigation(resource_available_check.bind(bird.species.diet)))
+	parenting_sequence.add_child(FlyToTarget.new(bird, nest_location, id+": FlyToNest"))
+	parenting_sequence.add_child(_build_navigation(nest_still_exists))
+	parenting_sequence.add_child(PlayAnimation.new(bird, id+": PlayPlaceAnimation"))
+	if bird.info.gender == "female":
+		parenting_sequence.add_child(LeaveNest.new(bird, id+": LeaveNest"))
 	root_selector.add_child(parenting_sequence)
 
 # Keeps the old behaviour where the bird will move towards the target regardless if it is there

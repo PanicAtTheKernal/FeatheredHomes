@@ -13,10 +13,15 @@ func run()->void:
 		super.fail()
 		return
 	if bird.info.gender == "female":
-		pass
-		#var nest_map_cords: Vector2i = bird.nest.position
-		#bird.nest_manager.leave_nest(nest_map_cords, bird.info)
-		#bird.nest = null
+		var nest_map_cords: Vector2i = bird.nest.position
+		bird.nest_manager.leave_nest(nest_map_cords, bird.info)
+		bird.nest = null
+		if bird.partner != -1:
+			var partner = bird.bird_manager.get_bird(bird.partner)
+			if partner != null:
+				partner.listener.emit(bird.BirdCalls.LEAVE, bird.id, nest_map_cords)
+				bird.partner = -1
+				bird.mate = false
 	super.success()
 	
 func start()->void:

@@ -62,7 +62,6 @@ func play_nesting_animation():
 	await _wait_for_animation()
 	play("Nest")
 	Logger.print_debug("Playing nest", logger_key)
-	await animation_to_play
 	animation_group_finished.emit()
 	finished = "nesting"
 	play("default")

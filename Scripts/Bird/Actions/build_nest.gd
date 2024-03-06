@@ -3,6 +3,7 @@ extends Task
 class_name BuildNest
 
 var bird: Bird
+var nest_finished = false
 
 func _init(parent_bird: Bird, node_name:String="BuildNest") -> void:
 	super(node_name)

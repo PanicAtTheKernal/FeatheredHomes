@@ -11,7 +11,8 @@ enum States {
 enum BirdCalls {
 	STOP,
 	LOVE,
-	NEST_BUILT
+	NEST_BUILT,
+	LEAVE
 }
 
 const SPEED = 60
@@ -266,6 +267,10 @@ func _on_call(call_message: BirdCalls, messager_id: int, data: Variant) -> void:
 			#animatated_spite.play("defualt")
 		BirdCalls.NEST_BUILT:
 			nest = null
+		BirdCalls.LEAVE:
+			nest = null
+			partner = -1
+			mate = false
 
 func _on_timer_timeout() -> void:
 	sound_player.play()

@@ -50,14 +50,21 @@ func build_nest(nest_map_cords: Vector2) -> void:
 	
 func is_nest_built(nest_map_cords: Vector2) -> bool:
 	var nest = world_resources.get_resource("Nests", nest_map_cords)
-	if nest != null and nest.current_state == "EmptyNest":
+	if nest != null and (nest.current_state != "Empty" and nest.current_state != "StartBuild"):
 		return true
 	else:
 		return false
 
 func is_egg_laid(nest_map_cords: Vector2) -> bool:
 	var nest = world_resources.get_resource("Nests", nest_map_cords)
-	if nest != null and nest.current_state == "EmptyNest":
+	if nest != null and nest.current_state == "Egg":
+		return true
+	else:
+		return false
+
+func is_chick_alive(nest_map_cords: Vector2) -> bool:
+	var nest = world_resources.get_resource("Nests", nest_map_cords)
+	if nest != null and (nest.current_state == "Hatch" or "Alive"):
 		return true
 	else:
 		return false

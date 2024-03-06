@@ -18,7 +18,6 @@ func _ready()->void:
 
 func _initalise_bird_data()->void:
 	Logger.print_debug("Setting up bird data", logger_key)
-	#birds = PlayerResourceManager.player_data.birds
 
 func _create_birds_folder()->void:
 	if !DirAccess.dir_exists_absolute(BIRD_DATA_PATH):

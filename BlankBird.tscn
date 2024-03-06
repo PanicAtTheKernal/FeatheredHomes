@@ -149,15 +149,15 @@ avoidance_mask = 3
 debug_enabled = true
 debug_use_custom = true
 
+[node name="BirdBehaviouralTree" type="Node" parent="." node_paths=PackedStringArray("root_timer")]
+script = ExtResource("4_vfg7a")
+root_timer = NodePath("../TreeTimer")
+
 [node name="CalorieTimer" type="Timer" parent="."]
 autostart = true
 
 [node name="TreeTimer" type="Timer" parent="."]
 autostart = true
-
-[node name="BirdBehaviouralTree" type="Node" parent="." node_paths=PackedStringArray("root_timer")]
-script = ExtResource("4_vfg7a")
-root_timer = NodePath("../TreeTimer")
 
 [node name="AgeTimer" type="Timer" parent="."]
 wait_time = 30.0

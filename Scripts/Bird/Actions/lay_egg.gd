@@ -14,16 +14,16 @@ func run()->void:
 		super.fail()
 		return
 	var nest_map_cords: Vector2i = bird.nest.position
-	if bird.nest_manager.is_nest_built(nest_map_cords) and not bird.nest_manager.is_egg_laid(nest_map_cords):
+	var nest_built = bird.nest_manager.is_nest_built(nest_map_cords) 
+	var egg_laid = bird.nest_manager.is_egg_laid(nest_map_cords)
+	if nest_built and not egg_laid:
 		bird.nest_manager.lay_egg(nest_map_cords)
 		Logger.print_success("Success: Egg was laid", logger_key)		
 		super.success()
+		return
 	else:
 		Logger.print_fail("Fail: Egg wasn't laid", logger_key)
 		super.fail()
-		return
-	bird.target_reached = false
-	super.success()
 	
 func start()->void:
 	super.start()

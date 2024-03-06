@@ -97,14 +97,14 @@ func _physics_process(_delta: float) -> void:
 		current_partition = new_partition
 
 
-func update_target(new_target: Vector2):
+func update_target(new_target: Vector2)->void:
 	target = new_target
 	if nav_agent.target_position == target:
 		return
 	nav_agent.target_position = target
-	Logger.print_debug(str("New target: ", new_target), logger_key)
 	nav_agent.get_next_path_position()
-	await nav_agent.path_changed
+	await get_tree().create_timer(0.1).timeout
+	#await nav_agent.path_changed
 	is_distance_calculated = false 
 
 ## Function to make sure the bird is at the target

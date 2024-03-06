@@ -88,7 +88,7 @@ turbulence_initial_displacement_min = 3.0
 turbulence_initial_displacement_max = 3.0
 turbulence_influence_over_life = SubResource("CurveTexture_rcj6b")
 
-[node name="Bird" type="CharacterBody2D" node_paths=PackedStringArray("nav_agent", "animatated_spite", "love_particles", "sound_player")]
+[node name="Bird" type="CharacterBody2D" node_paths=PackedStringArray("nav_agent", "animatated_spite", "love_particles", "sound_player", "behavioural_tree")]
 z_index = 2
 collision_layer = 0
 collision_mask = 4
@@ -99,6 +99,7 @@ nav_agent = NodePath("NavAgent")
 animatated_spite = NodePath("AnimatedSprite2D")
 love_particles = NodePath("LoveParticles")
 sound_player = NodePath("AudioStreamPlayer2D")
+behavioural_tree = NodePath("BirdBehaviouralTree")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.15, 0.15)
@@ -145,6 +146,7 @@ trail_lifetime = 0.5
 navigation_layers = 3
 avoidance_enabled = true
 avoidance_mask = 3
+debug_enabled = true
 debug_use_custom = true
 
 [node name="CalorieTimer" type="Timer" parent="."]

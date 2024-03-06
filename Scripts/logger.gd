@@ -55,5 +55,8 @@ func print_debug(message: Variant, key: Dictionary)->void:
 	log_file.store_string(str(get_log_colour,message,"\n"))
 	print_rich(get_log_colour,message)
 	
-
+func print_success(message: Variant, key: Dictionary)->void:
+	self.print_debug(str("[color=green]",message,"[/color]"),key)
 	
+func print_fail(message: Variant, key: Dictionary)->void:
+	self.print_debug(str("[color=red]",message,"[/color]"),key)

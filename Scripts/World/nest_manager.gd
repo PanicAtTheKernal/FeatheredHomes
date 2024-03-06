@@ -60,14 +60,12 @@ func lay_egg(nest_map_cords: Vector2) -> bool:
 		return true
 	return false
 
-func hatch_egg(nest_map_cords: Vector2) -> bool:
+func hatch_egg(nest_map_cords: Vector2) -> void:
 	var nest = world_resources.get_resource("Nests", nest_map_cords)
 	if nest != null and nest.current_state == "Egg":
 		world_resources.set_resource_state(nest, "Hatch")
 		await get_tree().create_timer(1).timeout
 		world_resources.set_resource_state(nest, "Alive")
-		return true
-	return false
 
 func leave_nest(nest_map_cords: Vector2, bird_info: BirdInfo) -> bool:
 	var nest = world_resources.get_resource("Nests", nest_map_cords)

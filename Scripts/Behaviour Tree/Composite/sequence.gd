@@ -7,7 +7,9 @@ class_name Sequence
 var current_child = 0
 
 func run()->void:
-	get_child(current_child).run()
+	var child = get_child(current_child)
+	Logger.print_debug("RUNNING ("+str(child.logger_key.obj)+")", logger_key)
+	child.run()
 	running()
 
 func child_success()->void:

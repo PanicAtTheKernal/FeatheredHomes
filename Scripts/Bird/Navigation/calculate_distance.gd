@@ -1,5 +1,9 @@
 extends Task
 
+## Not needed anymore
+## @deprecated
+##
+
 class_name CalculateDistance
 
 var bird: Bird

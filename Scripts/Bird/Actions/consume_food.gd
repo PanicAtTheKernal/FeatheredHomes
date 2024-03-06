@@ -19,16 +19,13 @@ func run()->void:
 	var resource = bird.world_resources.get_resource(target_resource, target_map_cords)
 	if resource != null and resource.current_state == "Full":
 		var value = resource.value
-		await bird.animatated_spite.play_eating_animation()
-		await bird.animatated_spite.animation_group_finished
-		# Wait until the eating animation is completed before moving on
-		if bird.animatated_spite.finished != "eating":
-			super.fail()
-			return
+		bird.animatated_spite.play_eating_animation()
+		bird.behavioural_tree.wait_for_signal(bird.animatated_spite.animation_group_finished) 
 		# Sticks have zero caloires ;)
 		bird.add_caloires(resource.value)
 		bird.world_resources.set_resource_state(resource, "Empty")
 	bird.target_reached = false
+	Logger.print_success("Success: Ate food", logger_key)
 	super.success()
 	
 func start()->void:

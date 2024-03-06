@@ -10,6 +10,7 @@ func _init(parent_bird: Bird, node_name:String="BuildNest") -> void:
 
 func run()->void:
 	if not bird.at_target():
+		Logger.print_fail("Fail: Bird not at nest", logger_key)
 		super.fail()
 		return
 	var nest_map_cords: Vector2i = bird.nest.position
@@ -18,17 +19,23 @@ func run()->void:
 			var partner: Bird = bird.bird_manager.get_bird(bird.partner)
 			if partner != null:
 				partner.listener.emit()
-			await bird.animatated_spite.play_nesting_animation()
-			await bird.animatated_spite.animation_group_finished
-			if bird.animatated_spite.finished != "nesting":
-				super.fail()
-				return
-			if await bird.nest_manager.hatch_egg(nest_map_cords):
-				super.success()
-			super.fail()
-		if bird.info.gender == "male":
+			bird.animatated_spite.play_nesting_animation()
+			bird.behavioural_tree.wait_for_signal(bird.animatated_spite.animation_group_finished) 
+			# if bird.animatated_spite.finished != "nesting":
+			# 	super.fail()
+			# 	return
+			bird.behavioural_tree.wait_for_function(bird.nest_manager.hatch_egg.bind(nest_map_cords))
+			Logger.print_success("Success: Egg hatched", logger_key)
 			super.success()
+			#Logger.print_fail("Fail: Female didn't hatch the egg", logger_key)
+			#super.fail()
+			return
+		if bird.info.gender == "male":
+			Logger.print_success("Success: Male helped with the nest", logger_key)
+			super.success()
+			return
 	else:
+		Logger.print_fail("Fail: Nest not built", logger_key)
 		super.fail()
 		return
 	# Make sure that there is still food at the target location

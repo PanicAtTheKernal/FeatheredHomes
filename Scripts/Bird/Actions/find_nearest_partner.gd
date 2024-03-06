@@ -11,6 +11,7 @@ func _init(parent_bird: Bird, node_name: String="FindNearestBird") -> void:
 
 func run()->void:
 	if bird.partner != -1:
+		Logger.print_success("Success: Already found a partner", logger_key)
 		super.success()
 		return
 	# bird.middle_of_love = true
@@ -21,6 +22,7 @@ func run()->void:
 	if shortest_distance == null:
 		shortest_distance = bird.check_closest_adjacent_cells_bird(partner_condition)
 		if shortest_distance == null:
+			Logger.print_fail("Fail: No bird found nearby", logger_key)
 			super.fail()
 			return
 	# Place the target beside the female bird but place based on the direction of the male bird 
@@ -30,8 +32,7 @@ func run()->void:
 	shortest_distance.value.listener.emit(bird.BirdCalls.STOP, bird.id, bird.global_position)
 	bird.partner = shortest_distance.value.id
 	
-	# TODO Temp logger stuff
-	logger_key.type = Logger.LogType.NAVIGATION
-	Logger.print_debug("[New Partner] "+str(location), logger_key)
-	await bird.update_target(location)
+	Logger.print_debug("[New Partner Loc] "+str(location), logger_key)
+	bird.behavioural_tree.wait_for_function(bird.update_target.bind(location))
+	Logger.print_success("Success: Heading towards new partner", logger_key)
 	super.success()

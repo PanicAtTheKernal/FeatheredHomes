@@ -39,3 +39,8 @@ func wait_for_signal(signal_to_wait: Signal)->void:
 	pause = true
 	await signal_to_wait
 	pause = false
+
+func wait_for_function(function_to_wait: Callable)->void:
+	pause = true
+	await function_to_wait.call()
+	pause = false

@@ -60,3 +60,6 @@ func print_success(message: Variant, key: Dictionary)->void:
 	
 func print_fail(message: Variant, key: Dictionary)->void:
 	self.print_debug(str("[color=red]",message,"[/color]"),key)
+
+func print_running(message: Variant, key: Dictionary)->void:
+	self.print_debug(str("[color=cyan]",message,"[/color]"),key)

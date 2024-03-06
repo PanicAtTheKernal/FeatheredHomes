@@ -11,6 +11,7 @@ func _init(parent_bird: Bird, node_name: String="PlayAnimation") -> void:
 func run() -> void:
 	bird.animatated_spite.play_eating_animation()
 	bird.behavioural_tree.wait_for_signal(bird.animatated_spite.animation_group_finished) 
+	Logger.print_success("Success: Playing eating animation", logger_key)
 	super.success()
 	
 func start() -> void:

@@ -41,30 +41,37 @@ func request_nest(nest_type: String) -> WorldResource:
 func has_available_nest(nest_type: String) -> bool:
 	return nests[nest_type][FREE_NEST].size() > 0
 
-func build_nest(nest_map_cords: Vector2) -> bool:
+func build_nest(nest_map_cords: Vector2) -> void:
 	var nest = world_resources.get_resource("Nests", nest_map_cords)
 	if nest != null and nest.current_state == "Empty":
 		world_resources.set_resource_state(nest, "StartBuild")
-		return false
-	if nest != null and nest.current_state == "StartBuild":
+	elif nest != null and nest.current_state == "StartBuild":
 		world_resources.set_resource_state(nest, "EmptyNest")
-		return true
+	
+func is_nest_built(nest_map_cords: Vector2) -> bool:
+	var nest = world_resources.get_resource("Nests", nest_map_cords)
 	if nest != null and nest.current_state == "EmptyNest":
 		return true
-	return false
-	
-func lay_egg(nest_map_cords: Vector2) -> bool:
+	else:
+		return false
+
+func is_egg_laid(nest_map_cords: Vector2) -> bool:
+	var nest = world_resources.get_resource("Nests", nest_map_cords)
+	if nest != null and nest.current_state == "EmptyNest":
+		return true
+	else:
+		return false
+
+func lay_egg(nest_map_cords: Vector2) -> void:
 	var nest = world_resources.get_resource("Nests", nest_map_cords)
 	if nest != null and nest.current_state == "EmptyNest":
 		world_resources.set_resource_state(nest, "Egg")
-		return true
-	return false
 
 func hatch_egg(nest_map_cords: Vector2) -> void:
 	var nest = world_resources.get_resource("Nests", nest_map_cords)
 	if nest != null and nest.current_state == "Egg":
 		world_resources.set_resource_state(nest, "Hatch")
-		await get_tree().create_timer(1).timeout
+		await get_tree().create_timer(3).timeout
 		world_resources.set_resource_state(nest, "Alive")
 
 func leave_nest(nest_map_cords: Vector2, bird_info: BirdInfo) -> bool:

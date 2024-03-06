@@ -79,6 +79,7 @@ func _ready():
 	stop_now = false
 	mate = true
 	partner = -1
+	behavioural_tree.bird_id = id
 	mass = info.species.size * 0.1
 	animatated_spite.sprite_frames = species.animations
 	listener.connect(_on_call)

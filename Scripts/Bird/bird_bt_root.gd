@@ -5,11 +5,12 @@ class_name BirdBehaviouralTree
 @export
 var root_timer: Timer
 
+var bird_id: int = 0
 var cycle: int = 0
 var pause: bool
 
 func _init() -> void:
-	super("Root")
+	super(str(bird_id)+": Root")
 
 func _ready():
 	super.start()
@@ -19,14 +20,14 @@ func _ready():
 func _physics_process(_delta):
 	if not pause:
 		cycle += 1
-		Logger.print_debug("cycle: " + str(cycle), logger_key)
+		Logger.print_debug("Cycle: " + str(cycle), logger_key)
 		run()
 
 
 func run()->void:
 	Logger.print_debug("RUNNING: ROOT", logger_key)
 	for child in get_children():
-		Logger.print_debug("RUNNING: "+child.logger_key.obj, logger_key)
+		Logger.print_debug("RUNNING: ("+child.logger_key.obj+")", logger_key)
 		child.run()
 
 func pause_execution(time: float)->void:

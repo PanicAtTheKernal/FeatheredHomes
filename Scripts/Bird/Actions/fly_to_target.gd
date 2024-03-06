@@ -14,7 +14,7 @@ func run() -> void:
 	var result = target.call()
 	if result != null:
 		bird.behavioural_tree.wait_for_function(bird.update_target.bind(result))
-	Logger.print_success("Success: Bird flew to "+str(result), logger_key)
+	Logger.print_success("Success: Bird is flying to "+str(result), logger_key)
 	super.success()
 
 func start() -> void:

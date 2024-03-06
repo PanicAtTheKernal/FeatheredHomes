@@ -64,7 +64,8 @@ func create_bird(bird_info: BirdInfo, hide_dialog:bool=false)->void:
 	
 func randomise_stats(bird_info:BirdInfo)->BirdInfo:
 	bird_info.species.max_stamina = randf_range(MIN_STAMINA, MAX_STAMINA)
-	bird_info.species.stamina = randf_range(MIN_STAMINA, MIN_STAMINA)
+	# TODO Temp
+	bird_info.species.stamina = randf_range(bird_info.species.max_stamina, bird_info.species.max_stamina)
 	bird_info.species.ground_max_distance = randf_range(MIN_GROUND_DISTANCE, MAX_GROUND_DISTANCE)
 	bird_info.species.flight_max_distance = randf_range(bird_info.species.ground_max_distance, MAX_FLIGHT_DISTANCE)
 	bird_info.species.max_age = randi_range(MIN_AGE, MAX_AGE)
@@ -97,6 +98,7 @@ func create_traits(new_bird: Bird)->void:
 	var trait_builder: TraitBuilder = TraitBuilder.new(new_bird)
 	trait_builder.build_root()
 	trait_builder.build_partner()
+	trait_builder.build_nest_building()
 	trait_builder.build_parenting()
 	# This is below partner and parenting because foraging and wander have very few condiditons to be active
 	trait_builder.build_foraging()

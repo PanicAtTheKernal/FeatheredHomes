@@ -18,10 +18,12 @@ func run()->void:
 	if shortest_distance == null:
 		shortest_distance = bird.check_closest_adjacent_cells(bird_map_cords, target_resource)
 		if shortest_distance == null:
+			Logger.print_fail(str("Fail: No ",target_resource," nearby "), logger_key)
 			super.fail()
 			return
 	# Convert the shortest distance back into world space
 	shortest_distance.value = bird.tile_map.map_to_world_space(shortest_distance.value)
 	Logger.print_debug("[New target] "+str(shortest_distance.value), logger_key)
-	await bird.update_target(shortest_distance.value)
+	bird.behavioural_tree.wait_for_function(bird.update_target.bind(shortest_distance.value))
+	Logger.print_success(str("Success: Found ",target_resource," nearby "), logger_key)
 	super.success()

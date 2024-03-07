@@ -16,8 +16,7 @@ func _ready()->void:
 	_create_player_data_folder()
 	_load_player_data()
 	# TODO Temp for testing while the player data structure is still WIP
-	_create_player_data()
-	#_initalise_player_data()
+	_initalise_player_data()
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -36,6 +35,8 @@ func _initalise_player_data()->void:
 func _create_player_data()->void:
 	Logger.print_debug("Initalising player data", logger_key)
 	player_data = PlayerData.new()
+	player_data.music_volume = 0.5
+	player_data.sound_volume = 0.5
 	ResourceSaver.save(player_data, PLAYER_DATA_PATH+PLAYER_DATA_FILE)
 
 func _load_player_data()->void:

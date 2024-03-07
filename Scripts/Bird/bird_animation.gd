@@ -44,6 +44,8 @@ func play_take_off_animation():
 	await animation_finished
 	animation_group_finished.emit()
 
+func play_dead():
+	play("Dead")
 
 func play_landing_animation():
 	if animation != "Flight": return
@@ -60,7 +62,6 @@ func play_nesting_animation():
 	await _wait_for_animation()
 	play("Nest")
 	Logger.print_debug("Playing nest", logger_key)
-	await animation_to_play
 	animation_group_finished.emit()
 	finished = "nesting"
 	play("default")

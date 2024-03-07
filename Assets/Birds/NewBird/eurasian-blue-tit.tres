@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="BirdSpecies" load_steps=3 format=3 uid="uid://b25tuaxl75q5k"]
 
-[ext_resource type="Script" path="res://Scripts/Bird/bird_species_info.gd" id="1_dfoau"]
+[ext_resource type="Script" path="res://Scripts/Bird/BirdResources/bird_species_info.gd" id="1_dfoau"]
 [ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="1_k8gkr"]
 
 [resource]

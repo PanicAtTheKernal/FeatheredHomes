@@ -1,0 +1,147 @@
+[gd_scene load_steps=4 format=3 uid="uid://wu1rxyfuwmdt"]
+
+[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="1_ho04v"]
+[ext_resource type="Script" path="res://Scripts/UI/settings.gd" id="1_n47ou"]
+[ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="2_ne3am"]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n47ou")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ho04v")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 80
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_ho04v")
+theme_type_variation = &"HeaderInfo"
+text = "Settings"
+vertical_alignment = 2
+autowrap_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme = ExtResource("2_ne3am")
+theme_override_font_sizes/font_size = 80
+text = "X"
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_ho04v")
+theme_type_variation = &"InfoBox"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderSubInfo"
+text = "Audio
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Music" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_ho04v")
+
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Music"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_ho04v")
+theme_type_variation = &"StatTextRich"
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Music:[/u][/color] "
+scroll_active = false
+autowrap_mode = 0
+
+[node name="MusicSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Music"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme = ExtResource("1_ho04v")
+theme_type_variation = &"StatText"
+max_value = 1.0
+step = 0.01
+
+[node name="MusicValue" type="Label" parent="Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Music"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_type_variation = &"StatText"
+text = "0%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Sound" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Sound"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"StatTextRich"
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Sound:[/u][/color]"
+fit_content = true
+scroll_active = false
+
+[node name="SoundSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Sound"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme = ExtResource("1_ho04v")
+theme_type_variation = &"StatText"
+max_value = 1.0
+step = 0.01
+
+[node name="SoundValue" type="Label" parent="Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Sound"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_type_variation = &"StatText"
+text = "0%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Music/MusicSlider" to="." method="_on_music_slider_value_changed"]
+[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Sound/SoundSlider" to="." method="_on_sound_slider_value_changed"]

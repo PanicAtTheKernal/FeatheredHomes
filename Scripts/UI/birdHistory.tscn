@@ -1,28 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://p8xqyx3jr7kg"]
+[gd_scene load_steps=5 format=3 uid="uid://p8xqyx3jr7kg"]
 
 [ext_resource type="Script" path="res://Scripts/UI/bird_history.gd" id="1_qlrfw"]
 [ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="2_8oloa"]
-[ext_resource type="Texture2D" uid="uid://b6vrw8xc5pxjb" path="res://Assets/theme-topbar.png" id="4_35nqc"]
 [ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="4_wtagk"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_3vxmj"]
-font_size = 80
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vige3"]
-atlas = ExtResource("4_35nqc")
-region = Rect2(320, 0, 64, 64)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y7q2j"]
-content_margin_left = 12.0
-content_margin_top = 12.0
-content_margin_right = 12.0
-content_margin_bottom = 12.0
-texture = SubResource("AtlasTexture_vige3")
-texture_margin_left = 12.0
-texture_margin_top = 12.0
-texture_margin_right = 12.0
-texture_margin_bottom = 12.0
-region_rect = Rect2(0, 9, 64, 46)
+[ext_resource type="Texture2D" uid="uid://b4jdxcjuaxy1t" path="res://addons/supabase/icon.svg" id="5_4kg40"]
 
 [node name="BirdHistory" type="Control" groups=["BirdHistory"]]
 layout_mode = 3
@@ -60,8 +41,8 @@ custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_8oloa")
+theme_type_variation = &"HeaderInfo"
 text = "Bird Log"
-label_settings = SubResource("LabelSettings_3vxmj")
 vertical_alignment = 2
 autowrap_mode = 2
 metadata/_edit_use_anchors_ = true
@@ -78,25 +59,30 @@ theme = ExtResource("4_wtagk")
 theme_override_font_sizes/font_size = 80
 text = "X"
 
-[node name="Seperator" type="Panel" parent="Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(2, 8)
+[node name="Margin" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("4_wtagk")
-theme_override_styles/panel = SubResource("StyleBoxTexture_y7q2j")
+size_flags_vertical = 3
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_right = 40
 
-[node name="ItemList" type="ItemList" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="ItemList" type="ItemList" parent="Panel/MarginContainer/VBoxContainer/Margin"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_8oloa")
-theme_override_font_sizes/font_size = 80
 allow_reselect = true
 allow_rmb_select = true
-max_text_lines = 2
 item_count = 31
+max_columns = 0
+same_column_width = true
+fixed_column_width = 250
+icon_mode = 0
+icon_scale = 3.0
 item_0/text = "Test"
+item_0/icon = ExtResource("5_4kg40")
 item_0/selectable = false
 item_1/text = "test"
+item_1/icon = ExtResource("5_4kg40")
 item_1/selectable = false
 item_2/text = "1"
 item_2/selectable = false
@@ -134,4 +120,4 @@ item_29/text = "9"
 item_30/text = ""
 
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]
-[connection signal="item_selected" from="Panel/MarginContainer/VBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]
+[connection signal="item_selected" from="Panel/MarginContainer/VBoxContainer/Margin/ItemList" to="." method="_on_item_list_item_selected"]

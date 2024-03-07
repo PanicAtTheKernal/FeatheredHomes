@@ -42,7 +42,7 @@ alternative_tile = 0
 [sub_resource type="Resource" id="Resource_8nx7t"]
 script = ExtResource("2_b4l5x")
 source_id = 0
-altas_cords = Vector2i(25, 8)
+altas_cords = Vector2i(25, 9)
 alternative_tile = 0
 
 [resource]

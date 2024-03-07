@@ -13,11 +13,7 @@ func _init(parent_bird: Bird, condition: Callable, node_name:String="Stop") -> v
 
 
 func run()->void:
-	var i = stop_condition.call()
 	if stop_condition.call():
-		#if bird.animatated_spite.animation == "Flight":
-			#await bird.animatated_spite.play_landing_animation()
-			#await bird.animatated_spite.animation_group_finished
 		super.success()
 	else:
 		super.fail()

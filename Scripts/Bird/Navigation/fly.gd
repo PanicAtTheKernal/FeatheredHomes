@@ -9,15 +9,14 @@ func _init(parent_bird: Bird, node_name:String="Fly") -> void:
 	bird = parent_bird
 
 func run()->void:
-	Logger.print_debug(bird.animatated_spite.animation, logger_key)
-	if bird.animatated_spite.animation == "Flight":
-		super.success()
-		return
-	if bird.animatated_spite.animation != "Take-off" and bird.animatated_spite.animation != "Flight":
-		bird.animatated_spite.stop()
+	if bird.animatated_spite.animation != "Flight":
 		bird.animatated_spite.play_flying_animation()
-	if bird.animatated_spite.animation == "Take-off":
+		bird.behavioural_tree.wait_for_signal(bird.animatated_spite.animation_group_finished) 
+		Logger.print_running("Running: Playing the flying animation", logger_key)
 		super.running()
+		return
+	Logger.print_success("Success: The bird is flying", logger_key)
+	super.success()
 		
 func start()->void:
 	super.start()

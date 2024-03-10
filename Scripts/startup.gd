@@ -6,12 +6,12 @@ const welcome_text: String = """Welcome to the Feathered Home Pre-Alpha. Please 
 var graph
 var standard_notification: AudioStreamMP3
 var grand_notification: AudioStreamMP3
+var camera_notification: AudioStreamWAV
 # Rotate the screen to potrait on moblie devices
 func _ready()->void:
 	_get_sounds()
 	_setup_screen_orientation()
 	_print_welcome_screen()
-	graph = DebugDraw2D.create_fps_graph("FPS")
 
 func _print_welcome_screen()->void:
 	var node: Array[Node] = get_tree().get_nodes_in_group("Dialog")
@@ -33,9 +33,4 @@ func _setup_screen_orientation()->void:
 func _get_sounds()->void:
 	standard_notification = preload("res://Assets/Sounds/SFX/Feathered Homes NOTIFICATION (A).mp3")
 	grand_notification = preload("res://Assets/Sounds/SFX/Feathered Homes NOTIFICATION (B).mp3")
-
-func load_mp3(path):
-	var file = FileAccess.open(path, FileAccess.READ)
-	var sound = AudioStreamMP3.new()
-	sound.data = file.get_buffer(file.get_length())
-	return sound
+	camera_notification = preload("res://Assets/Sounds/SFX/Camera Notification.wav")

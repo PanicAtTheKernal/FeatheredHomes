@@ -254,6 +254,7 @@ unique_name_in_owner = true
 visible = false
 
 [node name="Debug" type="RichTextLabel" parent="."]
+visible = false
 offset_left = 16.0
 offset_top = 16.0
 offset_right = 704.0

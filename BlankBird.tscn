@@ -145,7 +145,6 @@ trail_lifetime = 0.5
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
 navigation_layers = 3
 avoidance_mask = 3
-debug_enabled = true
 debug_use_custom = true
 
 [node name="BirdBehaviouralTree" type="Node" parent="." node_paths=PackedStringArray("root_timer")]

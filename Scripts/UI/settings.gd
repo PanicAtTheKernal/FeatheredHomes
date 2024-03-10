@@ -7,7 +7,7 @@ var sound_bus_id: int = AudioServer.get_bus_index("SFX")
 @onready
 var ambiance_bus_id: int = AudioServer.get_bus_index("Ambiance")
 @onready 
-var sound_value: Label = $Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Sound/SoundValue
+var sound_value: Label = %SoundValue
 @onready
 var music_value: Label = %MusicValue
 @onready 
@@ -57,3 +57,31 @@ func _on_sound_slider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_db(ambiance_bus_id, linear_to_db(value))
 	PlayerResourceManager.player_data.sound_volume = value*1.5
 	PlayerResourceManager.save_player_data()	
+
+
+func _on_check_button_toggled(toggled_on: bool) -> void:
+	var partition_debug = get_tree().root.find_child("PartitionDebug", true, false)
+	partition_debug.visible = toggled_on
+
+func _on_navigation_toggled(toggled_on: bool) -> void:
+	var birds = get_tree().root.find_child("Birds", true, false)
+	for bird in birds.get_children():
+		bird.nav_agent.debug_enabled = toggled_on
+
+func _on_fps_toggled(toggled_on: bool) -> void:
+	DebugDraw2D.debug_enabled = toggled_on
+	if toggled_on:
+		DebugDraw2D.create_fps_graph("FPS")
+	var debug_stats = get_tree().root.find_child("Debug", true, false)
+	debug_stats.visible = toggled_on
+
+func _on_wat_sound_sources_toggled(toggled_on: bool) -> void:
+	var tile_map = get_tree().root.find_child("TileMap", true, false)
+	for sound in tile_map.find_children("River?"):
+		sound.visible = toggled_on
+	for sound in tile_map.find_children("Water*"):
+		sound.visible = toggled_on
+
+
+func _on_win_sound_sources_toggled(toggled_on: bool) -> void:
+	get_tree().root.find_child("Wind", true, false).visible = toggled_on

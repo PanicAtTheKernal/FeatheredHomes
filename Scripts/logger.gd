@@ -91,9 +91,11 @@ func create_new_bird_log(id: int)->void:
 	bird_log_files[id] = FileAccess.open(file_name, FileAccess.WRITE)
 
 func print_debug(message: Variant, key: Dictionary)->void:
+	# Failsafe incase I forget to disable the logger
+	var os_name = OS.get_name()
 	var type = key.get("type")
 	var object_name = key.get("obj")
-	if not is_debug or not _is_log_allowed(type):
+	if not is_debug or not _is_log_allowed(type) or (os_name != "Linux" and os_name != "Windows"):
 		return
 	var get_log_colour: String = log_colours.get(type)
 	var replace_obj_name: String = "<>" if object_name != "" else " (<>)" 

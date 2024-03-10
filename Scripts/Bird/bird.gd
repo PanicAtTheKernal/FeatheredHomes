@@ -232,9 +232,8 @@ func _die() -> void:
 	queue_free()
 
 func _on_button_pressed():
-	queue_free()
-	#get_tree().call_group("BirdStat", "show")	
-	#get_tree().call_group("BirdStat", "load_new_bird", info)
+	get_tree().call_group("BirdStat", "show")	
+	get_tree().call_group("BirdStat", "load_new_bird", info)
 
 
 func _on_calorie_timer_timeout() -> void:

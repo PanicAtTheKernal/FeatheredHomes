@@ -1,5 +1,7 @@
 extends Camera2D
 
+class_name PlayerCam
+
 const MIN_ZOOM: float = 3.0
 const MAX_ZOOM: float = 12.0
 const TILE_SIZE: int = WorldResources.TILE_SIZE

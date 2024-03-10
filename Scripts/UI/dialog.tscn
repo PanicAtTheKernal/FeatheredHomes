@@ -86,6 +86,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_2eewb")
 theme_override_font_sizes/bold_font_size = 0
+bbcode_enabled = true
 text = "Place Holder asdfa sdf asd fas dfas dfas dfas dfa sdf asdf asd fasd fasd f asdf"
 fit_content = true
 

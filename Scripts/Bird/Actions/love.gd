@@ -16,12 +16,13 @@ func run()->void:
 		bird.behavioural_tree.wait_for_function(bird.animatated_spite.play_dance_animation)
 		bird.behavioural_tree.wait_for_signal(bird.animatated_spite.animation_group_finished) 
 	else:
-		bird.love_particles.emitting = true
 		var nest = bird.nest_manager.request_nest(bird.species.nest_type)
 		var nearby_bird = bird.bird_manager.get_bird(bird.partner)
-		if nearby_bird == null:
+		if nearby_bird == null or nearby_bird.partner != -1:
 			Logger.print_fail("Fail: The bird lost the potential partner", logger_key)
 			super.fail()
+			return
+		bird.love_particles.emitting = true
 		nearby_bird.listener.emit(bird.BirdCalls.LOVE, bird.id, nest)
 		if bird.species.coparent:
 			bird.nest = nest

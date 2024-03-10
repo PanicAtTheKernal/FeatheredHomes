@@ -62,7 +62,7 @@ func check_if_within_map_bounds(map_cords: Vector2i)->bool:
 		return false
 
 func check_if_within_partition_bounds(partition_index: Vector2i)->bool:
-	if (partition_index > partition_keys[0]) and (partition_index < partition_keys[-1]):
+	if (partition_index.x > partition_keys[0].x) and (partition_index.x < partition_keys[-1].x) and (partition_index.y > partition_keys[0].y) and (partition_index.y < partition_keys[-1].y):
 		return true
 	else:
 		return false 

@@ -234,11 +234,8 @@ texture_progress = SubResource("AtlasTexture_lwoqc")
 radial_initial_angle = 360.0
 script = ExtResource("5_afy4f")
 
-[node name="BirdHistory" parent="." instance=ExtResource("13_owhgl")]
+[node name="Settings" parent="." instance=ExtResource("20_evmqt")]
 unique_name_in_owner = true
-visible = false
-
-[node name="BirdStat" parent="." groups=["BirdStat"] instance=ExtResource("14_fq8rw")]
 visible = false
 
 [node name="Dialog" parent="." groups=["Dialog"] instance=ExtResource("8_q6ckc")]
@@ -246,14 +243,18 @@ unique_name_in_owner = true
 visible = false
 offset_left = -0.00012207
 
-[node name="ManualSearch" parent="." groups=["Search"] instance=ExtResource("20_uxstc")]
-visible = false
-
-[node name="Settings" parent="." instance=ExtResource("20_evmqt")]
+[node name="BirdHistory" parent="." instance=ExtResource("13_owhgl")]
 unique_name_in_owner = true
 visible = false
 
+[node name="BirdStat" parent="." groups=["BirdStat"] instance=ExtResource("14_fq8rw")]
+visible = false
+
+[node name="ManualSearch" parent="." groups=["Search"] instance=ExtResource("20_uxstc")]
+visible = false
+
 [node name="Debug" type="RichTextLabel" parent="."]
+visible = false
 offset_left = 16.0
 offset_top = 16.0
 offset_right = 704.0

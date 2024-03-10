@@ -9,10 +9,6 @@ func _init(parent_bird: Bird, node_name:String="Nest") -> void:
 	bird = parent_bird
 
 func run()->void:
-	if not bird.at_target():
-		Logger.print_fail("Fail: Bird not at nest", logger_key)
-		super.fail()
-		return
 	var nest_map_cords: Vector2i = bird.nest.position
 	if bird.nest_manager.is_egg_laid(nest_map_cords) and bird.animatated_spite.finished != "nesting":
 			bird.animatated_spite.play_nesting_animation()

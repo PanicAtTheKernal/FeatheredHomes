@@ -28,6 +28,10 @@ func _on_image_request_completed(image_buffers)->void:
 	var image_identification = ImageIdentification.new(image)
 	add_child(image_identification)
 	image_identification.send_request()
+	# Play camera shutter sound
+	var sound_player: AudioStreamPlayer = get_tree().root.find_child("NotificationPlayer", true, false)
+	sound_player.stream = Startup.camera_notification
+	sound_player.play()
 
 func _on_error(e)->void:
 	get_tree().call_group("Dialog", "display", e)

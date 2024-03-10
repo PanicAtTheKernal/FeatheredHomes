@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dxdl3qpgfc15y"]
+
+[ext_resource type="Script" path="res://sound_wind_effect.gd" id="1_2iwmf"]
+[ext_resource type="AudioStream" uid="uid://be1kgen2p07ao" path="res://Assets/Sounds/TEMP/WIND2.mp3" id="1_7md0d"]
+
+[node name="Wind" type="Node2D" node_paths=PackedStringArray("audio_player")]
+script = ExtResource("1_2iwmf")
+audio_player = NodePath("AudioSoundPlayer2D")
+
+[node name="AudioSoundPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("1_7md0d")
+autoplay = true
+max_distance = 300.0
+panning_strength = 0.0
+bus = &"Ambiance"

@@ -1,8 +1,9 @@
-[gd_resource type="Theme" load_steps=33 format=3 uid="uid://sct70k5b8gxf"]
+[gd_resource type="Theme" load_steps=38 format=3 uid="uid://sct70k5b8gxf"]
 
 [ext_resource type="Texture2D" uid="uid://bxdhaypp45ddw" path="res://Assets/big-button-sprite.png" id="1_4d5x0"]
 [ext_resource type="FontFile" uid="uid://c4xvfnmsiyw7t" path="res://Assets/Silkscreen/Silkscreen-Regular.ttf" id="1_b40rr"]
 [ext_resource type="Texture2D" uid="uid://by50r2nhjrjn" path="res://Assets/theme-ui.png" id="2_abom5"]
+[ext_resource type="Texture2D" uid="uid://cb7c5siue3vfo" path="res://Assets/checkbox.png" id="3_g2yd6"]
 [ext_resource type="FontFile" uid="uid://nxmuchvunil1" path="res://Assets/Silkscreen/Silkscreen-Bold.ttf" id="3_k1sf3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wa5uq"]
@@ -54,6 +55,22 @@ texture_margin_left = 12.0
 texture_margin_top = 12.0
 texture_margin_right = 12.0
 texture_margin_bottom = 12.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v77y1"]
+atlas = ExtResource("3_g2yd6")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m25sf"]
+atlas = ExtResource("3_g2yd6")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1tiex"]
+atlas = ExtResource("3_g2yd6")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_heaih"]
+atlas = ExtResource("3_g2yd6")
+region = Rect2(0, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ooebg"]
 atlas = ExtResource("1_4d5x0")
@@ -182,6 +199,10 @@ Button/styles/disabled = SubResource("StyleBoxTexture_dtxb1")
 Button/styles/hover = SubResource("StyleBoxTexture_s7ie2")
 Button/styles/normal = SubResource("StyleBoxTexture_ty6y7")
 Button/styles/pressed = SubResource("StyleBoxTexture_26cjl")
+CheckBox/icons/checked = SubResource("AtlasTexture_v77y1")
+CheckBox/icons/checked_disabled = SubResource("AtlasTexture_m25sf")
+CheckBox/icons/unchecked = SubResource("AtlasTexture_1tiex")
+CheckBox/icons/unchecked_disabled = SubResource("AtlasTexture_heaih")
 HeaderInfo/base_type = &"Label"
 HeaderInfo/font_sizes/font_size = 56
 HeaderSubInfo/base_type = &"Label"

@@ -13,7 +13,10 @@ config_version=5
 config/name="Fyp Prototype 1"
 run/main_scene="res://2d_world.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
-config/icon="res://icon.svg"
+boot_splash/bg_color=Color(1, 1, 1, 1)
+boot_splash/image="res://Assets/main-logo.png"
+boot_splash/fullsize=false
+config/icon="res://Assets/main-logo.png"
 
 [autoload]
 

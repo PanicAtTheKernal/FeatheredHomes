@@ -17,7 +17,9 @@ func run()->void:
 	# bird.middle_of_love = true
 	# A partner is invalid, if it's not the opposite gender, not too young, not the same species
 	var partner_condition = func(nearby_bird) : 
-		return (bird.info.gender == nearby_bird.info.gender) or (nearby_bird.current_age < 4) or (bird.species.name != nearby_bird.species.name) or (bird.partner == nearby_bird.id) or (nearby_bird.nest != null) or (not nearby_bird.mate) or (nearby_bird.partner != -1)
+			return (nearby_bird == null) or (bird.info.gender == nearby_bird.info.gender) or (nearby_bird.current_age < 4) or \
+			(bird.species.name != nearby_bird.species.name) or (bird.partner == nearby_bird.id) or (nearby_bird.nest != null) \
+			or (not nearby_bird.mate) or (nearby_bird.partner != -1) or (nearby_bird.current_tile == "Water")
 	var shortest_distance =  bird.find_nearest_bird(partner_condition, bird.current_partition)
 	if shortest_distance == null:
 		shortest_distance = bird.check_closest_adjacent_cells_bird(partner_condition)

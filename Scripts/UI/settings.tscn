@@ -58,22 +58,33 @@ theme = ExtResource("2_ne3am")
 theme_override_font_sizes/font_size = 80
 text = "X"
 
-[node name="CenterContainer" type="CenterContainer" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer"]
+[node name="d" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(664, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Audio" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 theme_type_variation = &"InfoBox"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderSubInfo"
 text = "Audio
@@ -81,7 +92,7 @@ text = "Audio
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -94,11 +105,11 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="Music" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Music" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 
-[node name="MusicSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/Music"]
+[node name="MusicSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer/Music"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 20)
 layout_mode = 2
@@ -109,7 +120,7 @@ theme_type_variation = &"StatText"
 max_value = 1.0
 step = 0.01
 
-[node name="MusicValue" type="Label" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/Music"]
+[node name="MusicValue" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer/Music"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
@@ -118,7 +129,7 @@ text = "0%"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -128,10 +139,10 @@ text = "[color=#9f9f9f][u]Sound:[/u][/color]"
 fit_content = true
 scroll_active = false
 
-[node name="Sound" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Sound" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer"]
 layout_mode = 2
 
-[node name="SoundSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/Sound"]
+[node name="SoundSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer/Sound"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 40)
 layout_mode = 2
@@ -142,7 +153,7 @@ theme_type_variation = &"StatText"
 max_value = 1.0
 step = 0.01
 
-[node name="SoundValue" type="Label" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/Sound"]
+[node name="SoundValue" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer/Sound"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
@@ -151,19 +162,47 @@ text = "0%"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_top = 31
 
-[node name="PanelContainer2" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer"]
+[node name="Credits" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"InfoBox"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Credits"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Credits/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderSubInfo"
+text = "Credits
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Credits/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_right = 100
+
+[node name="Button" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Credits/VBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "Show"
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 31
+
+[node name="Debug" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 theme_type_variation = &"InfoBox"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderSubInfo"
 text = "Debug
@@ -171,11 +210,11 @@ text = "Debug
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Partitions" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="Partitions" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 
-[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/Partitions"]
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Partitions"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -188,15 +227,15 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/Partitions"]
+[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Partitions"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 flat = true
 
-[node name="Navigation" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="Navigation" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
 layout_mode = 2
 
-[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/Navigation"]
+[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Navigation"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -206,15 +245,15 @@ text = "[color=#9f9f9f][u]Navigation:[/u][/color]"
 fit_content = true
 scroll_active = false
 
-[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/Navigation"]
+[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Navigation"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 flat = true
 
-[node name="FPSCharts" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="FPSCharts" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
 layout_mode = 2
 
-[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/FPSCharts"]
+[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/FPSCharts"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -224,15 +263,15 @@ text = "[color=#9f9f9f][u]FPS:[/u][/color]"
 fit_content = true
 scroll_active = false
 
-[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/FPSCharts"]
+[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/FPSCharts"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 flat = true
 
-[node name="WaterSound" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="WaterSound" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
 layout_mode = 2
 
-[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/WaterSound"]
+[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WaterSound"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -242,15 +281,15 @@ text = "[color=#9f9f9f][u]Water Sound Sources:[/u][/color]"
 fit_content = true
 scroll_active = false
 
-[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/WaterSound"]
+[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WaterSound"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 flat = true
 
-[node name="WindSound" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="WindSound" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
 layout_mode = 2
 
-[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/WindSound"]
+[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WindSound"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -260,16 +299,21 @@ text = "[color=#9f9f9f][u]Wind Sound Sources:[/u][/color]"
 fit_content = true
 scroll_active = false
 
-[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/WindSound"]
+[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WindSound"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 flat = true
 
+[node name="d2" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]
-[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/Music/MusicSlider" to="." method="_on_music_slider_value_changed"]
-[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/Sound/SoundSlider" to="." method="_on_sound_slider_value_changed"]
-[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/Partitions/CheckButton" to="." method="_on_check_button_toggled"]
-[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/Navigation/CheckButton" to="." method="_on_navigation_toggled"]
-[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/FPSCharts/CheckButton" to="." method="_on_fps_toggled"]
-[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/WaterSound/CheckButton" to="." method="_on_wat_sound_sources_toggled"]
-[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/WindSound/CheckButton" to="." method="_on_win_sound_sources_toggled"]
+[connection signal="draw" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer" to="." method="_on_scroll_container_draw"]
+[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer/Music/MusicSlider" to="." method="_on_music_slider_value_changed"]
+[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer/Sound/SoundSlider" to="." method="_on_sound_slider_value_changed"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Partitions/CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Navigation/CheckButton" to="." method="_on_navigation_toggled"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/FPSCharts/CheckButton" to="." method="_on_fps_toggled"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WaterSound/CheckButton" to="." method="_on_wat_sound_sources_toggled"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WindSound/CheckButton" to="." method="_on_win_sound_sources_toggled"]

@@ -95,8 +95,8 @@ func spawn_bird(new_bird: Bird, location: Vector2)->void:
 func add_bird(new_bird: Bird)->void:
 	spawn_bird(new_bird, player_camera.get_screen_center_position())
 	# TODO REMOVE THIS 
-	if new_bird.info.gender == "female":
-		new_bird.global_position.x += 75
+	#if new_bird.info.gender == "female":
+		#new_bird.global_position.x += 75
 	get_tree().call_group("Dialog", "display", str("You found a ",new_bird.info.species.name.capitalize()), "Congratulations!", true)
 	get_tree().call_group("LoadingButton", "hide_loading")
 

@@ -93,7 +93,12 @@ func _on_scroll_container_draw() -> void:
 	var container: ScrollContainer = %ScrollContainer as ScrollContainer
 	var margin: MarginContainer = $Panel/MarginContainer as MarginContainer
 	var start_pos = container.global_position.y
-	var new_minium = DisplayServer.window_get_size_with_decorations().y - start_pos - margin.get_theme_constant("margin_bottom")
+	# The 40 is there because all of these contianers have hidden margins which cause the header to be pushed up
+	var new_minium = DisplayServer.window_get_size_with_decorations().y - start_pos - margin.get_theme_constant("margin_bottom") - 40
 	if container.custom_minimum_size.y != new_minium:
 		container.custom_minimum_size.y = new_minium
 
+
+
+func _on_button_pressed() -> void:
+	get_tree().call_group("Dialog", "display", "[color=#9f9f9f][u]Created By:[/u][/color]\nDaniel Kondabarov\n\n[color=#9f9f9f][u]Music\\Sound By:[/u][/color]\nIan Cecil Scott", "Credits: ", true)

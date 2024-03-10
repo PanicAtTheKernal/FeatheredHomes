@@ -5,11 +5,12 @@ class_name BirdBehaviouralTree
 @export
 var root_timer: Timer
 
-var bird_id: int = 0
+var bird_id: String = "0"
 var cycle: int = 0
 var pause: bool
 
 func _init() -> void:
+	# Actually id is set in trait builder
 	super(str(bird_id)+": Root")
 
 func _ready():

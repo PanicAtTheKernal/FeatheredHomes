@@ -11,6 +11,8 @@ var nests: Dictionary
 var tile_map: TileMapManager = %TileMap
 @onready
 var world_resources: WorldResources = %WorldResources
+@onready
+var bird_manager: BirdManager = %Birds
 
 func _ready() -> void:
 	_initialise_nests()
@@ -88,8 +90,9 @@ func leave_nest(nest_map_cords: Vector2, bird_info: BirdInfo) -> bool:
 		var type = nest.template.name
 		nests[type][TAKEN_NEST].erase(nest)
 		nests[type][FREE_NEST].push_back(nest)
-		BirdResourceManager.add_bird(bird_info.species.name)
-		#get_tree().call_group("BirdManager", "create_bird", bird_info)
-		#BirdResourceManager.add_bird_to_list(bird_info)
+		var child_bird_info = BirdResourceManager.load_bird(bird_info.species.name)
+		var child_bird = bird_manager.create_bird(child_bird_info)
+		bird_manager.spawn_bird(child_bird, tile_map.map_to_world_space(nest_map_cords))
+		BirdResourceManager.add_bird_to_list(child_bird_info)
 		return true
 	return false

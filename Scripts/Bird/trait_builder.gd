@@ -47,6 +47,7 @@ func _init(new_bird: Bird) -> void:
 
 
 func build_root()->void:
+	root.logger_key.obj = id+": Root"
 	root_selector = Selector.new(id+": RootSelector")
 	root.add_child(root_selector)
 
@@ -108,6 +109,10 @@ func build_nest_building()->void:
 	has_nest.add_child(Equal.new(bird, "nest", null, id+": NoNest"))
 	nest_building_sequence.add_child(has_nest)
 	nest_building_sequence.add_child(Equal.new(bird, nest_built, false, id+": NestBuilt"))
+	if bird.info.gender == "male":
+		var has_partner = Inverter.new(id+": HasPartner")
+		has_partner.add_child(Equal.new(bird, "partner", -1, id+": HasNoPartner"))
+		nest_building_sequence.add_child(has_partner)
 	# Actions
 	nest_building_sequence.add_child(UpdateStatus.new(bird, "Building nest", id+": StartingMatingBehaviour"))
 	nest_building_sequence.add_child(FindNearestResource.new(bird, "Stick", id+": FindNearestStick"))
@@ -131,7 +136,12 @@ func build_parenting()->void:
 	parenting_sequence.add_child(has_nest)
 	parenting_sequence.add_child(Equal.new(bird, nest_built, true, id+": NestBuilt"))
 	if bird.info.gender == "male":
-		parenting_sequence.add_child(Equal.new(bird, is_egg_hatched, true, id+": EggHatched"))
+		var abandon_nest_selector = Selector.new(id+": AbandonNest")
+		abandon_nest_selector.add_child(Equal.new(bird, is_egg_hatched, true, id+": EggHatched"))
+		var has_partner = Inverter.new(id+": HasPartner")
+		has_partner.add_child(Equal.new(bird, "partner", -1, id+": HasNoPartner"))
+		abandon_nest_selector.add_child(has_partner)
+		parenting_sequence.add_child(abandon_nest_selector)
 	# Actions
 	if bird.info.gender == "female":
 		parenting_sequence.add_child(UpdateStatus.new(bird, "nesting", id+": StartingNestingBehaviou"))
@@ -154,6 +164,7 @@ func build_parenting()->void:
 func _build_navigation(target_check: Callable = func(): return true)->Sequence:
 	var navigation_sequence = Sequence.new(id+": NavigationSequence")
 	# MovementSelector
+	#navigation_sequence.add_child(CheckGroundType.new(bird, id+": CheckGroundType"))	
 	var movement_selector = Selector.new(id+": MovementSelector")
 	movement_selector.add_child(_build_ground_sequence())
 	if bird.species.can_fly:
@@ -178,7 +189,6 @@ func _build_ground_sequence()->Sequence:
 	var ground_sequence = Sequence.new(id+": GroundSequence")
 	var distance_lamdba = func(): return bird.global_position.distance_to(bird.target)
 	ground_sequence.add_child(LessThan.new(bird,distance_lamdba,bird.species.ground_max_distance, id+": CheckIfMovingOnGround"))
-	ground_sequence.add_child(CheckGroundType.new(bird, id+": CheckGroundType"))
 	ground_sequence.add_child(_build_walking_sequence())
 	if bird.species.can_swim:
 		ground_sequence.add_child(_build_swimming_sequence())		
@@ -222,22 +232,3 @@ func _build_check_if_walking()->Sequence:
 	not_at_targert_inverter.add_child(Equal.new(bird, "target_reached", true, id+": AtTarget"))
 	check_if_walking_sequence.add_child(not_at_targert_inverter)
 	return check_if_walking_sequence
-
-# func _build_nest_sequence()->UntilSuccess:
-# 	var nest_success = UntilSuccess.new(id+": UntilNestIsBuilt")
-# 	var stick_sequence = Sequence.new(id+": StickGatheringSequence")
-# 	var stick_selector = Selector.new(id+": StickGatheringSelector")
-# 	var nest_sequence = Sequence.new(id+": NestBuildingSequence")
-# 	nest_sequence.add_child(UpdateStatus.new(bird, "parenting", id+": StartingParentingBehaviour"))
-# 	stick_sequence.add_child(FindNearestResource.new(bird, "Stick", id+": FindNearestStick"))
-# 	stick_sequence.add_child(_build_navigation(resource_available_check.bind("Stick")))
-# 	stick_selector.add_child(stick_sequence)
-# 	stick_selector.add_child(_build_wander())
-# 	nest_sequence.add_child(stick_selector)
-# 	nest_sequence.add_child(Consume.new(bird, "Stick", id+": GatherStick"))
-# 	nest_sequence.add_child(FlyToTarget.new(bird, nest_location, id+": FlyToNest"))
-# 	nest_sequence.add_child(_build_navigation())
-# 	nest_sequence.add_child(PlayAnimation.new(bird, id+": PlayPlaceAnimation"))
-# 	nest_sequence.add_child(BuildNest.new(bird, id+": BuildNest"))
-# 	nest_success.add_child(nest_sequence)
-# 	return nest_success

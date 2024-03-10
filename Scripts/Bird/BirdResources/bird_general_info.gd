@@ -57,5 +57,12 @@ func _create_id()->int:
 	var time = str(date_dict.get("hour"), date_dict.get("minute"))
 	return int((date+time))
 	
+func create_unique_id()->int:
+	var date_dict = Time.get_datetime_dict_from_system()
+	var date = str(date_dict.get("month"),date_dict.get("day"),date_dict.get("year"))
+	var time = str(date_dict.get("hour"), date_dict.get("minute"))
+	return int(Time.get_ticks_usec())
+	
+
 func set_bird_species(species: BirdSpecies):
 	self.species = species

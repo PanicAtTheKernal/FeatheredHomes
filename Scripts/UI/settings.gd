@@ -29,6 +29,11 @@ func _process(delta: float) -> void:
 func _on_close_button_pressed() -> void:
 	hide()
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch or InputEventScreenDrag:
+		music_slider.focus_mode = Control.FOCUS_ALL
+		sound_slider.focus_mode = Control.FOCUS_ALL
+
 func _load_player_settings() -> void:
 	var music_volume = PlayerResourceManager.player_data.music_volume
 	var sound_volume = PlayerResourceManager.player_data.sound_volume*1.5

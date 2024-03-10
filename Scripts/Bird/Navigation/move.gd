@@ -4,16 +4,22 @@ class_name Move
 
 var bird: Bird
 var extra_check: Callable
+var distance_moved: float
+var last_location: Vector2
 
 func _init(parent_bird: Bird, target_available_check: Callable, node_name:String="Move") -> void:
 	super(node_name)
 	bird = parent_bird
 	extra_check = target_available_check
+	last_location = bird.global_position
 
 func run()->void:
 	bird.next_path_position = bird.nav_agent.get_next_path_position()
-	bird.direction = bird.to_local(bird.next_path_position).normalized()
-	bird.animatated_spite.flip_h = bird.direction.x < 0
+	bird.direction = bird.global_position.direction_to(bird.next_path_position)
+	bird.animatated_spite.flip_h = bird.direction.normalized().x < 0
+	Logger.print_debug(str("Bird has moved ", last_location.distance_to(bird.global_position)), logger_key)
+	last_location = bird.global_position
+	Logger.print_debug(str("Bird direction is ", bird.direction.x), logger_key)
 	bird.velocity = bird.direction * bird.SPEED_INSANE * get_physics_process_delta_time()
 	var bird_at_target = bird.at_target()
 	var target_avaliable = extra_check.call()

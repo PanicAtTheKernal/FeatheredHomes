@@ -8,6 +8,7 @@ var logger_key = {
 	"type": Logger.LogType.RESOURCE,
 	"obj": "BirdResourceManager"
 }
+var bird_manager: BirdManager
 
 signal new_bird_added
 
@@ -15,6 +16,10 @@ func _ready()->void:
 	_initalise_bird_data()
 	_create_birds_folder()
 	_remove_outdated_bird_data()
+	_get_bird_manager()
+
+func _get_bird_manager()->void:
+	bird_manager = get_tree().root.find_child("Birds", true, false)
 
 func _initalise_bird_data()->void:
 	Logger.print_debug("Setting up bird data", logger_key)
@@ -81,14 +86,18 @@ func save_bird(bird_data: BirdInfo)->void:
 	if error != OK:
 		Logger.print_debug(str("Error saving player data",error), logger_key)
 
-func add_bird(bird_species: String, hide_dialog: bool=false)->void:
+func load_bird(bird_species: String)->BirdInfo:
 	var bird_files: Array[String] = _find_bird_files(bird_species)
 	var bird: BirdInfo
 	if not bird_files.is_empty():
 		var bird_file = bird_files.pick_random()
 		bird = ResourceLoader.load(BIRD_DATA_PATH+bird_file)
 		Logger.print_debug("Loaded local copy", logger_key)
-	else:
+	return bird
+
+func add_bird(bird_species: String, hide_dialog: bool=false)->void:
+	var bird: BirdInfo = load_bird(bird_species)
+	if bird == null:
 		var bird_request: FetchBirdRequest = FetchBirdRequest.new()#
 		add_child(bird_request)
 		var bird_data: Dictionary = await bird_request.fetch_bird_species(bird_species, Database.get_fetch_species_endpoint())
@@ -112,7 +121,9 @@ func add_bird(bird_species: String, hide_dialog: bool=false)->void:
 			bird_infos.push_back(male_bird)
 			bird_infos.push_back(female_bird)
 			bird = bird_infos.pick_random()
-	get_tree().call_group("BirdManager", "create_bird", bird, hide_dialog)
+	#get_tree().call_group("BirdManager", "create_bird", bird, hide_dialog)
+	var new_bird = bird_manager.create_bird(bird)
+	bird_manager.add_bird(new_bird)
 	birds.push_back(bird)
 	Logger.print_debug("Added new bird", logger_key)
 	get_tree().call_group("LoadingButton", "hide_loading")
@@ -139,3 +150,4 @@ func get_bird(index: int)->BirdInfo:
 
 func add_bird_to_list(bird: BirdInfo)->void:
 	birds.push_back(bird)
+	new_bird_added.emit()

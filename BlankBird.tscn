@@ -4,7 +4,7 @@
 [ext_resource type="SpriteFrames" uid="uid://bn5ofc4v5g8hy" path="res://Assets/Birds/NewBird/animation.tres" id="2_8dhfy"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_animation.gd" id="3_x8tx3"]
 [ext_resource type="Texture2D" uid="uid://bqktaeoiu24v8" path="res://Assets/heart.png" id="4_m0w2r"]
-[ext_resource type="AudioStream" uid="uid://c61yk4dy58sb4" path="res://Assets/Sounds/TEMP/BIRD.mp3" id="4_njcr1"]
+[ext_resource type="AudioStream" uid="uid://b6tlxm8nb0vkc" path="res://Assets/Sounds/SFX/Bird_SFX/CHIRP.wav" id="4_ms73x"]
 [ext_resource type="Script" path="res://Scripts/Bird/bird_bt_root.gd" id="4_vfg7a"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qhqa7"]
@@ -123,7 +123,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_q0nww")
 shape = SubResource("CircleShape2D_2ghpp")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("4_njcr1")
+stream = ExtResource("4_ms73x")
 max_distance = 100.0
 attenuation = 2.0
 bus = &"SFX"
@@ -144,7 +144,6 @@ trail_lifetime = 0.5
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
 navigation_layers = 3
-avoidance_enabled = true
 avoidance_mask = 3
 debug_enabled = true
 debug_use_custom = true

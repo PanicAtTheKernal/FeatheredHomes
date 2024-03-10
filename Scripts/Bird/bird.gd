@@ -77,10 +77,9 @@ signal listener(call: String, messager_id: int, data: Variant)
 
 func _ready():
 	_increament_age()
+	_check_ground_tile()
 	stop_now = false
-	mate = true
 	partner = -1
-	behavioural_tree.bird_id = id
 	mass = info.species.size * 0.1
 	animatated_spite.sprite_frames = species.animations
 	listener.connect(_on_call)
@@ -92,12 +91,12 @@ func _ready():
 func _physics_process(_delta: float) -> void:
 	# Physics process starts before ready is called
 	#await get_tree().create_timer(0.5, true, true).timeout
+	_check_ground_tile()
 	var new_partition = tile_map.get_partition_index(tile_map.world_to_map_space(global_position))
 	if current_partition != new_partition and tile_map.partition_keys.has(new_partition):
 		Logger.print_debug("Entered new partition: " + str(new_partition), logger_key)
 		bird_manager.add_bird_resource(new_partition, current_partition, self)
 		current_partition = new_partition
-
 
 func update_target(new_target: Vector2)->void:
 	target = new_target
@@ -163,7 +162,7 @@ func check_closest_adjacent_cells(map_cords: Vector2, group: String)->MinHeap.He
 	for neighbour in neighbours:
 		if not tile_map.check_if_within_partition_bounds(neighbour):
 			continue
-		if world_resources.get_resource_partition_group(neighbour, species.diet).is_empty(): 
+		if world_resources.get_resource_partition_group(neighbour, group).is_empty(): 
 			continue
 		var bird_map_cords: Vector2 = tile_map.world_to_map_space(global_position)	
 		var distance = bird_map_cords.distance_to(tile_map.get_partition_midpoint(neighbour))
@@ -176,7 +175,7 @@ func check_closest_adjacent_cells(map_cords: Vector2, group: String)->MinHeap.He
 	return null
 
 func find_nearest_bird(condition: Callable, partition: Vector2i)->MinHeap.HeapItem:
-	var bird_map_cords: Vector2 = tile_map.world_to_map_space(global_position)	
+	var bird_map_cords: Vector2 = tile_map.world_to_map_space(global_position)
 	var birds = bird_manager.partitions[partition]
 	var distances: MinHeap = MinHeap.new()
 	for nearby_bird in birds:
@@ -223,12 +222,19 @@ func _die() -> void:
 	info.status = "Dead"
 	animatated_spite.play_dead()
 	hide()
+	if info.gender == "female" and partner != -1:
+		if nest != null and not nest_manager.is_egg_laid(nest.position):
+			var partner_bird = bird_manager.get_bird(partner)
+			if partner_bird != null:
+				# Inform the male if his partner dies before she laid the egg
+				partner_bird.listener.emit(BirdCalls.LEAVE,id,true)
 	BirdResourceManager.remove_bird(info)
 	queue_free()
 
 func _on_button_pressed():
-	get_tree().call_group("BirdStat", "show")	
-	get_tree().call_group("BirdStat", "load_new_bird", info)
+	queue_free()
+	#get_tree().call_group("BirdStat", "show")	
+	#get_tree().call_group("BirdStat", "load_new_bird", info)
 
 
 func _on_calorie_timer_timeout() -> void:
@@ -252,6 +258,19 @@ func _on_age_timer_timeout() -> void:
 	_increament_age()
 	if current_age >= species.max_age:
 		_die()
+
+func _check_ground_tile() -> void:
+	var bird_map_cords = tile_map.world_to_map_space(global_position)
+	var tile_data = tile_map.get_cell_tile_data(0, bird_map_cords)
+	if tile_data == null:
+		Logger.print_fail("Fail: Tile loc is missing type data; "+bird_map_cords, logger_key)
+		return
+	var type = tile_data.get_custom_data("Type")
+	if type == "":
+		Logger.print_fail("Fail: Tile loc is missing type data; "+bird_map_cords, logger_key)		
+	elif current_tile != type:
+		current_tile = type
+		Logger.print_success("Success: [Current Tile] "+current_tile, logger_key)
 
 func _on_call(call_message: BirdCalls, messager_id: int, data: Variant) -> void:
 	match call_message:

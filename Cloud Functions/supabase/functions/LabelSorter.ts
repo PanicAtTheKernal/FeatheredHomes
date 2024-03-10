@@ -25,7 +25,7 @@ export class LabelSorter {
             birdFamilyLabels: [],
             birdSpeciesLabels: [],
         };
-        this._birdReferralSections = ["Birds","Species"];
+        this._birdReferralSections = ["Birds","Species","Animals"];
     }
     
     private async fetchLabelLists() {
@@ -78,11 +78,11 @@ export class LabelSorter {
     }
 
     private async sortUnknownLabel(label: string): Promise<void> {
-        let wikiPage: BirdWikiPage = new BirdWikiPage(label);
+        let wikiPage: BirdWikiPage = new BirdWikiPage(label.toLowerCase());
         try {
             await wikiPage.setupParser();
             if(!(await wikiPage.isPageAboutBirds())) {
-                const referralPage = new ReferralWikiPage(label, this._birdReferralSections);
+                const referralPage = new ReferralWikiPage(label.toLowerCase(), this._birdReferralSections);
                 await referralPage.setupParser();
                 if (!referralPage.isReferralPage()) {
                     throw new Error("Not a bird page");

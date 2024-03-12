@@ -15,7 +15,7 @@ enum BirdCalls {
 	LEAVE
 }
 
-const SPEED = 60
+const SPEED = 80
 const SPEED_INSANE = 40**2
 const ARRIVAL_THRESHOLD = 5.0
 const CALORIES_BURNED = 10

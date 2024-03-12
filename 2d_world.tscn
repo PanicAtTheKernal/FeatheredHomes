@@ -2,16 +2,16 @@
 
 [ext_resource type="Texture2D" uid="uid://cnuew56xuo5jv" path="res://Assets/Titlemap/roguelikeSheet_transparent.png" id="1_q8hc6"]
 [ext_resource type="Script" path="res://Scripts/World/world_resources.gd" id="2_g4m67"]
-[ext_resource type="AudioStream" uid="uid://8x7t1g5jon1a" path="res://Assets/Sounds/TEMP/CALM_WAVES.mp3" id="3_hiurp"]
 [ext_resource type="Resource" uid="uid://lbomgeivl84f" path="res://Scripts/Resources/Fruit.tres" id="3_vd1to"]
+[ext_resource type="AudioStream" uid="uid://brkmsbhte3fv4" path="res://Assets/Sounds/SFX/Ambient/Waves.mp3" id="4_bysuv"]
 [ext_resource type="Script" path="res://Scripts/World/tile_map_manager.gd" id="4_cndgk"]
-[ext_resource type="AudioStream" uid="uid://be1kgen2p07ao" path="res://Assets/Sounds/TEMP/WIND2.mp3" id="4_n44wg"]
 [ext_resource type="Resource" uid="uid://dunx6shlscnkj" path="res://Scripts/Resources/Seeds.tres" id="5_ekd7m"]
 [ext_resource type="PackedScene" uid="uid://dxrpitfrkhs0f" path="res://sound_effect.tscn" id="5_rk4si"]
 [ext_resource type="PackedScene" uid="uid://dxdl3qpgfc15y" path="res://sound_wind_effect.tscn" id="6_15gye"]
+[ext_resource type="AudioStream" uid="uid://bo3pd8sxkm01n" path="res://Assets/Sounds/SFX/Ambient/Wind.mp3" id="6_be6k7"]
 [ext_resource type="Resource" uid="uid://btin6hacyprgx" path="res://Scripts/Resources/Nests.tres" id="6_rd573"]
 [ext_resource type="Resource" uid="uid://bjb2h71puk7jc" path="res://Scripts/Resources/Insects.tres" id="7_3bfdd"]
-[ext_resource type="AudioStream" uid="uid://cnpovv1bkbvpj" path="res://Assets/Sounds/TEMP/RIVER.mp3" id="7_221w7"]
+[ext_resource type="AudioStream" uid="uid://c1khmytl8gocv" path="res://Assets/Sounds/SFX/Ambient/River.mp3" id="7_ffcyt"]
 [ext_resource type="Script" path="res://Scripts/World/nest_manager.gd" id="8_bx5sd"]
 [ext_resource type="Resource" uid="uid://5ga1vwaeetfc" path="res://Scripts/Resources/Stick.tres" id="8_ijkck"]
 [ext_resource type="PackedScene" uid="uid://cc7jo7b3cgbem" path="res://Scripts/World/ui.tscn" id="8_k080l"]
@@ -12511,56 +12511,56 @@ script = ExtResource("4_cndgk")
 visible = false
 position = Vector2(638, 53)
 max_distance = 200.0
-sound = ExtResource("3_hiurp")
+sound = ExtResource("4_bysuv")
 player_cam = NodePath("../../PlayerCam")
 
 [node name="Water2" parent="TileMap" node_paths=PackedStringArray("player_cam") instance=ExtResource("5_rk4si")]
 visible = false
 position = Vector2(84, 80)
 max_distance = 250.0
-sound = ExtResource("3_hiurp")
+sound = ExtResource("4_bysuv")
 player_cam = NodePath("../../PlayerCam")
 
 [node name="Water3" parent="TileMap" node_paths=PackedStringArray("player_cam") instance=ExtResource("5_rk4si")]
 visible = false
 position = Vector2(387, 80)
 max_distance = 250.0
-sound = ExtResource("3_hiurp")
+sound = ExtResource("4_bysuv")
 player_cam = NodePath("../../PlayerCam")
 
 [node name="Wind" parent="TileMap" node_paths=PackedStringArray("player_cam") instance=ExtResource("6_15gye")]
 visible = false
 position = Vector2(387, 456)
 max_distance = 1000.0
-sound = ExtResource("4_n44wg")
+sound = ExtResource("6_be6k7")
 player_cam = NodePath("../../PlayerCam")
 
 [node name="River1" parent="TileMap" node_paths=PackedStringArray("player_cam") instance=ExtResource("5_rk4si")]
 visible = false
 position = Vector2(304, 808)
 max_distance = 200.0
-sound = ExtResource("7_221w7")
+sound = ExtResource("7_ffcyt")
 player_cam = NodePath("../../PlayerCam")
 
 [node name="River2" parent="TileMap" node_paths=PackedStringArray("player_cam") instance=ExtResource("5_rk4si")]
 visible = false
 position = Vector2(336, 304)
 max_distance = 200.0
-sound = ExtResource("7_221w7")
+sound = ExtResource("7_ffcyt")
 player_cam = NodePath("../../PlayerCam")
 
 [node name="River3" parent="TileMap" node_paths=PackedStringArray("player_cam") instance=ExtResource("5_rk4si")]
 visible = false
 position = Vector2(160, 688)
 max_distance = 200.0
-sound = ExtResource("7_221w7")
+sound = ExtResource("7_ffcyt")
 player_cam = NodePath("../../PlayerCam")
 
 [node name="River4" parent="TileMap" node_paths=PackedStringArray("player_cam") instance=ExtResource("5_rk4si")]
 visible = false
 position = Vector2(304, 528)
 max_distance = 200.0
-sound = ExtResource("7_221w7")
+sound = ExtResource("7_ffcyt")
 player_cam = NodePath("../../PlayerCam")
 
 [node name="WorldResources" type="Node2D" parent="."]

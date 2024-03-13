@@ -91,6 +91,10 @@ export class BirdWikiPage extends WikiPage {
 
     public async getDescription(): Promise<string> {
         if(this._wikiParser.hasFullSection(this._descriptionHeading)) {
+            const description = WikiParser.replaceCitations(this._wikiParser.getFullSection(this._descriptionHeading));
+            if (description.length/ChatGPT.TOKEN_SIZE > 700) {
+                return await ChatGPT.instantiate().generateCustomSummary(description, "colours and appearance");
+            }
             return WikiParser.replaceCitations(this._wikiParser.getFullSection(this._descriptionHeading));
         } else if (this._wikiParser.hasSection(this._descriptionHeading)) {
             return WikiParser.replaceCitations(this._wikiParser.getSection(this._descriptionHeading))

@@ -12,9 +12,6 @@ export_presets.cfg
 icon.svg
 icon.svg.import
 
-# Temp for a surprise effect
-Assets/Sounds/
-
 *.import
 *.translation
 

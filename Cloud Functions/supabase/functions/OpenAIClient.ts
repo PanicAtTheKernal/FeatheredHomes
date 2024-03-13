@@ -170,6 +170,7 @@ export class OpenAIRequestDirector {
 }
 
 export class ChatGPT {
+    public static readonly TOKEN_SIZE = 4;
     private static _instance: ChatGPT;
     private readonly _openAIClient: OpenAI;
     private readonly _openAIApiKey: string;
@@ -236,10 +237,10 @@ export class ChatGPT {
         return (chatGPTResponse.choices[0].message.content == "True");
     }
 
-    public async generateColoursFromDescription(description: string, gender: string, bodyParts: string): Promise<string> {
+    public async generateColoursFromDescription(description: string, birdName: string, bodyParts: string): Promise<string> {
         const openAIRequestDirector = new OpenAIRequestDirector();
         await openAIRequestDirector.setSystemMessage("ColourGenerator");
-        const request = openAIRequestDirector.buildColourGeneratorRequest(description, gender, bodyParts) as any;
+        const request = openAIRequestDirector.buildColourGeneratorRequest(description, birdName, bodyParts) as any;
         console.log(request);
         const chatGPTResponse = await this._openAIClient.chat.completions.create(request);
         if (chatGPTResponse.choices[0].message.content == null) {

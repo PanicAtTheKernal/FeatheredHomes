@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dxrpitfrkhs0f"]
 
-[ext_resource type="AudioStream" uid="uid://8x7t1g5jon1a" path="res://Assets/Sounds/TEMP/CALM_WAVES.mp3" id="1_2y6p1"]
 [ext_resource type="Script" path="res://Scripts/Audio/sound_effect.gd" id="1_tuq32"]
+[ext_resource type="AudioStream" uid="uid://brkmsbhte3fv4" path="res://Assets/Sounds/SFX/Ambient/Waves.mp3" id="2_yqnw1"]
 
 [node name="SoundEffect" type="Node2D" node_paths=PackedStringArray("audio_player")]
 script = ExtResource("1_tuq32")
@@ -9,7 +9,7 @@ max_distance = 300.0
 audio_player = NodePath("AudioSoundPlayer2D")
 
 [node name="AudioSoundPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("1_2y6p1")
+stream = ExtResource("2_yqnw1")
 autoplay = true
 max_distance = 300.0
 panning_strength = 0.0

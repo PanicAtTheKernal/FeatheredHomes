@@ -195,15 +195,15 @@ text = "Show"
 layout_mode = 2
 theme_override_constants/margin_top = 31
 
-[node name="Debug" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer"]
+[node name="DebugSettings" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 theme_type_variation = &"InfoBox"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderSubInfo"
 text = "Debug
@@ -211,11 +211,11 @@ text = "Debug
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Partitions" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
+[node name="Partitions" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 
-[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Partitions"]
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/Partitions"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -228,15 +228,15 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Partitions"]
+[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/Partitions"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 flat = true
 
-[node name="Navigation" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
+[node name="Navigation" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer"]
 layout_mode = 2
 
-[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Navigation"]
+[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/Navigation"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -246,15 +246,15 @@ text = "[color=#9f9f9f][u]Navigation:[/u][/color]"
 fit_content = true
 scroll_active = false
 
-[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Navigation"]
+[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/Navigation"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 flat = true
 
-[node name="FPSCharts" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
+[node name="FPSCharts" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer"]
 layout_mode = 2
 
-[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/FPSCharts"]
+[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/FPSCharts"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -264,15 +264,15 @@ text = "[color=#9f9f9f][u]FPS:[/u][/color]"
 fit_content = true
 scroll_active = false
 
-[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/FPSCharts"]
+[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/FPSCharts"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 flat = true
 
-[node name="WaterSound" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
+[node name="WaterSound" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer"]
 layout_mode = 2
 
-[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WaterSound"]
+[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/WaterSound"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -282,15 +282,15 @@ text = "[color=#9f9f9f][u]Water Sound Sources:[/u][/color]"
 fit_content = true
 scroll_active = false
 
-[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WaterSound"]
+[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/WaterSound"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 flat = true
 
-[node name="WindSound" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer"]
+[node name="WindSound" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer"]
 layout_mode = 2
 
-[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WindSound"]
+[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/WindSound"]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -300,7 +300,7 @@ text = "[color=#9f9f9f][u]Wind Sound Sources:[/u][/color]"
 fit_content = true
 scroll_active = false
 
-[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WindSound"]
+[node name="CheckButton" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/WindSound"]
 layout_mode = 2
 theme = ExtResource("1_ho04v")
 flat = true
@@ -315,8 +315,8 @@ size_flags_vertical = 4
 [connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer/Music/MusicSlider" to="." method="_on_music_slider_value_changed"]
 [connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Audio/VBoxContainer/Sound/SoundSlider" to="." method="_on_sound_slider_value_changed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Credits/VBoxContainer/MarginContainer/Button" to="." method="_on_button_pressed"]
-[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Partitions/CheckButton" to="." method="_on_check_button_toggled"]
-[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/Navigation/CheckButton" to="." method="_on_navigation_toggled"]
-[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/FPSCharts/CheckButton" to="." method="_on_fps_toggled"]
-[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WaterSound/CheckButton" to="." method="_on_wat_sound_sources_toggled"]
-[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Debug/VBoxContainer/WindSound/CheckButton" to="." method="_on_win_sound_sources_toggled"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/Partitions/CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/Navigation/CheckButton" to="." method="_on_navigation_toggled"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/FPSCharts/CheckButton" to="." method="_on_fps_toggled"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/WaterSound/CheckButton" to="." method="_on_wat_sound_sources_toggled"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/WindSound/CheckButton" to="." method="_on_win_sound_sources_toggled"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://nxgu1imsippy"]
 
 [ext_resource type="Script" path="res://Scripts/Player/player_cam.gd" id="1_om4pp"]
-[ext_resource type="AudioStream" uid="uid://5dtk74387xs3" path="res://Assets/Sounds/Music/Feathered Homes FULL SOUNDTRACK LOOP.mp3" id="2_wsnsc"]
+[ext_resource type="AudioStream" uid="uid://bkagxfyq6blai" path="res://Assets/Sounds/Music/SOUNDTRACK.mp3" id="2_jyxnn"]
 [ext_resource type="Script" path="res://Scripts/Audio/music_player.gd" id="3_mcv5f"]
 
 [node name="PlayerCam" type="Camera2D" groups=["Dialog", "PlayerCamera"]]
@@ -13,7 +13,7 @@ limit_smoothed = true
 script = ExtResource("1_om4pp")
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_wsnsc")
+stream = ExtResource("2_jyxnn")
 autoplay = true
 bus = &"Music"
 script = ExtResource("3_mcv5f")

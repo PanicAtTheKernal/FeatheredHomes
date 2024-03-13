@@ -5,7 +5,7 @@ class_name BirdSpecies
 @export_group("GeneralBirdInfo")
 @export
 var name: String
-@export_range(1.0, 11.0)
+@export_range(0.1, 11.0)
 var size: float
 @export
 var diet: String

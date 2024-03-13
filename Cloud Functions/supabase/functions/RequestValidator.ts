@@ -2,7 +2,8 @@ const CONTENT_TYPE = "application/json; charset=utf-8";
 const HEADERS = { "Content-Type": CONTENT_TYPE };
 
 export type BirdRequest = {
-    birdSpecies: string
+    birdSpecies: string,
+    hashMap?: object,
 }
 
 export class RequestValidator {

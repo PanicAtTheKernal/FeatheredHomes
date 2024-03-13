@@ -15,20 +15,20 @@ Deno.serve(async (req) => {
   const validation = new RequestValidator(req);
   const validationResponse = await validation.validate();
   if (validationResponse != null) {
-    // Supabase.instantiate().uploadLog(FUNCTION_NAME, validation.body, validation.error);
+    Supabase.instantiate().uploadLog(FUNCTION_NAME, validation.body, validation.error);
     return validationResponse;
   };
   try {
     const findSpecies = new Search(validation.body.birdSpecies.toUpperCase());
     const bird = await findSpecies.findBird();
-    // Supabase.instantiate().uploadLog(FUNCTION_NAME, validation.body);
+    Supabase.instantiate().uploadLog(FUNCTION_NAME, validation.body);
     return new Response(
       JSON.stringify(bird),
       { headers: HEADERS,
         status: 200 },
     );
   } catch (error) {
-    // Supabase.instantiate().uploadLog(FUNCTION_NAME, validation.body, error.message);
+    Supabase.instantiate().uploadLog(FUNCTION_NAME, validation.body, error.message);
     return new Response(
       JSON.stringify({error:error.message}),
       { headers: HEADERS,

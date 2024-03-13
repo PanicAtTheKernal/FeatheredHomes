@@ -15,6 +15,8 @@ export class ImageGenerator {
     private _colourJson: object;
     private _templateUrl: string;
     private _unisex: boolean;
+    private _unisexOnly: boolean;
+    private _altColours: object;
 
     constructor(description: string, family: string, birdName: string) {
         this._description = description;
@@ -27,6 +29,8 @@ export class ImageGenerator {
         this._colourJson = {};
         this._birdName = birdName;
         this._colourMaps = {};
+        this._unisexOnly = false;
+        this._altColours = {};
     }
 
     private async fetchTemplate(): Promise<void> {
@@ -38,6 +42,9 @@ export class ImageGenerator {
     }
 
     private async isBirdLookUnisex(): Promise<boolean> {
+        if (this._unisexOnly) {
+            return true;
+        }
         this._unisex = await ChatGPT.instantiate().checkIfBirdAppearanceUnisex(this._description);
         return this._unisex;
     }
@@ -51,7 +58,13 @@ export class ImageGenerator {
 
     private async generateImageAndUpload(gender: string, fileName: string): Promise<string> {
         const templateMap = new Map(Object.entries(this._templateJson));
-        const colours = await this.generateListOfColours(gender);
+        let colours = new Map();
+        // Check if altColours is empty
+        if (Object.keys(this._altColours).length == 0) {
+            colours = await this.generateListOfColours(gender);
+        } else {
+            colours = new Map(Object.entries(this._altColours));
+        }
         const birdColourMap: ColourMap = new ColourMap(templateMap, colours);
         birdColourMap.createMap();
         this.addColourMap(gender, birdColourMap);
@@ -86,7 +99,7 @@ export class ImageGenerator {
     }
 
     private async generateListOfColours(gender: string): Promise<Map<string, string>> {
-        const colours = await ChatGPT.instantiate().generateColoursFromDescription(this._description, gender, this.generateBodyPartNames());
+        const colours = await ChatGPT.instantiate().generateColoursFromDescription(this._description, `${gender} ${this._birdName}`, this.generateBodyPartNames());
         return new Map(Object.entries(JSON.parse(colours)));
     }
 
@@ -107,6 +120,14 @@ export class ImageGenerator {
             await this.generateGenderImages();
         }
     }    
+
+    public generateOnlyUnisexImage(): void {
+        this._unisexOnly = true;
+    }
+
+    public useAlternativeColours(colours: object): void {
+        this._altColours = colours;
+    }
 
     public get shapeId(): string {
         if (this._shapeId == "") {

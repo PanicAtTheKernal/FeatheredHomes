@@ -36,10 +36,10 @@ func _create_request()->void:
 	http_request.request_completed.connect(_on_fetch_bird_species_request_complete)
 	add_child(http_request)
 
-func _on_fetch_bird_species_request_complete(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray)->void:
+func _on_fetch_bird_species_request_complete(_result: int, response_code_a: int, _headers: PackedStringArray, body: PackedByteArray)->void:
 	response_body = JSON.parse_string(body.get_string_from_ascii()) as Dictionary
-	if response_code != HTTPClient.RESPONSE_OK:
-		Logger.print_debug("Error retrieving bird: (Response Code) "+str(response_code)+" (Body) "+response_body.get("error"), logger_key)
+	if response_code_a != HTTPClient.RESPONSE_OK:
+		Logger.print_debug("Error retrieving bird: (Response Code) "+str(response_code_a)+" (Body) "+response_body.get("error"), logger_key)
 		if response_body["error"] == "No template found":
 			get_tree().call_group("Dialog", "display", str("You found a ",bird_name_request," but it can't be generated at this time :( Please check the search button to see all bird families supported"))
 		else:		

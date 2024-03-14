@@ -12,7 +12,7 @@ var max_font_size
 func _ready() -> void:
 	max_font_size = get_theme_font_size("font_size")
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if has_theme_font_size_override("font_size"):
 		remove_theme_font_size_override("font_size")
 	var new_font_size = min(get_visible_characters_count(), max_font_size)

@@ -20,7 +20,6 @@ func run()->void:
 	var resource = bird.world_resources.get_resource(target_resource, target_map_cords)
 	if resource != null and resource.current_state == "Full":
 		if bird.animatated_spite.finished != "eating":
-			var value = resource.value
 			bird.animatated_spite.play_eating_animation()
 			bird.behavioural_tree.wait_for_signal(bird.animatated_spite.animation_group_finished)
 			Logger.print_running("Running: Playing eating animation", logger_key)

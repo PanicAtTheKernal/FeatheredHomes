@@ -14,7 +14,7 @@ var panel: PanelContainer = %Panel
 func _ready()->void:
 	dialog.visible = false
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var window = get_window()
 	if window.size.x > Startup.NON_MOBLIE_SIZE:
 		panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER

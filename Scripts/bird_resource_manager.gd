@@ -95,7 +95,7 @@ func load_bird(bird_species: String)->BirdInfo:
 		Logger.print_debug("Loaded local copy", logger_key)
 	return bird
 
-func add_bird(bird_species: String, hide_dialog: bool=false)->void:
+func add_bird(bird_species: String, _hide_dialog: bool=false)->void:
 	var bird: BirdInfo = load_bird(bird_species)
 	if bird == null:
 		var bird_request: FetchBirdRequest = FetchBirdRequest.new()#

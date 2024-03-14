@@ -27,9 +27,6 @@ func _create_partition_keys() -> void:
 		for j in range(partition_size):
 			partition_keys.push_back(Vector2i(i, j))
 			
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 
 func update_resource_sprite(resource: WorldResource, new_state: String)->void:

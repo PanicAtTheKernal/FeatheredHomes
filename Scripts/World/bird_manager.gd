@@ -58,7 +58,7 @@ func _intialise_bird_resources() -> void:
 	for key in tile_map.partition_keys:
 		partitions[key] = []
 
-func create_bird(bird_info: BirdInfo, hide_dialog:bool=false)->Bird:
+func create_bird(bird_info: BirdInfo, _hide_dialog:bool=false)->Bird:
 	var new_bird: Bird = blank_bird.instantiate()
 	setup_bird(new_bird, randomise_stats(bird_info))
 	create_traits(new_bird)
@@ -67,7 +67,7 @@ func create_bird(bird_info: BirdInfo, hide_dialog:bool=false)->Bird:
 func randomise_stats(bird_info:BirdInfo)->BirdInfo:
 	bird_info.species.max_stamina = randf_range(MIN_STAMINA, MAX_STAMINA)
 	# TODO Temp
-	bird_info.species.stamina = randf_range(bird_info.species.max_stamina, bird_info.species.max_stamina)
+	bird_info.species.stamina = randf_range(100, bird_info.species.max_stamina)
 	bird_info.species.ground_max_distance = randf_range(MIN_GROUND_DISTANCE, MAX_GROUND_DISTANCE)
 	bird_info.species.flight_max_distance = randf_range(bird_info.species.ground_max_distance, MAX_FLIGHT_DISTANCE)
 	bird_info.species.max_age = randi_range(MIN_AGE, MAX_AGE)
@@ -82,6 +82,8 @@ func setup_bird(new_bird:Bird, bird_info: BirdInfo)->void:
 	new_bird.bird_manager = self
 	new_bird.info = bird_info
 	new_bird.id = bird_info.create_unique_id()
+	new_bird.scale = new_bird.scale * bird_info.species.size
+	new_bird.sound_player.stream = Startup.bird_sounds[bird_info.species.sound]
 	new_bird.logger_key.obj = "("+str(new_bird.id)+": Bird)"
 	# TODO Testing setup for bird mating/parenting
 	new_bird.current_age = 4

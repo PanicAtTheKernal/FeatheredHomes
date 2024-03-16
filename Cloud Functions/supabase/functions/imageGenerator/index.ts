@@ -24,8 +24,8 @@ Deno.serve(async (req) => {
     const imageGen = new ImageGenerator(description, familyName, birdName);
     if (validation.body.hashMap) {
       imageGen.useAlternativeColours(validation.body.hashMap);
+      imageGen.generateOnlyUnisexImage();
     }
-    // imageGen.generateOnlyUnisexImage();
     await imageGen.generate();
     return new Response(      
       JSON.stringify({

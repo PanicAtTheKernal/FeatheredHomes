@@ -20,12 +20,6 @@ var sound_slider: HSlider = %SoundSlider
 func _ready() -> void:
 	_load_player_settings()
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-
 func _on_close_button_pressed() -> void:
 	hide()
 

@@ -62,7 +62,7 @@ var is_distance_calculated: bool = false
 var state: States = States.AIR
 var current_tile: String
 var current_partition: Vector2i
-# var middle_of_love: bool
+var tween: Tween
 var mate: bool
 var mass: float
 # Only birds that have the find neartest partner action will have this set 

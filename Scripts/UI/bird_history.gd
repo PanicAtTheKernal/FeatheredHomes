@@ -33,8 +33,8 @@ func _ready()->void:
 	setup_list(BirdResourceManager.get_bird_list_items())
 	BirdResourceManager.new_bird_added.connect(_on_new_bird)
 
-func _process(delta)->void:
-	var window_size = get_window().size
+#func _process(_delta)->void:
+	#var window_size = get_window().size
 	#var empty_space = list.size.x - (floor(list.size.x/list.fixed_column_width)) 
 	#margin.add_theme_constant_override("margin_left", empty_space/2)
 	#var center_size = list.get_parent_area_size()
@@ -59,10 +59,10 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag:
 		dragging = true
 		var container: VScrollBar = list.get_v_scroll_bar()
-		var max = container.max_value
-		var min = container.min_value
+		var max_v = container.max_value
+		var min_v = container.min_value
 		var new_value = container.value - event.relative.y
-		container.value = clamp(new_value, min, max)
+		container.value = clamp(new_value, min_v, max_v)
 	else:
 		dragging = false
 

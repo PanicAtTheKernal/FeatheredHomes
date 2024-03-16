@@ -1,5 +1,6 @@
-[gd_scene load_steps=75 format=3 uid="uid://dsps58agtajiu"]
+[gd_scene load_steps=76 format=3 uid="uid://dsps58agtajiu"]
 
+[ext_resource type="Script" path="res://Scripts/game.gd" id="1_bwmqj"]
 [ext_resource type="Texture2D" uid="uid://cnuew56xuo5jv" path="res://Assets/Titlemap/roguelikeSheet_transparent.png" id="1_q8hc6"]
 [ext_resource type="Script" path="res://Scripts/World/world_resources.gd" id="2_g4m67"]
 [ext_resource type="Resource" uid="uid://lbomgeivl84f" path="res://Scripts/Resources/Fruit.tres" id="3_vd1to"]
@@ -12495,6 +12496,7 @@ custom_data_layer_3/type = 3
 sources/0 = SubResource("TileSetAtlasSource_hb7s6")
 
 [node name="2D world" type="Node2D"]
+script = ExtResource("1_bwmqj")
 
 [node name="TileMap" type="TileMap" parent="."]
 unique_name_in_owner = true

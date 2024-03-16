@@ -57,8 +57,8 @@ func start()->void:
 		add_child(debug_displacement)	
 		add_child(debug_velocity)
 
-func _seek(target: Vector2)->Vector2:
-	var to_target = (target - bird.global_position).normalized()
+func _seek(seek_target: Vector2)->Vector2:
+	var to_target = (seek_target - bird.global_position).normalized()
 	var desired = to_target * bird.SPEED
 	return desired - bird.velocity
 	

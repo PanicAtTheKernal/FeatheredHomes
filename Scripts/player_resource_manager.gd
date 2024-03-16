@@ -19,10 +19,6 @@ func _ready()->void:
 	_initalise_player_data()
 	
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta)->void:
-	pass
-
 func _create_player_data_folder()->void:
 	if !DirAccess.dir_exists_absolute(PLAYER_DATA_PATH):
 		Logger.print_debug("Creating PlayerData folder", logger_key)

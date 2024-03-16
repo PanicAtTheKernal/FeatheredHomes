@@ -40,12 +40,12 @@ func _ready()->void:
 		return
 
 func _load_env_file()->ConfigFile:
-	var config = ConfigFile.new()
-	var error = config.load("res://.env")
+	var config_local = ConfigFile.new()
+	var error = config_local.load("res://.env")
 	if error != OK:
 		Logger.print_debug("Could not load env file", logger_key)
 		return null
-	return config
+	return config_local
 
 func _login()->void:
 	var email = config.get_value(ENVIRONMENT_VARIABLES, "EMAIL")

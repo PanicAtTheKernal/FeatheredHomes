@@ -15,7 +15,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var window_size = get_window().size
 	var half_size = size.x/2
 	var margin = 32

@@ -55,7 +55,7 @@ func _ready()->void:
 	if not is_visible_in_tree():
 		new_frame_timer.stop()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var window = get_window()
 	if window.size.x > Startup.NON_MOBLIE_SIZE:
 		panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -157,7 +157,7 @@ func _input(event: InputEvent) -> void:
 	# this adds a fix using the screen drag event instead
 	if event is InputEventScreenDrag:
 		var container: ScrollContainer = $Panel/MarginContainer/Content/ScrollContainer as ScrollContainer
-		var max = container.get_v_scroll_bar().max_value
-		var min = container.get_v_scroll_bar().min_value
+		var max_v = container.get_v_scroll_bar().max_value
+		var min_v = container.get_v_scroll_bar().min_value
 		var new_value = container.get_v_scroll_bar().value - event.relative.y
-		container.get_v_scroll_bar().value = clamp(new_value, min, max)
+		container.get_v_scroll_bar().value = clamp(new_value, min_v, max_v)

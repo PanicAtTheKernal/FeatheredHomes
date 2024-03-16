@@ -22,7 +22,7 @@ func _draw() -> void:
 	draw_circle(Vector2(0,0), max_distance/2, Color.DEEP_SKY_BLUE)
 	draw_circle(Vector2(0,0), 2.0, Color.DARK_VIOLET)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var volume = _zoom_to_linear(player_cam.zoom)
 	audio_player.volume_db = linear_to_db(volume)
 

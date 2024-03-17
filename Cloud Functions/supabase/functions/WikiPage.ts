@@ -78,6 +78,12 @@ export class BirdWikiPage extends WikiPage {
         return this._wikiParser.getInfoBoxProperty("Family") as string;
     }
 
+    public getBirdGenus(): string {
+        this.isParserSetup();
+        return this._wikiParser.getInfoBoxProperty("Genus") as string;
+    }
+
+
     public getBirdSpecies(): string {
         this.isParserSetup();
         return this._wikiParser.getBinomialName() as string;

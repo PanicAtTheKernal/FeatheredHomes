@@ -19,7 +19,10 @@ Deno.serve(async (req) => {
     const wikiPage = new BirdWikiPage(validation.body.birdSpecies.toLowerCase());
     await wikiPage.setupParser();
     const description = await wikiPage.getDescription();
-    const familyName = wikiPage.getBirdFamily().toUpperCase();
+    let familyName = wikiPage.getBirdFamily().toUpperCase();
+    if (familyName == "ANATIDAE") {
+        familyName = wikiPage.getBirdGenus().toUpperCase();
+    }
     const birdName = wikiPage.getBirdName();
     const imageGen = new ImageGenerator(description, familyName, birdName);
     if (validation.body.hashMap) {

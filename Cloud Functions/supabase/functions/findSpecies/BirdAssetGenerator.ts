@@ -60,7 +60,10 @@ export class BirdAssetGenerator {
 
     private async generateImage(): Promise<void> {
         const description = await this._wikiPage.getDescription();
-        const familyName = this._wikiPage.getBirdFamily().toUpperCase();
+        let familyName = this._wikiPage.getBirdFamily().toUpperCase();
+        if (familyName == "ANATIDAE") {
+            familyName = this._wikiPage.getBirdGenus().toUpperCase();
+        }
         const birdName = this._wikiPage.getBirdName();
         this._imageGenerator = new ImageGenerator(description, familyName, birdName);
         await this._imageGenerator.generate();

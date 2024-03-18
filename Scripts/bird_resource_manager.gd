@@ -24,7 +24,7 @@ func _get_bird_manager()->void:
 
 func _initalise_bird_data()->void:
 	Logger.print_debug("Setting up bird data", logger_key)
-	birds_names = Database.fetch_all_birds()
+	birds_names = await Database.fetch_all_birds()
 
 func _create_birds_folder()->void:
 	if !DirAccess.dir_exists_absolute(BIRD_DATA_PATH):

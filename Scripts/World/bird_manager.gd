@@ -31,6 +31,8 @@ var nest_manager: NestManager = %NestManager
 var partitions: Dictionary : 
 	get:
 		return partitions
+var save_thread: Thread
+var thread_running: bool
 
 var logger_key = {
 	"type": Logger.LogType.RESOURCE,
@@ -44,6 +46,9 @@ var male: BirdInfo = ResourceLoader.load("res://Assets/Birds/NewBird/DUNNOCK-MAL
 
 func _ready() -> void:
 	_intialise_bird_resources()
+	_load_birds()
+	save_thread = Thread.new()
+	
 	#for i in range(20):
 		#BirdResourceManager.add_bird("Dunnock")
 	#for i in range(15):
@@ -58,7 +63,19 @@ func _intialise_bird_resources() -> void:
 	for key in tile_map.partition_keys:
 		partitions[key] = []
 
-func create_bird(bird_info: BirdInfo, _hide_dialog:bool=false)->Bird:
+func _load_birds() -> void:
+	if len(PlayerResourceManager.player_data.birds) < 1:
+		return
+	for bird_state: BirdState in PlayerResourceManager.player_data.birds:
+		var bird_info = BirdResourceManager.load_bird(bird_state.species_name, bird_state.gender)
+		bird_info.species = bird_state.species
+		var bird = create_bird(bird_info)
+		spawn_bird(bird, bird_state.position)
+		bird.current_stamina = bird_state.species.stamina
+		BirdResourceManager.add_bird_to_list(bird_info)
+	PlayerResourceManager.player_data.birds = []
+
+func create_bird(bird_info: BirdInfo)->Bird:
 	var new_bird: Bird = blank_bird.instantiate()
 	setup_bird(new_bird, randomise_stats(bird_info))
 	create_traits(new_bird)
@@ -94,12 +111,15 @@ func spawn_bird(new_bird: Bird, location: Vector2)->void:
 	Logger.create_new_bird_log(new_bird.id)
 	add_child(new_bird)
 
-func add_bird(new_bird: Bird)->void:
+func add_bird(new_bird: Bird, random_bird: bool = false)->void:
 	spawn_bird(new_bird, player_camera.get_screen_center_position())
 	# TODO REMOVE THIS 
 	#if new_bird.info.gender == "female":
 		#new_bird.global_position.x += 75
-	get_tree().call_group("Dialog", "display", str("You found a ",new_bird.info.species.name.capitalize()), "Congratulations!", true)
+	var message = "You found a "+new_bird.info.species.name.capitalize()
+	if random_bird:
+		message = "You get a "+new_bird.info.species.name.capitalize()+" because the exact bird species can't be determined"
+	get_tree().call_group("Dialog", "display", message, "Congratulations!", true)
 	get_tree().call_group("LoadingButton", "hide_loading")
 
 func create_traits(new_bird: Bird)->void:
@@ -121,3 +141,25 @@ func get_bird(id: int)->Bird:
 func add_bird_resource(parition_index: Vector2i, old_index: Vector2i, bird: Bird) -> void:
 	partitions[old_index].erase(bird)
 	partitions[parition_index].push_back(bird)
+
+func save_all_birds() ->void:
+	for bird: Bird in get_children():
+		var bird_state: BirdState = BirdState.new()
+		bird_state.position = bird.global_position
+		bird_state.age = bird.current_age
+		bird_state.species = bird.species
+		bird_state.species.stamina = bird.current_stamina
+		bird_state.species_name = bird.species.name
+		bird_state.gender = bird.info.gender
+		PlayerResourceManager.player_data.birds.push_back(bird_state)
+		PlayerResourceManager.save_player_data()
+
+func _exit_tree():
+	save_thread.wait_to_finish()
+
+func _save_all_birds()->void:
+	PlayerResourceManager.player_data.birds = []
+	save_thread.set_thread_safety_checks_enabled(false)
+	Thread.set_thread_safety_checks_enabled(false)
+	
+

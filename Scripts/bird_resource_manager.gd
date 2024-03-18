@@ -9,6 +9,7 @@ var logger_key = {
 	"obj": "BirdResourceManager"
 }
 var bird_manager: BirdManager
+var birds_names: Array[String]
 
 signal new_bird_added
 
@@ -23,6 +24,7 @@ func _get_bird_manager()->void:
 
 func _initalise_bird_data()->void:
 	Logger.print_debug("Setting up bird data", logger_key)
+	birds_names = Database.fetch_all_birds()
 
 func _create_birds_folder()->void:
 	if !DirAccess.dir_exists_absolute(BIRD_DATA_PATH):
@@ -86,8 +88,9 @@ func save_bird(bird_data: BirdInfo)->void:
 	if error != OK:
 		Logger.print_debug(str("Error saving player data",error), logger_key)
 
-func load_bird(bird_species: String)->BirdInfo:
-	var bird_files: Array[String] = _find_bird_files(bird_species)
+func load_bird(bird_species: String, gender: String = "")->BirdInfo:
+	var search_bird = bird_species if gender == "" else bird_species + " " + gender 
+	var bird_files: Array[String] = _find_bird_files(search_bird)
 	var bird: BirdInfo
 	if not bird_files.is_empty():
 		var bird_file = bird_files.pick_random()
@@ -95,7 +98,11 @@ func load_bird(bird_species: String)->BirdInfo:
 		Logger.print_debug("Loaded local copy", logger_key)
 	return bird
 
-func add_bird(bird_species: String, _hide_dialog: bool=false)->void:
+func add_bird(bird_species_name: String, random_bird: bool=false)->void:
+	var bird_species = bird_species_name
+	if random_bird:
+		randomize()
+		bird_species = birds_names.pick_random()
 	var bird: BirdInfo = load_bird(bird_species)
 	if bird == null:
 		var bird_request: FetchBirdRequest = FetchBirdRequest.new()#
@@ -121,9 +128,8 @@ func add_bird(bird_species: String, _hide_dialog: bool=false)->void:
 			bird_infos.push_back(male_bird)
 			bird_infos.push_back(female_bird)
 			bird = bird_infos.pick_random()
-	#get_tree().call_group("BirdManager", "create_bird", bird, hide_dialog)
 	var new_bird = bird_manager.create_bird(bird)
-	bird_manager.add_bird(new_bird)
+	bird_manager.add_bird(new_bird, random_bird)
 	birds.push_back(bird)
 	Logger.print_debug("Added new bird", logger_key)
 	get_tree().call_group("LoadingButton", "hide_loading")

@@ -33,14 +33,15 @@ func _notify_user(message:String, bird:String="")->void:
 	var user_message:String = ""
 	match message:
 		"No bird":
-			user_message = "We couldn't find any bird in the photo you took. Please take another photo and try again"
+			user_message = "Couldn't find any bird in the photo you took. Please take another photo and try again"
 			get_tree().call_group("Dialog", "display", user_message)
 			get_tree().call_group("LoadingButton", "hide_loading")
 		"Blurry bird":
-			user_message = "We couldn't figure out the bird species. Please take another photo at a different angle"
-			get_tree().call_group("Dialog", "display", user_message)
-			get_tree().call_group("LoadingButton", "hide_loading")
+			# Give a random bird as compensation
+			await BirdResourceManager.add_bird("", true)
 		"bird":
+			# This dosen't do anything, this message is printed in a different part of the code
+			# This is just left over code from a previous implementation
 			user_message = "You found a "+bird+"!"
 		_:
 			user_message = "There was an error processing the image"
@@ -51,7 +52,7 @@ func _on_image_request_complete(result: int, response_code: int, headers: Packed
 	var result_body = JSON.parse_string(body.get_string_from_ascii())
 	if response_code != HTTPClient.RESPONSE_OK:
 		Logger.print_debug("Error retrieving bird: (Response Code) "+str(response_code)+" (Body) "+result_body.get("error"), logger_key)
-		_notify_user(result_body.get("error"))
+		await _notify_user(result_body.get("error"))
 		_cleanup()
 		return
 	var bird_species = result_body.get("birdSpecies")

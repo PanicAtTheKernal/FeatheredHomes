@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Fyp Prototype 1"
 run/main_scene="res://2d_world.tscn"
+config/auto_accept_quit=false
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.2", "Mobile")
 boot_splash/bg_color=Color(1, 1, 1, 1)

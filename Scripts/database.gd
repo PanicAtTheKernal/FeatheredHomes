@@ -89,6 +89,9 @@ func fetch_supported_familes()->Array[String]:
 		supported_familes.push_back(family["Family"])
 	return supported_familes
 
+func fetch_all_birds()->Array[String]:
+	return []
+
 func download_image(image_name, file_name)->void:
 	var storageResult: StorageTask = await Supabase.storage.from("BirdAssets").download(image_name, BirdResourceManager.BIRD_DATA_PATH + file_name).completed
 	if storageResult.error != null:

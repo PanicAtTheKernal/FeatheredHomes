@@ -1,0 +1,161 @@
+[gd_scene load_steps=5 format=3 uid="uid://eeidvtn4de67"]
+
+[ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="1_ghckf"]
+[ext_resource type="Texture2D" uid="uid://db62w7kcpu68l" path="res://Assets/poster-logo2.png" id="3_bx462"]
+[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="4_7wuor"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_pyqga"]
+
+[node name="Control" type="CanvasLayer"]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_7wuor")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+
+[node name="ZoomInButton" type="Button" parent="VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme = ExtResource("1_ghckf")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 80
+icon = ExtResource("3_bx462")
+expand_icon = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Part1" type="CenterContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Part1"]
+custom_minimum_size = Vector2(200, 300)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Part1/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Part1/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "1. Take photos"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Part1/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/Part1/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Take photos of any bird "
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Part2" type="CenterContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/Part2"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Part2/MarginContainer"]
+custom_minimum_size = Vector2(200, 300)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Part2/MarginContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Part2/MarginContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "2. Generate Birds"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Part2/MarginContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/Part2/MarginContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Wait for the bird to be generated"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Part3" type="CenterContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Part3"]
+custom_minimum_size = Vector2(200, 300)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Part3/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Part3/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "3. Experience life"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Part3/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/Part3/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Watch your images brough to life as digital bird "
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme = ExtResource("4_7wuor")
+
+[node name="BoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2/PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer2/PanelContainer/BoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/PanelContainer/BoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Created By:"
+
+[node name="Label2" type="Label" parent="VBoxContainer/MarginContainer2/PanelContainer/BoxContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_7wuor")
+theme_override_font_sizes/font_size = 16
+text = "C20456964 Daniel Kondabarov"
+label_settings = SubResource("LabelSettings_pyqga")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/MarginContainer2/PanelContainer/BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/PanelContainer/BoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Music/Sound:"
+horizontal_alignment = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/MarginContainer2/PanelContainer/BoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("4_7wuor")
+theme_override_font_sizes/font_size = 16
+text = "Ian Cecil Scott"
+label_settings = SubResource("LabelSettings_pyqga")

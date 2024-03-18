@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PlayerData" load_steps=2 format=3 uid="uid://bi053it33ghdl"]
+
+[ext_resource type="Script" path="res://Scripts/Player/player_data.gd" id="1_0s2pj"]
+
+[resource]
+script = ExtResource("1_0s2pj")
+birds = Array[Resource("res://Scripts/Bird/BirdResources/bird_state.gd")]([])
+version = 0.0
+music_volume = 0.28
+sound_volume = 0.0

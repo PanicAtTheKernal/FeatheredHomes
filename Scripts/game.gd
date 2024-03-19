@@ -19,7 +19,8 @@ func _notification(what: int) -> void:
 			"obj": "Game"
 		})
 		get_tree().quit()
-
+	#elif what == NOTIFICATION_APPLICATION_PAUSED:
+		#bird_manager.save_all_birds()		
 
 func _on_save_timer_timeout() -> void:
 	pass

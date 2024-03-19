@@ -1,6 +1,6 @@
 extends Task
 
-class_name Wander
+class_name WanderBehaviour
 
 var bird: Bird
 var noise: FastNoiseLite
@@ -23,6 +23,7 @@ var debug_feeler: DebugGizmos.DebugLine
 var debug_displacement: DebugGizmos.DebugLine
 var debug_velocity: DebugGizmos.DebugLine
 
+var max_force = 30
 
 func _init(parent_bird: Bird, node_name:String="Wander") -> void:
 	super(node_name)
@@ -37,8 +38,20 @@ func _init(parent_bird: Bird, node_name:String="Wander") -> void:
 
 func run()->void:
 	force = Vector2.ZERO
-	force += _wander()
-	force += _avoidance()
+	var forces: Array[Vector2] = []
+	forces.push_back(_wander() * 0.4) 
+	forces.push_back(_avoidance() * 0.8) 	
+	#force += _avoidance() 
+	
+	for b_force: Vector2 in forces:
+		if is_nan(b_force.x) or is_nan(b_force.y):
+			force = Vector2.ZERO
+		force += b_force
+		if force.length() > max_force:
+			force = force.limit_length(max_force)
+			break
+	
+	
 	if DebugGizmos.enabled:
 		debug_velocity.draw([bird.global_position, (bird.global_position+force)])
 	var acceleration = force/ bird.mass

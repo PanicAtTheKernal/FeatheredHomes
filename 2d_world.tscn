@@ -23,7 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://nxgu1imsippy" path="res://Scripts/Player/player_cam.tscn" id="11_csqhd"]
 [ext_resource type="FontFile" uid="uid://nxmuchvunil1" path="res://Assets/Silkscreen/Silkscreen-Bold.ttf" id="11_ice53"]
 [ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="18_l7q05"]
-[ext_resource type="PackedScene" uid="uid://eeidvtn4de67" path="res://poster.tscn" id="24_gol4x"]
+[ext_resource type="PackedScene" uid="uid://eeidvtn4de67" path="res://Scripts/Bird/BirdResources/poster.tscn" id="24_gol4x"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_tt3tg"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -12580,7 +12580,6 @@ script = ExtResource("8_bx5sd")
 [node name="PlayerCam" parent="." instance=ExtResource("11_csqhd")]
 unique_name_in_owner = true
 position = Vector2(384, 416)
-zoom = Vector2(1.8, 1.8)
 
 [node name="RegenFood" type="Timer" parent="."]
 wait_time = 10.0

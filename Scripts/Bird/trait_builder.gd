@@ -182,7 +182,7 @@ func _build_navigation(target_check: Callable = func(): return true)->Sequence:
 func _build_wander()->Sequence:
 	var wander_sequence = Sequence.new(id+": WanderSequence")
 	wander_sequence.add_child(Fly.new(bird, id+": Fly"))
-	wander_sequence.add_child(Wander.new(bird, id+": Wander"))
+	wander_sequence.add_child(WanderBehaviour.new(bird, id+": Wander"))
 	return wander_sequence
 
 func _build_ground_sequence()->Sequence:

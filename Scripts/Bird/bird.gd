@@ -72,6 +72,12 @@ var logger_key = {
 	"type": Logger.LogType.NAVIGATION,
 	"obj": "Bird <ID:"+str(id)+">"
 }
+#Debug
+var debug_feeler: DebugGizmos.DebugLine
+var debug_displacement: DebugGizmos.DebugLine
+var debug_velocity: DebugGizmos.DebugLine
+
+
 signal change_state(new_state: String, should_flip_h: bool)
 signal listener(call: String, messager_id: int, data: Variant)
 
@@ -87,6 +93,13 @@ func _ready():
 	current_partition = tile_map.get_partition_index(tile_map.world_to_map_space(global_position))
 	bird_manager.add_bird_resource(current_partition,Vector2i(0,0), self)
 	 #Start the navaiagation timer at differnet times for each bird
+	if DebugGizmos.enabled:
+		debug_feeler = DebugGizmos.DebugLine.new(Color.ORANGE)
+		debug_displacement = DebugGizmos.DebugLine.new(Color.RED)
+		debug_velocity = DebugGizmos.DebugLine.new(Color.GREEN)
+		add_child(debug_feeler)
+		add_child(debug_displacement)	
+		add_child(debug_velocity)
 	
 func _physics_process(_delta: float) -> void:
 	# Physics process starts before ready is called

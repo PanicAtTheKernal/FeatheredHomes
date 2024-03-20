@@ -72,11 +72,9 @@ var logger_key = {
 	"type": Logger.LogType.NAVIGATION,
 	"obj": "Bird <ID:"+str(id)+">"
 }
-#Debug
-var debug_feeler: DebugGizmos.DebugLine
-var debug_displacement: DebugGizmos.DebugLine
-var debug_velocity: DebugGizmos.DebugLine
-
+var flying: bool = false
+var flight_size: Vector2
+var normal_size: Vector2
 
 signal change_state(new_state: String, should_flip_h: bool)
 signal listener(call: String, messager_id: int, data: Variant)
@@ -87,19 +85,18 @@ func _ready():
 	stop_now = false
 	partner = -1
 	mass = info.species.size * 0.1
+	normal_size = scale * species.size
+	flight_size = normal_size + (normal_size*0.2)
+	scale = normal_size
+	info.species = species
+	#var i = info.species.max_stamina
+	#species.max_stamina = info.species.max_stamina
+	#species.stamina = info.species.stamina
 	animatated_spite.sprite_frames = species.animations
 	listener.connect(_on_call)
 	current_stamina = species.stamina
 	current_partition = tile_map.get_partition_index(tile_map.world_to_map_space(global_position))
 	bird_manager.add_bird_resource(current_partition,Vector2i(0,0), self)
-	 #Start the navaiagation timer at differnet times for each bird
-	if DebugGizmos.enabled:
-		debug_feeler = DebugGizmos.DebugLine.new(Color.ORANGE)
-		debug_displacement = DebugGizmos.DebugLine.new(Color.RED)
-		debug_velocity = DebugGizmos.DebugLine.new(Color.GREEN)
-		add_child(debug_feeler)
-		add_child(debug_displacement)	
-		add_child(debug_velocity)
 	
 func _physics_process(_delta: float) -> void:
 	# Physics process starts before ready is called
@@ -271,12 +268,12 @@ func _die() -> void:
 				partner_bird.listener.emit(BirdCalls.LEAVE,id,true)
 	BirdResourceManager.remove_bird(info)
 	bird_manager.remove_bird(current_partition, self)
+	Logger.print_fail(str("Bird ",id," has died"),logger_key)
 	queue_free()
 
 func _on_button_pressed():
-	_die()
-	#get_tree().call_group("BirdStat", "show")	
-	#get_tree().call_group("BirdStat", "load_new_bird", info)
+	get_tree().call_group("BirdStat", "show")	
+	get_tree().call_group("BirdStat", "load_new_bird", info)
 
 
 func _on_calorie_timer_timeout() -> void:

@@ -61,3 +61,31 @@ var coparent: bool
 var male_single_parent: bool
 @export
 var female_single_parent: bool
+
+func copy()->BirdSpecies:
+	var species_copy = BirdSpecies.new()
+	species_copy.name = name
+	species_copy.size = size
+	species_copy.diet = diet
+	species_copy.sound = sound
+	species_copy.nest_type = nest_type
+	species_copy.max_age = max_age
+	species_copy.is_predator = is_predator
+	species_copy.animations = animations
+	species_copy.max_stamina = max_stamina
+	species_copy.stamina = stamina
+	species_copy.threshold = threshold
+	species_copy.ground_cost = ground_cost
+	species_copy.can_swim = can_swim
+	species_copy.can_fly = can_fly
+	species_copy.ground_max_distance = ground_max_distance
+	species_copy.take_off_cost = take_off_cost
+	species_copy.flight_cost = flight_cost
+	species_copy.flight_max_distance = flight_max_distance
+	species_copy.preen = preen
+	species_copy.takes_dust_baths = takes_dust_baths
+	species_copy.does_sunbathing = does_sunbathing
+	species_copy.coparent = coparent
+	species_copy.male_single_parent = male_single_parent
+	species_copy.female_single_parent = female_single_parent
+	return species_copy

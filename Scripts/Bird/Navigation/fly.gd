@@ -15,7 +15,7 @@ func run()->void:
 		bird.tween = create_tween()
 		bird.tween.set_ease(Tween.EASE_OUT)
 		bird.tween.set_trans(Tween.TRANS_QUINT)
-		bird.tween.tween_property(bird, "scale", bird.scale+(Vector2(0.2,0.2)), 1)
+		bird.tween.tween_property(bird, "scale", bird.flight_size, 1)
 		Logger.print_running(bird.scale, logger_key)
 		bird.behavioural_tree.wait_for_signal(bird.animatated_spite.animation_group_finished) 
 		Logger.print_running("Running: Playing the flying animation", logger_key)

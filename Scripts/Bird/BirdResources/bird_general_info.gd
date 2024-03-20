@@ -63,3 +63,18 @@ func create_unique_id()->int:
 
 func set_bird_species(species: BirdSpecies):
 	self.species = species
+
+func copy()->BirdInfo:
+	var bird_info: BirdInfo = BirdInfo.new()
+	bird_info.age_status = age_status
+	bird_info.date_found = date_found
+	bird_info.description = description
+	bird_info.family = family
+	bird_info.gender = gender
+	bird_info.id = id
+	bird_info.scientific_name = scientific_name
+	bird_info.species = species.copy()
+	bird_info.status = status
+	bird_info.unisex = unisex
+	bird_info.version = version
+	return bird_info

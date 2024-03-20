@@ -9,8 +9,8 @@ const MIN_GROUND_DISTANCE = 20
 const MAX_FLIGHT_DISTANCE = 200
 const MIN_AGE = 20
 const MAX_AGE = 30
-const MIN_FOOD_THRESHOLD = 0.2
-const MAX_FOOD_THRESHOLD = 0.9
+const MIN_FOOD_THRESHOLD = 0.3
+const MAX_FOOD_THRESHOLD = 0.6
 
 @export
 var blank_bird: PackedScene = preload("res://BlankBird.tscn")
@@ -67,11 +67,18 @@ func _load_birds() -> void:
 		return
 	for bird_state: BirdState in PlayerResourceManager.player_data.birds:
 		var bird_info = BirdResourceManager.load_bird(bird_state.species_name, bird_state.gender)
-		bird_info.species = bird_state.species
+		#bird_info.species = bird_state.species
 		var bird = create_bird(bird_info)
+		#bird.species = null
+		bird.species = bird_state.species.copy()
+		#bird.info = bird_info
+		#bird.info.species = bird_state.species 
+		#bird.species.max_stamina = bird_state.species.max_stamina
+		#bird.species.stamina = bird_state.current_stamina
+		#bird.current_stamina = bird_state.current_stamina
+		bird.current_age = bird_state.age
 		spawn_bird(bird, bird_state.position)
-		bird.current_stamina = bird_state.species.stamina
-		BirdResourceManager.add_bird_to_list(bird_info)
+		BirdResourceManager.add_bird_to_list(bird.info)
 	PlayerResourceManager.player_data.birds = []
 
 func create_bird(bird_info: BirdInfo)->Bird:
@@ -80,7 +87,8 @@ func create_bird(bird_info: BirdInfo)->Bird:
 	create_traits(new_bird)
 	return new_bird
 	
-func randomise_stats(bird_info:BirdInfo)->BirdInfo:
+func randomise_stats(_bird_info:BirdInfo)->BirdInfo:
+	var bird_info = _bird_info.copy()
 	bird_info.species.max_stamina = randf_range(MIN_STAMINA, MAX_STAMINA)
 	# TODO Temp
 	bird_info.species.stamina = randf_range(bird_info.species.max_stamina, bird_info.species.max_stamina)
@@ -98,7 +106,6 @@ func setup_bird(new_bird:Bird, bird_info: BirdInfo)->void:
 	new_bird.bird_manager = self
 	new_bird.info = bird_info
 	new_bird.id = bird_info.create_unique_id()
-	new_bird.scale = new_bird.scale * bird_info.species.size
 	new_bird.sound_player.stream = Startup.bird_sounds[bird_info.species.sound]
 	new_bird.logger_key.obj = "("+str(new_bird.id)+": Bird)"
 	# TODO Testing setup for bird mating/parenting
@@ -151,13 +158,11 @@ func save_all_birds() ->void:
 		bird_state.age = bird.current_age
 		bird_state.species = bird.species
 		bird_state.species.stamina = bird.current_stamina
+		bird_state.current_stamina = bird.current_stamina
 		bird_state.species_name = bird.species.name
 		bird_state.gender = bird.info.gender
 		PlayerResourceManager.player_data.birds.push_back(bird_state)
 		PlayerResourceManager.save_player_data()
-
-func _exit_tree():
-	save_thread.wait_to_finish()
 
 func _save_all_birds()->void:
 	PlayerResourceManager.player_data.birds = []

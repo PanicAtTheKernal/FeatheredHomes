@@ -1,6 +1,6 @@
 extends Task
 
-class_name WanderBehaviour
+#class_name WanderBehaviour
 
 var bird: Bird
 
@@ -17,10 +17,10 @@ func _init(parent_bird: Bird, node_name:String="Wander") -> void:
 	super(node_name)
 	bird = parent_bird
 	behaviours = {
-		"wander" = {
-			"behaviour": Wander.new(bird),
-			"weight": 0.4
-		},
+		#"wander" = {
+			#"behaviour": Wander.new(bird),
+			#"weight": 0.4
+		#},
 		"avoidance" = {
 			"behaviour": Avoidance.new(bird),
 			"weight": 0.8

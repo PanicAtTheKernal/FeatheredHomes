@@ -61,7 +61,6 @@ func build_exploration()->void:
 	is_barren.add_child(FindNearestResource.new(bird, bird.species.diet, id+": FindNearestFood"))
 	exploration_condition_selector.add_child(is_energetic)
 	exploration_condition_selector.add_child(is_barren)
-	# exploration_condition_selector.add_child(Equal.new(bird, "stop_now", false, id+": NotStopped"))
 	exploration_sequence.add_child(exploration_condition_selector)
 	# Navigation
 	exploration_sequence.add_child(UpdateStatus.new(bird, "exploring", id+": StartingExploringBehaviour"))

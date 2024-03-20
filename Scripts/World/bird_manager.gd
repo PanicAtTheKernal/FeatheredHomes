@@ -47,13 +47,12 @@ var male: BirdInfo = ResourceLoader.load("res://Assets/Birds/NewBird/DUNNOCK-MAL
 func _ready() -> void:
 	_intialise_bird_resources()
 	_load_birds()
-	save_thread = Thread.new()
 	
 	#for i in range(20):
 		#BirdResourceManager.add_bird("Dunnock")
 	#for i in range(15):
 		#BirdResourceManager.add_bird("Blue tit")
-	#for i in range(1):
+	#for i in range(4):
 		#var fem_bird = create_bird(female)
 		#add_bird(fem_bird)
 		#var man_bird = create_bird(male)
@@ -84,7 +83,7 @@ func create_bird(bird_info: BirdInfo)->Bird:
 func randomise_stats(bird_info:BirdInfo)->BirdInfo:
 	bird_info.species.max_stamina = randf_range(MIN_STAMINA, MAX_STAMINA)
 	# TODO Temp
-	bird_info.species.stamina = randf_range(100, bird_info.species.max_stamina)
+	bird_info.species.stamina = randf_range(bird_info.species.max_stamina, bird_info.species.max_stamina)
 	bird_info.species.ground_max_distance = randf_range(MIN_GROUND_DISTANCE, MAX_GROUND_DISTANCE)
 	bird_info.species.flight_max_distance = randf_range(bird_info.species.ground_max_distance, MAX_FLIGHT_DISTANCE)
 	bird_info.species.max_age = randi_range(MIN_AGE, MAX_AGE)
@@ -128,7 +127,7 @@ func create_traits(new_bird: Bird)->void:
 	trait_builder.build_partner()
 	trait_builder.build_nest_building()
 	trait_builder.build_parenting()
-	# This is below partner and parenting because foraging and wander have very few condiditons to be active
+	## This is below partner and parenting because foraging and wander have very few condiditons to be active
 	trait_builder.build_foraging()
 	trait_builder.build_exploration()
 
@@ -141,6 +140,9 @@ func get_bird(id: int)->Bird:
 func add_bird_resource(parition_index: Vector2i, old_index: Vector2i, bird: Bird) -> void:
 	partitions[old_index].erase(bird)
 	partitions[parition_index].push_back(bird)
+
+func remove_bird(parition_index: Vector2i, bird: Bird) -> void:
+	partitions[parition_index].erase(bird)
 
 func save_all_birds() ->void:
 	for bird: Bird in get_children():

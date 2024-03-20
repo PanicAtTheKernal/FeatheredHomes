@@ -1,6 +1,6 @@
 extends Node
 
-var enabled: bool = false
+var enabled: bool = true
 
 class DebugLine extends Node2D:
 	var _line: Line2D

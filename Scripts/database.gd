@@ -8,6 +8,7 @@ const TABLES = {
 	FAMILY_TO_SHAPE = "FAMILY_TO_SHAPE",
 	SOUND = "SOUND",
 	NEST = "NEST",
+	BIRD = "BIRD_SPECIES"
 }
 const DATABASE_NAME = {
 	DIET = "Diet",
@@ -15,6 +16,7 @@ const DATABASE_NAME = {
 	FAMILY_TO_SHAPE = "FamilyToShape",
 	SOUND = "Sound",
 	NEST = "Nest",
+	BIRD = "BirdSpecies"
 }
 const ID_COLS = {
 	DIET = "DietId",
@@ -22,6 +24,7 @@ const ID_COLS = {
 	FAMILY_TO_SHAPE = "Family",
 	SOUND = "Id",
 	NEST = "Id",
+	BIRD = "BirdId"
 }
 
 var config: ConfigFile
@@ -87,6 +90,14 @@ func fetch_supported_familes()->Array[String]:
 	var supported_familes: Array[String] = []
 	for family in family_result.data:
 		supported_familes.push_back(family["Family"])
+	return supported_familes
+
+func fetch_all_birds()->Array[String]:
+	var species_query: SupabaseQuery = SupabaseQuery.new().from("BirdSpecies").select()
+	var species_result = await Supabase.database.query(species_query).completed
+	var supported_familes: Array[String] = []
+	for family in species_result.data:
+		supported_familes.push_back(family["birdName"])
 	return supported_familes
 
 func download_image(image_name, file_name)->void:

@@ -30,7 +30,7 @@ func _input(event: InputEvent) -> void:
 
 func _load_player_settings() -> void:
 	var music_volume = PlayerResourceManager.player_data.music_volume
-	var sound_volume = PlayerResourceManager.player_data.sound_volume*1.5
+	var sound_volume = PlayerResourceManager.player_data.sound_volume
 	music_value.text = str(round(music_volume*100),"%")
 	AudioServer.set_bus_volume_db(music_bus_id, linear_to_db(music_volume))
 	music_slider.value = music_volume

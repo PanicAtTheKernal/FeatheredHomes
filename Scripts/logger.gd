@@ -95,12 +95,13 @@ func print_debug(message: Variant, key: Dictionary)->void:
 	var os_name = OS.get_name()
 	var type = key.get("type")
 	var object_name = key.get("obj")
-	if not is_debug or not _is_log_allowed(type) or (os_name != "Linux" and os_name != "Windows"):
+	if not is_debug or not _is_log_allowed(type) :
 		return
 	var get_log_colour: String = log_colours.get(type)
 	var replace_obj_name: String = "<>" if object_name != "" else " (<>)" 
 	get_log_colour = get_log_colour.replace(replace_obj_name, object_name)
-	_print_to_log(object_name, get_log_colour, message)
+	if (os_name == "Linux" or os_name == "Windows"):
+		_print_to_log(object_name, get_log_colour, message)
 	print_rich(get_log_colour,message)
 
 func _print_to_log(object_name, get_log_colour, message)->void:

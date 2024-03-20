@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://dsps58agtajiu"]
+[gd_scene load_steps=77 format=3 uid="uid://dsps58agtajiu"]
 
 [ext_resource type="Script" path="res://Scripts/game.gd" id="1_bwmqj"]
 [ext_resource type="Texture2D" uid="uid://cnuew56xuo5jv" path="res://Assets/Titlemap/roguelikeSheet_transparent.png" id="1_q8hc6"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://nxgu1imsippy" path="res://Scripts/Player/player_cam.tscn" id="11_csqhd"]
 [ext_resource type="FontFile" uid="uid://nxmuchvunil1" path="res://Assets/Silkscreen/Silkscreen-Bold.ttf" id="11_ice53"]
 [ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="18_l7q05"]
+[ext_resource type="PackedScene" uid="uid://eeidvtn4de67" path="res://Scripts/Bird/BirdResources/poster.tscn" id="24_gol4x"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_tt3tg"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -12578,7 +12579,7 @@ script = ExtResource("8_bx5sd")
 
 [node name="PlayerCam" parent="." instance=ExtResource("11_csqhd")]
 unique_name_in_owner = true
-position = Vector2(387, 469)
+position = Vector2(384, 416)
 
 [node name="RegenFood" type="Timer" parent="."]
 wait_time = 10.0
@@ -12612,4 +12613,10 @@ theme_override_font_sizes/font_size = 8
 text = "Nice try, but there ain't
  no secrets out here ;)"
 
+[node name="Poster" parent="." instance=ExtResource("24_gol4x")]
+visible = false
+
+[node name="SaveTimer" type="Timer" parent="."]
+
 [connection signal="timeout" from="RegenFood" to="WorldResources" method="_on_regen_food_timeout"]
+[connection signal="timeout" from="SaveTimer" to="." method="_on_save_timer_timeout"]

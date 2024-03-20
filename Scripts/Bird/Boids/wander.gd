@@ -1,6 +1,12 @@
 extends Task
 
-class_name Wander
+class_name WanderBehaviour
+
+const WANDER_WEIGHT = 0.8
+const AVOIDANCE_WEIGHT = 0.8
+const SEPERATION_WEIGHT = 0.8
+const COHERSION_WEIGHT = 0.8
+const ALLIGNMENT_WEIGHT = 0.8
 
 var bird: Bird
 var noise: FastNoiseLite
@@ -16,19 +22,20 @@ var target: Vector2
 var world_target: Vector2
 var current_angle: float = 0
 var w_angle: float = 20
-var force: Vector2
 var jitter = 3.0
 #Debug
 var debug_feeler: DebugGizmos.DebugLine
 var debug_displacement: DebugGizmos.DebugLine
 var debug_velocity: DebugGizmos.DebugLine
 
+var max_force = 10
 
 func _init(parent_bird: Bird, node_name:String="Wander") -> void:
 	super(node_name)
 	bird = parent_bird
 	noise = FastNoiseLite.new()
 	noise.seed = randi()
+	randomize()
 	noise.set_noise_type(FastNoiseLite.TYPE_PERLIN)
 	noise.set_frequency(0.01)
 	noise.set_fractal_lacunarity(2)
@@ -36,9 +43,33 @@ func _init(parent_bird: Bird, node_name:String="Wander") -> void:
 	feeler_distance = distance + 10
 
 func run()->void:
-	force = Vector2.ZERO
-	force += _wander()
-	force += _avoidance()
+	var force: Vector2 = Vector2.ZERO
+	var forces: Array[Vector2] = []
+	forces.push_back(_avoidance() * AVOIDANCE_WEIGHT) 
+	# flocking forces
+	var seperation_f = Vector2.ZERO
+	var allignment_desired = Vector2.ZERO
+	var center_of_mass = Vector2.ZERO
+	var nearby_birds = bird.get_all_nearby_birds()
+	for nearby_bird in nearby_birds:
+		seperation_f += _seperation(nearby_bird)
+		allignment_desired += _alignment(nearby_bird)
+		center_of_mass += _cohersion(nearby_bird)
+	forces.push_back(seperation_f * SEPERATION_WEIGHT)
+	forces.push_back(_alignment_force(allignment_desired, nearby_birds.size()) * ALLIGNMENT_WEIGHT)
+	forces.push_back(_cohersion_force(center_of_mass, nearby_birds.size()) * COHERSION_WEIGHT)
+	
+	forces.push_back(_wander() * WANDER_WEIGHT) 	
+	
+	for b_force: Vector2 in forces:
+		if is_nan(b_force.x) or is_nan(b_force.y):
+			force += Vector2.ZERO
+		force += b_force
+		if force.length() > max_force:
+			force = force.limit_length(max_force)
+			break
+	
+	
 	if DebugGizmos.enabled:
 		debug_velocity.draw([bird.global_position, (bird.global_position+force)])
 	var acceleration = force/ bird.mass
@@ -92,7 +123,36 @@ func _avoidance()->Vector2:
 	if not result.is_empty(): 
 		var to_bird = bird.global_position - result.position
 		var force_magnatiude = (feeler_distance - to_bird.length()) * (distance)
-		#Invert the wander direction to force the bird to turn around and not be fighting with wander forcing the bird in the other direction
+		# Invert the wander direction to force the bird to turn around and not be fighting with wander forcing the bird in the other direction
 		target = -target
 		local_force += result.normal * force_magnatiude
 	return local_force
+
+func _seperation(nearby_bird: Bird)->Vector2:
+	var distance_from = bird.global_position - nearby_bird.global_position
+	# Divide by the length to push it further away, if the birds are close then distance will be close, dividing by 
+	# the magnitude inverts and results in a value closer to one the closer the birds meaning the force will be stronger 
+	var force = distance_from.normalized() / distance_from.length()
+	return force
+
+func _cohersion(nearby_bird: Bird)->Vector2:
+	return nearby_bird.global_position
+
+func _cohersion_force(center_of_mass: Vector2, size: int)->Vector2:
+	var cohersion_force = Vector2.ZERO
+	var com = center_of_mass
+	if size > 0:
+		com /= size
+		cohersion_force = _seek(com).normalized()
+	return cohersion_force
+
+func _alignment(nearby_bird: Bird)->Vector2:
+	return nearby_bird.velocity
+
+func _alignment_force(_desired: Vector2, size: int)->Vector2:
+	var allignment_force = Vector2.ZERO
+	var desired = _desired
+	if size > 0 and desired.length() > 0:
+		desired = desired / size
+		allignment_force = desired - bird.velocity
+	return allignment_force

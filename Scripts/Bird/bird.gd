@@ -72,6 +72,12 @@ var logger_key = {
 	"type": Logger.LogType.NAVIGATION,
 	"obj": "Bird <ID:"+str(id)+">"
 }
+#Debug
+var debug_feeler: DebugGizmos.DebugLine
+var debug_displacement: DebugGizmos.DebugLine
+var debug_velocity: DebugGizmos.DebugLine
+
+
 signal change_state(new_state: String, should_flip_h: bool)
 signal listener(call: String, messager_id: int, data: Variant)
 
@@ -87,6 +93,13 @@ func _ready():
 	current_partition = tile_map.get_partition_index(tile_map.world_to_map_space(global_position))
 	bird_manager.add_bird_resource(current_partition,Vector2i(0,0), self)
 	 #Start the navaiagation timer at differnet times for each bird
+	if DebugGizmos.enabled:
+		debug_feeler = DebugGizmos.DebugLine.new(Color.ORANGE)
+		debug_displacement = DebugGizmos.DebugLine.new(Color.RED)
+		debug_velocity = DebugGizmos.DebugLine.new(Color.GREEN)
+		add_child(debug_feeler)
+		add_child(debug_displacement)	
+		add_child(debug_velocity)
 	
 func _physics_process(_delta: float) -> void:
 	# Physics process starts before ready is called
@@ -218,6 +231,34 @@ func check_closest_adjacent_cells_bird(condition: Callable)->MinHeap.HeapItem:
 			return shortest_distance
 	return null
 
+func get_all_nearby_birds()->Array[Bird]:
+	# This is faster
+	var nearby_birds: Array[Bird] = []
+	var row = current_partition.x
+	var col = current_partition.y
+	var neighbours = [
+		Vector2i(row + 1, col),
+		Vector2i(row + 1, col+1),
+		Vector2i(row + 1, col-1),
+		Vector2i(row - 1, col),
+		Vector2i(row - 1, col+1),
+		Vector2i(row - 1, col-1),
+		Vector2i(row, col + 1),
+		Vector2i(row, col - 1),
+		Vector2i(row, col)
+	]
+	for neighbour:Vector2i in neighbours:
+		if not tile_map.check_if_within_partition_bounds(neighbour):
+			continue
+		var partition = bird_manager.partitions[neighbour]
+		for nearby_bird: Bird in partition:
+			# Make sure only birds that are the same type flock, the position check
+			# is there because all the maths will result in a overflow 
+			if species.name == nearby_bird.species.name and id != nearby_bird.id \
+			and global_position != nearby_bird.global_position:
+				nearby_birds.append(nearby_bird)
+	return nearby_birds
+
 func _die() -> void:
 	info.status = "Dead"
 	animatated_spite.play_dead()
@@ -229,11 +270,13 @@ func _die() -> void:
 				# Inform the male if his partner dies before she laid the egg
 				partner_bird.listener.emit(BirdCalls.LEAVE,id,true)
 	BirdResourceManager.remove_bird(info)
+	bird_manager.remove_bird(current_partition, self)
 	queue_free()
 
 func _on_button_pressed():
-	get_tree().call_group("BirdStat", "show")	
-	get_tree().call_group("BirdStat", "load_new_bird", info)
+	_die()
+	#get_tree().call_group("BirdStat", "show")	
+	#get_tree().call_group("BirdStat", "load_new_bird", info)
 
 
 func _on_calorie_timer_timeout() -> void:
@@ -262,11 +305,11 @@ func _check_ground_tile() -> void:
 	var bird_map_cords = tile_map.world_to_map_space(global_position)
 	var tile_data = tile_map.get_cell_tile_data(0, bird_map_cords)
 	if tile_data == null:
-		Logger.print_fail("Fail: Tile loc is missing type data; "+bird_map_cords, logger_key)
+		Logger.print_fail("Fail: Tile loc is missing type data; "+str(bird_map_cords), logger_key)
 		return
 	var type = tile_data.get_custom_data("Type")
 	if type == "":
-		Logger.print_fail("Fail: Tile loc is missing type data; "+bird_map_cords, logger_key)		
+		Logger.print_fail("Fail: Tile loc is missing type data; "+str(bird_map_cords), logger_key)		
 	elif current_tile != type:
 		current_tile = type
 		Logger.print_success("Success: [Current Tile] "+current_tile, logger_key)
@@ -292,3 +335,7 @@ func _on_call(call_message: BirdCalls, messager_id: int, data: Variant) -> void:
 
 func _on_timer_timeout() -> void:
 	sound_player.play()
+
+
+func _on_navigation_timer_timeout() -> void:
+	is_distance_calculated = false

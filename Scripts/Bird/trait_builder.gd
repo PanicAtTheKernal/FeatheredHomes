@@ -61,7 +61,6 @@ func build_exploration()->void:
 	is_barren.add_child(FindNearestResource.new(bird, bird.species.diet, id+": FindNearestFood"))
 	exploration_condition_selector.add_child(is_energetic)
 	exploration_condition_selector.add_child(is_barren)
-	# exploration_condition_selector.add_child(Equal.new(bird, "stop_now", false, id+": NotStopped"))
 	exploration_sequence.add_child(exploration_condition_selector)
 	# Navigation
 	exploration_sequence.add_child(UpdateStatus.new(bird, "exploring", id+": StartingExploringBehaviour"))
@@ -182,7 +181,7 @@ func _build_navigation(target_check: Callable = func(): return true)->Sequence:
 func _build_wander()->Sequence:
 	var wander_sequence = Sequence.new(id+": WanderSequence")
 	wander_sequence.add_child(Fly.new(bird, id+": Fly"))
-	wander_sequence.add_child(Wander.new(bird, id+": Wander"))
+	wander_sequence.add_child(WanderBehaviour.new(bird, id+": Wander"))
 	return wander_sequence
 
 func _build_ground_sequence()->Sequence:

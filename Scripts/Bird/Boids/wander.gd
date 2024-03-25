@@ -58,9 +58,7 @@ func run()->void:
 	forces.push_back(seperation_f * SEPERATION_WEIGHT)
 	forces.push_back(_alignment_force(allignment_desired, nearby_birds.size()) * ALLIGNMENT_WEIGHT)
 	forces.push_back(_cohersion_force(center_of_mass, nearby_birds.size()) * COHERSION_WEIGHT)
-	
 	forces.push_back(_wander() * WANDER_WEIGHT) 	
-	
 	for b_force: Vector2 in forces:
 		if is_nan(b_force.x) or is_nan(b_force.y):
 			force += Vector2.ZERO
@@ -68,10 +66,7 @@ func run()->void:
 		if force.length() > max_force:
 			force = force.limit_length(max_force)
 			break
-	
-	
-	if DebugGizmos.enabled:
-		debug_velocity.draw([bird.global_position, (bird.global_position+force)])
+	debug_velocity.draw([bird.global_position, (bird.global_position+force)])
 	var acceleration = force/ bird.mass
 	bird.animatated_spite.flip_h = bird.velocity.normalized().x < 0
 	bird.velocity = bird.velocity + acceleration * get_physics_process_delta_time()
@@ -80,13 +75,12 @@ func run()->void:
 	
 func start()->void:
 	super.start()
-	if DebugGizmos.enabled:
-		debug_feeler = DebugGizmos.DebugLine.new(Color.ORANGE)
-		debug_displacement = DebugGizmos.DebugLine.new(Color.RED)
-		debug_velocity = DebugGizmos.DebugLine.new(Color.GREEN)
-		add_child(debug_feeler)
-		add_child(debug_displacement)	
-		add_child(debug_velocity)
+	debug_feeler = DebugGizmos.DebugLine.new(Color.ORANGE)
+	debug_displacement = DebugGizmos.DebugLine.new(Color.RED)
+	debug_velocity = DebugGizmos.DebugLine.new(Color.GREEN)
+	add_child(debug_feeler)
+	add_child(debug_displacement)	
+	add_child(debug_velocity)
 
 func _seek(seek_target: Vector2)->Vector2:
 	var to_target = (seek_target - bird.global_position).normalized()
@@ -107,8 +101,7 @@ func _wander()->Vector2:
 	# The bird can go up, down, left or right, so the target becomes the direction
 	local_target = target.normalized() * distance
 	world_target = (bird.global_position + local_target)
-	if DebugGizmos.enabled:
-		debug_displacement.draw([bird.global_position, world_target])
+	debug_displacement.draw([bird.global_position, world_target])
 	theta += frequency * get_physics_process_delta_time() * PI * 2.0
 	return _seek(world_target)
 	#return Vector2.ZERO
@@ -118,8 +111,7 @@ func _avoidance()->Vector2:
 	var state_space = bird.get_world_2d().direct_space_state
 	var query = PhysicsRayQueryParameters2D.create(bird.global_position, bird.global_position + (bird.velocity.normalized() * feeler_distance), bird.collision_mask)
 	var result = state_space.intersect_ray(query)
-	if DebugGizmos.enabled:
-		debug_feeler.draw([bird.global_position, bird.global_position + (bird.velocity.normalized() * feeler_distance)])
+	debug_feeler.draw([bird.global_position, bird.global_position + (bird.velocity.normalized() * feeler_distance)])
 	if not result.is_empty(): 
 		var to_bird = bird.global_position - result.position
 		var force_magnatiude = (feeler_distance - to_bird.length()) * (distance)

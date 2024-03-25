@@ -15,7 +15,7 @@ enum LogType {
 	ANIMATION
 }
 
-var is_debug: bool = true :
+var is_debug: bool = false :
 	set(value): value
 	get: return is_debug
 var seperate_bird_logs: bool = false :

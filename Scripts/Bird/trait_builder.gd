@@ -152,6 +152,7 @@ func build_parenting()->void:
 		parenting_sequence.add_child(UpdateStatus.new(bird, "parenting", id+": StartingParentingBehaviou"))
 	parenting_sequence.add_child(FindNearestResource.new(bird, bird.species.diet, id+": GetFood"))
 	parenting_sequence.add_child(_build_navigation(resource_available_check.bind(bird.species.diet)))
+	parenting_sequence.add_child(Consume.new(bird, bird.species.diet, id+": ConsumeFood"))
 	parenting_sequence.add_child(FlyToTarget.new(bird, nest_location, id+": FlyToNest"))
 	parenting_sequence.add_child(_build_navigation(nest_still_exists))
 	parenting_sequence.add_child(PlayAnimation.new(bird, id+": PlayPlaceAnimation"))

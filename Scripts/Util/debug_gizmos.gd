@@ -1,6 +1,6 @@
 extends Node
 
-var enabled: bool = true
+var enabled: bool = false
 
 class DebugLine extends Node2D:
 	var _line: Line2D
@@ -14,8 +14,8 @@ class DebugLine extends Node2D:
 		add_child(_line)
 	
 	func draw(points: Array[Vector2]):
+		_line.clear_points()
 		if not DebugGizmos.enabled:
 			return
-		_line.clear_points()
 		for point in points:
 			_line.add_point(point)

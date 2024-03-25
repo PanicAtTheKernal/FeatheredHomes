@@ -1,7 +1,7 @@
 extends Node
 
 const NON_MOBLIE_SIZE = 1080
-const welcome_text: String = """Welcome to the Feathered Home Pre-Alpha. Please note that the app is still under development, and you might find issues. The goal with this Alpha is to test the camera, bird asset generator, UI functions and bird AI behaviour. Player data is reset every time the app is loaded. You can get new birds by photographing one or clicking on the magnify button to open a text search. This app collects anonymised data from users for debugging purposes. Any images you upload are not stored. No identifiable information is collected. By pressing ok, you agree to these terms. You can send feedback to Daniel directly or open an issue on the GitHub Repo. Thank you for checking out the app, and have fun playing around with it."""
+const welcome_text: String = "Welcome to Feathered Homes, where you can bring bird photos to life with the power of generative AI! Point your camera, snap a picture, and within a minute or two, connect with the beauty of nature in a whole new way. If you have any issues or feedback, mention it on the survey or open a ticket on the GitHub page at https://github.com/PanicAtTheKernal/FinalYearProject. This app collects anonymised data from users for debugging purposes. Any images you upload are not stored. No identifiable information is collected. By pressing ok, you agree to these terms."
 const BIRD_SFX_FILE_PATH = "res://Assets/Sounds/SFX/Bird_SFX/"
 
 var graph

@@ -61,6 +61,7 @@ func _on_navigation_toggled(toggled_on: bool) -> void:
 	var birds = get_tree().root.find_child("Birds", true, false)
 	for bird in birds.get_children():
 		bird.nav_agent.debug_enabled = toggled_on
+	DebugGizmos.enabled = toggled_on
 
 func _on_fps_toggled(toggled_on: bool) -> void:
 	DebugDraw2D.debug_enabled = toggled_on

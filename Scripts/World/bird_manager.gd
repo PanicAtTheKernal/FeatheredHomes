@@ -52,7 +52,7 @@ func _ready() -> void:
 		#BirdResourceManager.add_bird("Dunnock")
 	#for i in range(15):
 		#BirdResourceManager.add_bird("Blue tit")
-	#for i in range(4):
+	#for i in range(1):
 		#var fem_bird = create_bird(female)
 		#add_bird(fem_bird)
 		#var man_bird = create_bird(male)

@@ -189,6 +189,7 @@ theme_override_constants/margin_right = 100
 
 [node name="Button" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/Credits/VBoxContainer/MarginContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Show"
 
 [node name="MarginContainer2" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer"]

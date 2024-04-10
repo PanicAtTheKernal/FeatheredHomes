@@ -1,2 +1,9 @@
-traitId,traitName,traitRule,traitPattern
-26118393-ba5c-4bcb-a87e-7f64364982ce,Can not walk long distances,"{""FreeRoamSequence"":{""CalculateDistances"":{""MovementSelector"":{""GroundSequence"":[]}}}}",{}
+traitId,traitName
+26118393-ba5c-4bcb-a87e-7f64364982ce,canFly
+8513382f-a60a-4a02-ae95-b281c07ded41,canSwim
+44d7dc9c-b279-4480-9c6a-f13770802873,preen
+dcc7425a-235a-4719-bb78-1344ecb3bea9,takesDustBaths
+c08b846f-beec-4109-b8b9-ca6c466440f8,doesSunbathing
+357e7600-2c5a-47bc-954e-e09038a56118,singleMaleParent
+0c19864a-03d2-4ae6-836f-602528b3622a,coparents
+b347d8bb-78bc-4290-a7ae-81f668d90c43,singleFemaleParent

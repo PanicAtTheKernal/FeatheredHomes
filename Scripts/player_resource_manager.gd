@@ -3,7 +3,7 @@ extends Node
 const PLAYER_DATA_PATH: String = "user://PlayerData/"
 const PLAYER_BIRDS_PATH: String = PLAYER_DATA_PATH + "Birds/"
 const PLAYER_DATA_FILE: String = "player-data.tres"
-const PLAYER_DATA_VERSION: float = 1.0
+const PLAYER_DATA_VERSION: float = 1.1
 
 var player_data: PlayerData
 var logger_key = {

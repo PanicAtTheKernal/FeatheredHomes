@@ -18,7 +18,7 @@ alternative_tile = 0
 [resource]
 script = ExtResource("1_bpr3i")
 name = "InsectWorm"
-respawn_rate = 0.4
+respawn_rate = 0.5
 initial_state = "Full"
 states = {
 "Empty": SubResource("Resource_e87ui"),

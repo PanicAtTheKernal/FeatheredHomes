@@ -25,6 +25,7 @@ func _on_image_request_completed(image_buffers)->void:
 	var image = image_buffers.values()[0]
 	Logger.print_debug("Creating a image request", logger_key)
 	get_tree().call_group("LoadingButton", "show_loading")
+	get_tree().root.find_child("BTimer", true, false).start_timer()
 	var image_identification = ImageIdentification.new(image)
 	add_child(image_identification)
 	image_identification.send_request()

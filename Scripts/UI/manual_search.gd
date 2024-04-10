@@ -35,6 +35,7 @@ func _on_ok_button_pressed()->void:
 	hide()
 	var input = line_edit.text.strip_edges()
 	if _validate_input(input):
+		get_tree().root.find_child("BTimer", true, false).start_timer()
 		BirdResourceManager.find_bird(input)
 		get_tree().call_group("LoadingSearchButton", "show_loading")
 		get_tree().call_group("PlayerCamera", "turn_on_movement")

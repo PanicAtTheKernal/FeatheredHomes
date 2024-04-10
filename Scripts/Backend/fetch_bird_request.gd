@@ -37,6 +37,10 @@ func _create_request()->void:
 	add_child(http_request)
 
 func _on_fetch_bird_species_request_complete(_result: int, response_code_a: int, _headers: PackedStringArray, body: PackedByteArray)->void:
+	if response_code_a == HTTPClient.RESPONSE_BAD_GATEWAY:
+		get_tree().call_group("Dialog", "display", "There was an error with the database")
+		request_processed.emit()
+		return
 	response_body = JSON.parse_string(body.get_string_from_ascii()) as Dictionary
 	if response_code_a != HTTPClient.RESPONSE_OK:
 		Logger.print_debug("Error retrieving bird: (Response Code) "+str(response_code_a)+" (Body) "+response_body.get("error"), logger_key)

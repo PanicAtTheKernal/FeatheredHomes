@@ -18,7 +18,7 @@ alternative_tile = 0
 [resource]
 script = ExtResource("1_q15rg")
 name = "FruitShrub"
-respawn_rate = 0.3
+respawn_rate = 0.35
 initial_state = "Full"
 states = {
 "Empty": SubResource("Resource_w0h2o"),

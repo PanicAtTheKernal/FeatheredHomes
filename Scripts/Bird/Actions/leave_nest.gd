@@ -22,6 +22,7 @@ func run()->void:
 				partner.listener.emit(bird.BirdCalls.LEAVE, bird.id, nest_map_cords)
 				bird.partner = -1
 				bird.mate = false
+				bird.reset_mate()
 	super.success()
 	
 func start()->void:

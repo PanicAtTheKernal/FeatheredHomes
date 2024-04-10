@@ -52,7 +52,7 @@ func _ready() -> void:
 		#BirdResourceManager.add_bird("Dunnock")
 	#for i in range(15):
 		#BirdResourceManager.add_bird("Blue tit")
-	#for i in range(1):
+	#for i in range(5):
 		#var fem_bird = create_bird(female)
 		#add_bird(fem_bird)
 		#var man_bird = create_bird(male)
@@ -67,6 +67,9 @@ func _load_birds() -> void:
 		return
 	for bird_state: BirdState in PlayerResourceManager.player_data.birds:
 		var bird_info = BirdResourceManager.load_bird(bird_state.species_name, bird_state.gender)
+		# Skip if the bird data gets removed
+		if bird_info == null:
+			continue
 		#bird_info.species = bird_state.species
 		var bird = create_bird(bird_info)
 		#bird.species = null
@@ -116,6 +119,7 @@ func spawn_bird(new_bird: Bird, location: Vector2)->void:
 	Logger.print_debug("New bird has been added ID: "+str(new_bird.id), logger_key)
 	Logger.create_new_bird_log(new_bird.id)
 	add_child(new_bird)
+	get_tree().root.find_child("BTimer", true, false).end_timer()
 
 func add_bird(new_bird: Bird, random_bird: bool = false)->void:
 	spawn_bird(new_bird, player_camera.get_screen_center_position())

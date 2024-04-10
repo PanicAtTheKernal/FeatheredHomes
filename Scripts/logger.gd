@@ -15,7 +15,7 @@ enum LogType {
 	ANIMATION
 }
 
-var is_debug: bool = false :
+var is_debug: bool = true :
 	set(value): value
 	get: return is_debug
 var seperate_bird_logs: bool = false :
@@ -26,11 +26,11 @@ var allowed_logs: Dictionary = {
 	LogType.CAMERA: true,
 	LogType.DATABASE: true,
 	LogType.NAVIGATION: true,
-	LogType.AI: true,
+	LogType.AI: false,
 	LogType.GENERAL: true,
 	LogType.UI: true,
 	LogType.BUILDER: true,
-	LogType.ANIMATION: true
+	LogType.ANIMATION: false
 }
 
 var log_colours: Dictionary = {

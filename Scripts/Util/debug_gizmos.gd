@@ -16,6 +16,10 @@ class DebugLine extends Node2D:
 	func draw(points: Array[Vector2]):
 		_line.clear_points()
 		if not DebugGizmos.enabled:
+			_line.clear_points()
 			return
 		for point in points:
 			_line.add_point(point)
+	
+	func _clear_lines():
+		_line.clear_points()

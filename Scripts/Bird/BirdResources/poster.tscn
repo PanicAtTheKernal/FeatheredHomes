@@ -1,11 +1,39 @@
-[gd_scene load_steps=6 format=3 uid="uid://eeidvtn4de67"]
+[gd_scene load_steps=15 format=3 uid="uid://bvum0j8bk210y"]
 
 [ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="1_ghckf"]
 [ext_resource type="Texture2D" uid="uid://ccuajxhacsxoy" path="res://Assets/camera.png" id="3_fj218"]
 [ext_resource type="Script" path="res://Scripts/UI/camera_button.gd" id="4_0co5c"]
 [ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="4_7wuor"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_pyqga"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wxi6v"]
+load_path = "res://.godot/imported/Screenshot from 2024-03-25 14-43-34.png-924d751ae5860dad3137740ca0a773d4.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ux5jc"]
+load_path = "res://.godot/imported/Screenshot from 2024-03-25 14-49-51.png-0317790128d7d468896ba72b8ba22166.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_j6udw"]
+load_path = "res://.godot/imported/Screenshot from 2024-03-25 14-48-27.png-2127d3c0db602ed64f5aff0861c7d057.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yy0my"]
+load_path = "res://.godot/imported/godot.png-a0031dfef3e06805b97733e8dcc5a933.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pv633"]
+load_path = "res://.godot/imported/Google-Cloud.png-66c42f02de9e995d21f239a7b3699f1b.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_fx7qk"]
+load_path = "res://.godot/imported/ChatGPT-Logo.png-3fa5baa1792158f19c26dd92649dd925.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wehcx"]
+load_path = "res://.godot/imported/postgres.png-d64f8087f96b22a61c757ef970664b31.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bxghp"]
+load_path = "res://.godot/imported/typescript.png-e415d0508b124857f2c9b6a74dd9be64.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3wi5l"]
+load_path = "res://.godot/imported/supabase.png-c45bf9c55c4cc8741dbd36a721010562.ctex"
+
+[sub_resource type="LabelSettings" id="LabelSettings_15x4a"]
+font_size = 32
 
 [node name="Control" type="CanvasLayer"]
 
@@ -34,13 +62,14 @@ custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme = ExtResource("1_ghckf")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 60
+theme_override_font_sizes/font_size = 96
 text = "FEATHERED HOMES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/MarginContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Daniel Kondabarov TU856"
 horizontal_alignment = 1
 
@@ -69,7 +98,7 @@ size_flags_vertical = 3
 alignment = 1
 
 [node name="Part1" type="PanelContainer" parent="VBoxContainer/MarginContainer4/HBoxContainer"]
-custom_minimum_size = Vector2(200, 260)
+custom_minimum_size = Vector2(400, 240)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -80,25 +109,31 @@ size_flags_vertical = 0
 
 [node name="Label" type="Label" parent="VBoxContainer/MarginContainer4/HBoxContainer/Part1/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "1. Take photos"
 horizontal_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer4/HBoxContainer/Part1/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+texture = SubResource("CompressedTexture2D_wxi6v")
+expand_mode = 1
 
 [node name="Label2" type="Label" parent="VBoxContainer/MarginContainer4/HBoxContainer/Part1/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Take a picture of any bird "
 horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="Part2" type="CenterContainer" parent="VBoxContainer/MarginContainer4/HBoxContainer"]
+custom_minimum_size = Vector2(400, 240)
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/MarginContainer4/HBoxContainer/Part2"]
-custom_minimum_size = Vector2(200, 260)
+custom_minimum_size = Vector2(400, 240)
 layout_mode = 2
 size_flags_vertical = 4
 
@@ -108,21 +143,26 @@ size_flags_vertical = 0
 
 [node name="Label" type="Label" parent="VBoxContainer/MarginContainer4/HBoxContainer/Part2/PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "2. Generate Birds"
 horizontal_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer4/HBoxContainer/Part2/PanelContainer/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+texture = SubResource("CompressedTexture2D_ux5jc")
+expand_mode = 1
 
 [node name="Label2" type="Label" parent="VBoxContainer/MarginContainer4/HBoxContainer/Part2/PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Wait for the bird to be generated"
 horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="Part3" type="PanelContainer" parent="VBoxContainer/MarginContainer4/HBoxContainer"]
-custom_minimum_size = Vector2(200, 260)
+custom_minimum_size = Vector2(400, 240)
 layout_mode = 2
 size_flags_vertical = 4
 
@@ -131,15 +171,20 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/MarginContainer4/HBoxContainer/Part3/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "3. Experience life"
 horizontal_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer4/HBoxContainer/Part3/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+texture = SubResource("CompressedTexture2D_j6udw")
+expand_mode = 1
 
 [node name="Label2" type="Label" parent="VBoxContainer/MarginContainer4/HBoxContainer/Part3/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Watch Digital life unfold in front of you"
 horizontal_alignment = 1
 autowrap_mode = 2
@@ -157,12 +202,82 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Technologies used"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer"]
 layout_mode = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("CompressedTexture2D_yy0my")
+expand_mode = 1
+
+[node name="MarginContainer5" type="MarginContainer" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 130)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("CompressedTexture2D_pv633")
+expand_mode = 2
+
+[node name="MarginContainer4" type="MarginContainer" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("CompressedTexture2D_fx7qk")
+expand_mode = 1
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("CompressedTexture2D_wehcx")
+expand_mode = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("CompressedTexture2D_bxghp")
+expand_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/MarginContainer3/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("CompressedTexture2D_3wi5l")
+expand_mode = 1
 
 [node name="Container2" type="Container" parent="VBoxContainer"]
 layout_mode = 2
@@ -190,6 +305,7 @@ alignment = 1
 [node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/PanelContainer/BoxContainer/VBoxContainer2"]
 layout_mode = 2
 text = "Music/Sound:"
+label_settings = SubResource("LabelSettings_15x4a")
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="VBoxContainer/MarginContainer2/PanelContainer/BoxContainer/VBoxContainer2"]
@@ -197,7 +313,7 @@ layout_mode = 2
 theme = ExtResource("4_7wuor")
 theme_override_font_sizes/font_size = 16
 text = "Ian Cecil Scott"
-label_settings = SubResource("LabelSettings_pyqga")
+label_settings = SubResource("LabelSettings_15x4a")
 horizontal_alignment = 1
 
 [connection signal="pressed" from="VBoxContainer/Container/CameraButton" to="VBoxContainer/Container/CameraButton" method="_on_pressed"]

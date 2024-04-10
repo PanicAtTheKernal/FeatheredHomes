@@ -59,6 +59,7 @@ var current_stamina: float
 var distance_to_target: float
 var target_reached: bool = false
 var is_distance_calculated: bool = false
+var is_ready_to_mate = true
 var state: States = States.AIR
 var current_tile: String
 var current_partition: Vector2i
@@ -233,7 +234,8 @@ func get_all_nearby_birds()->Array[Bird]:
 	var nearby_birds: Array[Bird] = []
 	var row = current_partition.x
 	var col = current_partition.y
-	var neighbours = [
+	var neighbours = [		
+		Vector2i(row, col),
 		Vector2i(row + 1, col),
 		Vector2i(row + 1, col+1),
 		Vector2i(row + 1, col-1),
@@ -242,11 +244,13 @@ func get_all_nearby_birds()->Array[Bird]:
 		Vector2i(row - 1, col-1),
 		Vector2i(row, col + 1),
 		Vector2i(row, col - 1),
-		Vector2i(row, col)
 	]
 	for neighbour:Vector2i in neighbours:
 		if not tile_map.check_if_within_partition_bounds(neighbour):
 			continue
+		# Don't check all the neighbours just the closest ones
+		if nearby_birds.size() > 10:
+			break
 		var partition = bird_manager.partitions[neighbour]
 		for nearby_bird: Bird in partition:
 			# Make sure only birds that are the same type flock, the position check
@@ -270,6 +274,11 @@ func _die() -> void:
 	bird_manager.remove_bird(current_partition, self)
 	Logger.print_fail(str("Bird ",id," has died"),logger_key)
 	queue_free()
+
+func reset_mate()->void:
+	is_ready_to_mate = false	
+	await get_tree().create_timer(30).timeout
+	is_ready_to_mate = true
 
 func _on_button_pressed():
 	get_tree().call_group("BirdStat", "show")	
@@ -326,6 +335,8 @@ func _on_call(call_message: BirdCalls, messager_id: int, data: Variant) -> void:
 		BirdCalls.NEST_BUILT:
 			nest = null
 		BirdCalls.LEAVE:
+			if nest != null:
+				nest_manager.leave_nest(nest.position, info)
 			nest = null
 			partner = -1
 			mate = false

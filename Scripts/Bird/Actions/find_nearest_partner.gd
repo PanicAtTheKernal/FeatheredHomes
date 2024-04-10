@@ -19,7 +19,7 @@ func run()->void:
 	var partner_condition = func(nearby_bird) : 
 			return (nearby_bird == null) or (bird.info.gender == nearby_bird.info.gender) or (nearby_bird.current_age < 4) or \
 			(bird.species.name != nearby_bird.species.name) or (bird.partner == nearby_bird.id) or (nearby_bird.nest != null) \
-			or (not nearby_bird.mate) or (nearby_bird.partner != -1) or (nearby_bird.current_tile == "Water")
+			or (not nearby_bird.mate) or (nearby_bird.partner != -1) or (nearby_bird.current_tile == "Water") or (not nearby_bird.is_ready_to_mate)
 	var shortest_distance =  bird.find_nearest_bird(partner_condition, bird.current_partition)
 	if shortest_distance == null:
 		shortest_distance = bird.check_closest_adjacent_cells_bird(partner_condition)

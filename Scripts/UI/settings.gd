@@ -1,5 +1,7 @@
 extends Control
 
+class_name settings
+
 @onready 
 var music_bus_id: int = AudioServer.get_bus_index("Music")
 @onready
@@ -15,6 +17,7 @@ var music_slider: HSlider = %MusicSlider
 @onready 
 var sound_slider: HSlider = %SoundSlider
 
+signal clear_lines
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -49,7 +52,7 @@ func _on_sound_slider_value_changed(value: float) -> void:
 	sound_value.text = str(round(value*100),"%")
 	AudioServer.set_bus_volume_db(sound_bus_id, linear_to_db(value))
 	AudioServer.set_bus_volume_db(ambiance_bus_id, linear_to_db(value))
-	PlayerResourceManager.player_data.sound_volume = value*1.5
+	PlayerResourceManager.player_data.sound_volume = value
 	PlayerResourceManager.save_player_data()	
 
 
@@ -61,6 +64,7 @@ func _on_navigation_toggled(toggled_on: bool) -> void:
 	var birds = get_tree().root.find_child("Birds", true, false)
 	for bird in birds.get_children():
 		bird.nav_agent.debug_enabled = toggled_on
+		clear_lines.emit()
 	DebugGizmos.enabled = toggled_on
 
 func _on_fps_toggled(toggled_on: bool) -> void:

@@ -2,11 +2,11 @@ extends Task
 
 class_name WanderBehaviour
 
-const WANDER_WEIGHT = 0.8
+const WANDER_WEIGHT = 0.6
 const AVOIDANCE_WEIGHT = 0.8
-const SEPERATION_WEIGHT = 0.8
-const COHERSION_WEIGHT = 0.8
-const ALLIGNMENT_WEIGHT = 0.8
+const SEPERATION_WEIGHT = 0.7
+const COHERSION_WEIGHT = 0.7
+const ALLIGNMENT_WEIGHT = 0.7
 
 var bird: Bird
 var noise: FastNoiseLite
@@ -28,7 +28,10 @@ var debug_feeler: DebugGizmos.DebugLine
 var debug_displacement: DebugGizmos.DebugLine
 var debug_velocity: DebugGizmos.DebugLine
 
+var force: Vector2
 var max_force = 10
+var calculate_new_force = true
+var count_to_new_force = 0
 
 func _init(parent_bird: Bird, node_name:String="Wander") -> void:
 	super(node_name)
@@ -43,35 +46,47 @@ func _init(parent_bird: Bird, node_name:String="Wander") -> void:
 	feeler_distance = distance + 10
 
 func run()->void:
-	var force: Vector2 = Vector2.ZERO
-	var forces: Array[Vector2] = []
-	forces.push_back(_avoidance() * AVOIDANCE_WEIGHT) 
-	# flocking forces
-	var seperation_f = Vector2.ZERO
-	var allignment_desired = Vector2.ZERO
-	var center_of_mass = Vector2.ZERO
-	var nearby_birds = bird.get_all_nearby_birds()
-	for nearby_bird in nearby_birds:
-		seperation_f += _seperation(nearby_bird)
-		allignment_desired += _alignment(nearby_bird)
-		center_of_mass += _cohersion(nearby_bird)
-	forces.push_back(seperation_f * SEPERATION_WEIGHT)
-	forces.push_back(_alignment_force(allignment_desired, nearby_birds.size()) * ALLIGNMENT_WEIGHT)
-	forces.push_back(_cohersion_force(center_of_mass, nearby_birds.size()) * COHERSION_WEIGHT)
-	forces.push_back(_wander() * WANDER_WEIGHT) 	
-	for b_force: Vector2 in forces:
-		if is_nan(b_force.x) or is_nan(b_force.y):
-			force += Vector2.ZERO
-		force += b_force
-		if force.length() > max_force:
-			force = force.limit_length(max_force)
-			break
-	debug_velocity.draw([bird.global_position, (bird.global_position+force)])
-	var acceleration = force/ bird.mass
-	bird.animatated_spite.flip_h = bird.velocity.normalized().x < 0
-	bird.velocity = bird.velocity + acceleration * get_physics_process_delta_time()
-	bird.move_and_slide()
-	super.success()
+	if not calculate_new_force:
+		debug_velocity.draw([bird.global_position, (bird.global_position+force)])
+		var acceleration = force/ bird.mass
+		bird.animatated_spite.flip_h = bird.velocity.normalized().x < 0
+		bird.velocity = bird.velocity + acceleration * get_physics_process_delta_time()
+		bird.move_and_slide()
+		if count_to_new_force == 20:
+			calculate_new_force = true
+		count_to_new_force += 1
+		super.success()
+	else:
+		count_to_new_force = 0
+		force = Vector2.ZERO
+		var forces: Array[Vector2] = []
+		forces.push_back(_avoidance() * AVOIDANCE_WEIGHT) 
+		# flocking forces
+		var seperation_f = Vector2.ZERO
+		var allignment_desired = Vector2.ZERO
+		var center_of_mass = Vector2.ZERO
+		var nearby_birds = bird.get_all_nearby_birds()
+		for nearby_bird in nearby_birds:
+			seperation_f += _seperation(nearby_bird)
+			allignment_desired += _alignment(nearby_bird)
+			center_of_mass += _cohersion(nearby_bird)
+		forces.push_back(seperation_f * SEPERATION_WEIGHT)
+		forces.push_back(_alignment_force(allignment_desired, nearby_birds.size()) * ALLIGNMENT_WEIGHT)
+		forces.push_back(_cohersion_force(center_of_mass, nearby_birds.size()) * COHERSION_WEIGHT)
+		forces.push_back(_wander() * WANDER_WEIGHT) 	
+		for b_force: Vector2 in forces:
+			if is_nan(b_force.x) or is_nan(b_force.y):
+				force += Vector2.ZERO
+			force += b_force
+			if force.length() > max_force:
+				force = force.limit_length(max_force)
+				break
+		debug_velocity.draw([bird.global_position, (bird.global_position+force)])
+		var acceleration = force/ bird.mass
+		bird.animatated_spite.flip_h = bird.velocity.normalized().x < 0
+		bird.velocity = bird.velocity + acceleration * get_physics_process_delta_time()
+		bird.move_and_slide()
+		super.success()
 	
 func start()->void:
 	super.start()
@@ -79,8 +94,12 @@ func start()->void:
 	debug_displacement = DebugGizmos.DebugLine.new(Color.RED)
 	debug_velocity = DebugGizmos.DebugLine.new(Color.GREEN)
 	add_child(debug_feeler)
-	add_child(debug_displacement)	
+	add_child(debug_displacement)
 	add_child(debug_velocity)
+	get_tree().root.find_child("Settings", true, false).clear_lines.connect(debug_feeler._clear_lines)
+	get_tree().root.find_child("Settings", true, false).clear_lines.connect(debug_displacement._clear_lines)
+	get_tree().root.find_child("Settings", true, false).clear_lines.connect(debug_velocity._clear_lines)
+	
 
 func _seek(seek_target: Vector2)->Vector2:
 	var to_target = (seek_target - bird.global_position).normalized()

@@ -2,6 +2,8 @@ C20456964 Daniel Kondabarov Final Year Project
 
 Github: https://github.com/PanicAtTheKernal/FinalYearProject
 
+Music and Sound Created by [Ian Cecil Scott](https://www.iancecilscott.com/)
+
 # Notes
 - All code files end with .ts or .gd
 - .tcsn are scene files for Godot
@@ -14,9 +16,11 @@ Github: https://github.com/PanicAtTheKernal/FinalYearProject
     - Get the URL of the instance
     - Get the anon key (API key) from the instance
 2. OpenAI API Key 
-3. Install Supabase locally ([Guide](https://supabase.com/docs/guides/cli/getting-started))
-4. Install [Godot](godotengine.org)
-5. Clone this repo to your local machine
+3. Google Cloud Project with the Vision API enabled ([Guide](https://cloud.google.com/vision/docs/setup))
+4. Google Cloud API Key ([Guide](https://cloud.google.com/docs/authentication/api-keys))
+5. Install Supabase locally ([Guide](https://supabase.com/docs/guides/cli/getting-started))
+6. Install [Godot 4.2](godotengine.org)
+7. Clone this repo to your local machine
 
 ## Setup storage 
 1. On the Supabase dashboard, click on the storage button in the side bar
@@ -40,8 +44,8 @@ Github: https://github.com/PanicAtTheKernal/FinalYearProject
 9. Drag and drop the csv file for that table and press import
 10. Repeat until necessary the tables are populated
 
-## Install the Supabase Godot Addon
-1. Download the addon from [Github](https://github.com/supabase-community/godot-engine.supabase/releases/tag/LW7)
+## Install the Addons
+1. Download the supabase addon from [Github](https://github.com/supabase-community/godot-engine.supabase/releases/tag/LW7)
 2. Extract the contents
 3. Copy the **addon** folder and place it in the root of the cloned repo
 4. Create an .env file in "addons/supabase"
@@ -58,6 +62,9 @@ supabaseKey="<Replace with your Supabase service key>"
 8. Click **Project Settings**
 9. Click **Plugins** 
 10. Enable the Supabase plugin 
+11. Repeat steps, 2-3,6-10 for the following plugins
+- [GodotGetImage](https://github.com/Lamelynx/GodotGetImagePlugin-Android)
+- [godot debug draw 3d](https://github.com/DmitriySalnikov/godot_debug_draw_3d)
 
 ## Deploying the Supabase functions
 1. Create an .env file in "Cloud Functions/supabase"
@@ -67,7 +74,8 @@ OPENAI_API_KEY=<OpenAI API key>
 OPENAI_ORG_ID=<Replace with your OpenAI Org ID>
 SUPABASE_SERVICE_ROLE_KEY=<Replace with your Supabase service key>
 SUPABASE_URL=<Replace with your Supabase instance url>
-VERSION=0.1
+VERSION=1.0
+GOOGLE_CLOUD_API_KEY=<Google Cloud API key>
 ```
 1. Open a terminal and navigate to "Cloud Functions"
 2. Follow these [steps](https://supabase.com/docs/guides/functions/deploy) to deploy to your instance

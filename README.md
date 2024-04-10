@@ -7,7 +7,7 @@ Music and Sound Created by [Ian Cecil Scott](https://www.iancecilscott.com/)
 # Notes
 - All code files end with .ts or .gd
 - .tcsn are scene files for Godot
-- The Assets folder only contains images and resources used for the project
+- The Assets folder only contains images, sound files and resources used for the project
 
 # How to set up
 
@@ -79,3 +79,20 @@ GOOGLE_CLOUD_API_KEY=<Google Cloud API key>
 ```
 1. Open a terminal and navigate to "Cloud Functions"
 2. Follow these [steps](https://supabase.com/docs/guides/functions/deploy) to deploy to your instance
+
+## Setup the game
+1. Create an .env file in the root of the project
+2. Add the lines
+```
+[environment]
+
+URL=<Replace with your Supabase instance url>
+LOCAL_URL=<Replace with your Supabase local instance url>
+IMAGE_ENDPOINT="imageIdentification"
+FIND_SPECIES_ENDPOINT="findSpecies"
+SEARCH_ENDPOINT="search"
+ANON_TOKEN=<Replace with your anon token>
+EMAIL=<create a basic user in the Supabase UI and paste username here>
+PASSWORD=<password here>
+VERSION="1.1"
+```

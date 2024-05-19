@@ -129,7 +129,8 @@ func add_bird(new_bird: Bird, random_bird: bool = false)->void:
 	var message = "You found a "+new_bird.info.species.name.capitalize()
 	if random_bird:
 		message = "You get a "+new_bird.info.species.name.capitalize()+" because the exact bird species can't be determined"
-	get_tree().call_group("Dialog", "display", message, "Congratulations!", true)
+	var dialog = Dialog.new().message(message).header("Congratulations!").grand_notification()
+	GlobalDialog.create(dialog)
 	get_tree().call_group("LoadingButton", "hide_loading")
 
 func create_traits(new_bird: Bird)->void:

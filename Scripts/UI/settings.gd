@@ -100,4 +100,5 @@ func _on_scroll_container_draw() -> void:
 
 
 func _on_button_pressed() -> void:
-	get_tree().call_group("Dialog", "display", "[color=#9f9f9f][u]Created By:[/u][/color]\nDaniel Kondabarov\n\n[color=#9f9f9f][u]Music\\Sound By:[/u][/color]\nIan Cecil Scott", "Credits:", true)
+	var credit_dialog = Dialog.new().message("[color=#9f9f9f][u]Created By:[/u][/color]\nDaniel Kondabarov\n\n[color=#9f9f9f][u]Music\\Sound By:[/u][/color]\nIan Cecil Scott").header("Credits:").grand_notification()
+	GlobalDialog.create(credit_dialog)

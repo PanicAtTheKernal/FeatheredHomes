@@ -74,10 +74,11 @@ func find_bird(bird_name: String)->void:
 	add_child(search_request)
 	var search_response = await  search_request.fetch_bird_species(bird_name, Database.get_search_endpoint())
 	search_request.queue_free()
-	if search_response["isValid"]:
+	if search_response.has("isValid"):
 		add_bird(search_response["speciesName"])
 	else:
-		get_tree().call_group("Dialog", "display", "Could not find bird")
+		var dialog = Dialog.new().message("Could not find bird").regular_notification()
+		GlobalDialog.create(dialog)
 		get_tree().call_group("LoadingSearchButton", "hide_loading")
 
 func save_bird(bird_data: BirdInfo)->void:

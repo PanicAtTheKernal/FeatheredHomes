@@ -37,17 +37,20 @@ func _create_request()->void:
 	add_child(http_request)
 
 func _on_fetch_bird_species_request_complete(_result: int, response_code_a: int, _headers: PackedStringArray, body: PackedByteArray)->void:
-	if response_code_a == HTTPClient.RESPONSE_BAD_GATEWAY:
-		get_tree().call_group("Dialog", "display", "There was an error with the database")
+	if response_code_a == HTTPClient.RESPONSE_BAD_GATEWAY or response_code_a == HTTPClient.RESPONSE_UNAUTHORIZED:
+		var error_dialog = Dialog.new().message("There was an error with the database").regular_notification()
+		GlobalDialog.create(error_dialog)
 		request_processed.emit()
 		return
 	response_body = JSON.parse_string(body.get_string_from_ascii()) as Dictionary
 	if response_code_a != HTTPClient.RESPONSE_OK:
 		Logger.print_debug("Error retrieving bird: (Response Code) "+str(response_code_a)+" (Body) "+response_body.get("error"), logger_key)
 		if response_body["error"] == "No template found":
-			get_tree().call_group("Dialog", "display", str("You found a ",bird_name_request," but it can't be generated at this time :( Please check the search button to see all bird families supported"))
+			var error_dialog = Dialog.new().message(str("You found a ",bird_name_request," but it can't be generated at this time :( Please check the search button to see all bird families supported")).regular_notification()
+			GlobalDialog.create(error_dialog)
 		else:		
-			get_tree().call_group("Dialog", "display", "There was an error with the database")
+			var error_dialog = Dialog.new().message("There was an error with the database")
+			GlobalDialog.create(error_dialog)
 		response_body = {}
 	response_body.make_read_only()
 	request_processed.emit()

@@ -33,8 +33,9 @@ func _notify_user(message:String, bird:String="")->void:
 	var user_message:String = ""
 	match message:
 		"No bird":
-			user_message = "Couldn't find any bird in the photo you took. Please take another photo and try again"
-			get_tree().call_group("Dialog", "display", user_message)
+			user_message = "Couldn't find any bird in the photo you took. Please take another photo and try again. TIP: Try taking the photo from a different angle"
+			var error_dialog = Dialog.new().message(user_message).regular_notification()
+			GlobalDialog.create(error_dialog)
 			get_tree().call_group("LoadingButton", "hide_loading")
 		"Blurry bird":
 			# Give a random bird as compensation
@@ -45,7 +46,8 @@ func _notify_user(message:String, bird:String="")->void:
 			user_message = "You found a "+bird+"!"
 		_:
 			user_message = "There was an error processing the image"
-			get_tree().call_group("Dialog", "display", user_message)
+			var error_dialog = Dialog.new().message(user_message).regular_notification()
+			GlobalDialog.create(error_dialog)
 			get_tree().call_group("LoadingButton", "hide_loading")
 
 func _on_image_request_complete(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray)->void:

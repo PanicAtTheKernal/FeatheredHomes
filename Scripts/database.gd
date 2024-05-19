@@ -57,7 +57,8 @@ func _login()->void:
 	var sign_result: AuthTask = await Supabase.auth.sign_in(email, password).completed
 	if sign_result.user == null:
 		Logger.print_debug("Failed to sign in", logger_key)
-		get_tree().call_group("Dialog", "display", "Not connected to database", "Warning!", false, false)
+		var warning_dialog = Dialog.new().message("Not connected to database").header("Warning!")
+		GlobalDialog.create(warning_dialog)
 		is_connected_to_db = false
 	else: 
 		config.set_value(ENVIRONMENT_VARIABLES, "access_token", access_token)

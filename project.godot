@@ -22,7 +22,9 @@ config/icon="res://Assets/main-logo.png"
 
 [autoload]
 
+ResourceFiles="*res://Scripts/Resources/ResourceSingleton/resource_files.gd"
 Logger="*res://Scripts/logger.gd"
+GlobalDialog="*res://Scripts/UI/Componets/Dialog/GlobalDialog.gd"
 Startup="*res://Scripts/startup.gd"
 Supabase="*res://addons/supabase/Supabase/supabase.gd"
 Database="*res://Scripts/database.gd"

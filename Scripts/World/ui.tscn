@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cc7jo7b3cgbem"]
+[gd_scene load_steps=24 format=3 uid="uid://cc7jo7b3cgbem"]
 
 [ext_resource type="Texture2D" uid="uid://b7a6fk0fwanx8" path="res://Assets/crosshair.png" id="3_48hw7"]
 [ext_resource type="Texture2D" uid="uid://ccuajxhacsxoy" path="res://Assets/camera.png" id="3_r2s6u"]
@@ -10,7 +10,6 @@
 [ext_resource type="Script" path="res://Scripts/UI/zoom_in_button.gd" id="7_7goe6"]
 [ext_resource type="Script" path="res://Scripts/UI/loading_button.gd" id="7_dmda8"]
 [ext_resource type="Script" path="res://Scripts/UI/camera_button.gd" id="7_v6h0r"]
-[ext_resource type="PackedScene" uid="uid://d2vy7b25mpbee" path="res://Scripts/UI/dialog.tscn" id="8_q6ckc"]
 [ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="9_xomvi"]
 [ext_resource type="Texture2D" uid="uid://gnvcs6o4qapv" path="res://Assets/bird-history.png" id="12_mo8vx"]
 [ext_resource type="Texture2D" uid="uid://sr6nk37ytiq6" path="res://Assets/search.png" id="13_ieebc"]
@@ -237,11 +236,6 @@ script = ExtResource("5_afy4f")
 [node name="Settings" parent="." instance=ExtResource("20_evmqt")]
 unique_name_in_owner = true
 visible = false
-
-[node name="Dialog" parent="." groups=["Dialog"] instance=ExtResource("8_q6ckc")]
-unique_name_in_owner = true
-visible = false
-offset_left = -0.00012207
 
 [node name="BirdHistory" parent="." instance=ExtResource("13_owhgl")]
 unique_name_in_owner = true

@@ -5,9 +5,9 @@ const welcome_text: String = "Welcome to Feathered Homes, where you can bring bi
 const BIRD_SFX_FILE_PATH = "res://Assets/Sounds/SFX/Bird_SFX/"
 
 var graph
-var standard_notification: AudioStreamMP3
-var grand_notification: AudioStreamMP3
-var camera_notification: AudioStreamWAV
+var standard_notification: AudioStreamMP3 = ResourceFiles.standard_notification
+var grand_notification: AudioStreamMP3 = ResourceFiles.grand_notification
+var camera_notification: AudioStreamWAV = ResourceFiles.camera_notification
 var bird_sounds: Dictionary
 var logger_key = {
 	"type": Logger.LogType.RESOURCE,
@@ -15,24 +15,16 @@ var logger_key = {
 }
 # Rotate the screen to potrait on moblie devices
 func _ready()->void:
-	_get_sounds()
 	_load_bird_sounds()
 	_setup_screen_orientation()
-	_print_welcome_screen()
 	_load_easter_egg()
-	get_tree().set_auto_accept_quit(false)
-
+	call_deferred("_print_welcome_screen")
 	
 
 func _print_welcome_screen()->void:
-	var node: Array[Node] = get_tree().get_nodes_in_group("Dialog")
-	if len(node) > 0:
-		# Wait for all nodes to be ready
-		await node[-1].ready
-		get_tree().call_group("Dialog", "display", welcome_text, "Welcome!", true, false)
-		get_tree().call_group("PlayerCamera", "turn_off_movement")
-		get_tree().call_group("Dialog", "increase_dialog")
-	# ;)
+	var welcome_dialog = Dialog.new().message(welcome_text).header("Welcome!").fit_content(false).grand_notification().minimum_height(800)
+	GlobalDialog.create(welcome_dialog)
+	get_tree().call_group("PlayerCamera", "turn_off_movement")
 
 func _load_easter_egg()->void:
 	var easter_egg = get_tree().root.find_child("EasterEgg", true, false)
@@ -44,11 +36,6 @@ func _setup_screen_orientation()->void:
 	match os_name:
 		"Android", "iOS":
 			DisplayServer.screen_set_orientation(DisplayServer.SCREEN_PORTRAIT)
- 
-func _get_sounds()->void:
-	standard_notification = preload("res://Assets/Sounds/SFX/Feathered Homes NOTIFICATION (A).mp3")
-	grand_notification = preload("res://Assets/Sounds/SFX/Feathered Homes NOTIFICATION (B).mp3")
-	camera_notification = preload("res://Assets/Sounds/SFX/Camera Notification.wav")
 
 func _load_bird_sounds()->void:
 	var sound_folder = DirAccess.open(BIRD_SFX_FILE_PATH)

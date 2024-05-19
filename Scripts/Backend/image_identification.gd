@@ -16,7 +16,7 @@ var logger_key = {
 
 func _init(image: PackedByteArray)->void:
 	self.image = image
-	auth_header = "Authorization: Bearer " + Database.get_anon_token()
+	auth_header = "Authorization: Bearer " + Database.get_refresh_token()
 	content_type_header = "Content-Type: application/octet-stream"
 	headers = [auth_header, content_type_header]
 	url = Database.get_image_endpoint()

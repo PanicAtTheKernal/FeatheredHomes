@@ -30,7 +30,7 @@ func fetch_bird_species(bird_name: String, url: String)->Dictionary:
 
 func _create_request()->void:
 	http_request = HTTPRequest.new()
-	auth_header = "Authorization: Bearer " + Database.get_anon_token()
+	auth_header = "Authorization: Bearer " + Database.get_refresh_token()
 	content_type_header = "Content-Type: application/json"
 	request_headers = [auth_header, content_type_header]
 	http_request.request_completed.connect(_on_fetch_bird_species_request_complete)

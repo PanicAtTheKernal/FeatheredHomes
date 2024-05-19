@@ -28,6 +28,7 @@ const ID_COLS = {
 }
 
 var config: ConfigFile
+var access_token: String
 var is_connected_to_db: bool
 var traits: Dictionary
 var logger_key = {
@@ -58,10 +59,11 @@ func _login()->void:
 		Logger.print_debug("Failed to sign in", logger_key)
 		is_connected_to_db = false
 	else: 
+		access_token = sign_result.user.access_token
 		is_connected_to_db = true
 
-func get_anon_token()->String:
-	return config.get_value(ENVIRONMENT_VARIABLES, "ANON_TOKEN", "")
+func get_refresh_token()->String:
+	return access_token
 
 func get_image_endpoint()->String:
 	return config.get_value(ENVIRONMENT_VARIABLES, "URL", "") + config.get_value(ENVIRONMENT_VARIABLES, "IMAGE_ENDPOINT", "")

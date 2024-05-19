@@ -5,7 +5,7 @@ class_name Dialog
 @onready 
 var dialog_text : RichTextLabel = %Text
 @onready
-var heading_text : RichTextLabel = %Notice
+var heading_text : Header = %Header
 @onready
 var dialog: Control = $"."
 @onready
@@ -38,7 +38,7 @@ func display(message: String, heading: String = "Notice:",grand_sound: bool = fa
 	dialog.visible = true
 	dialog_text.text = message
 	dialog_text.fit_content = fit_content
-	heading_text.text = str("[b]",heading,"[/b]")
+	heading_text.text = heading
 	
 func increase_dialog()->void:
 	panel.custom_minimum_size.y = 800

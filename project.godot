@@ -75,6 +75,10 @@ folder_colors={
 "res://android/": "gray"
 }
 
+[gui]
+
+theme/custom="res://Assets/Theme.tres"
+
 [input]
 
 on_mouse_left_click={

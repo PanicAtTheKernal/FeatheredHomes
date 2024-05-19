@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/UI/dialog.gd" id="1_6thm6"]
 [ext_resource type="Texture2D" uid="uid://mflsr74fmyc" path="res://Assets/background.png" id="1_eeyfq"]
 [ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="3_2eewb"]
-[ext_resource type="FontFile" uid="uid://nxmuchvunil1" path="res://Assets/Silkscreen/Silkscreen-Bold.ttf" id="4_4ef35"]
+[ext_resource type="PackedScene" uid="uid://pvyfe81q2y78" path="res://Scripts/UI/Componets/Header/Header.tscn" id="4_krbmn"]
 
 [node name="Dialog" type="Control"]
 layout_mode = 3
@@ -55,22 +55,10 @@ theme_override_constants/margin_bottom = 20
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 12
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/MarginContainer"]
-layout_mode = 2
-
-[node name="Notice" type="RichTextLabel" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Header" parent="MarginContainer/Panel/MarginContainer/VBoxContainer" node_paths=PackedStringArray("node_to_close") instance=ExtResource("4_krbmn")]
 unique_name_in_owner = true
 layout_mode = 2
-theme = ExtResource("3_2eewb")
-theme_override_fonts/bold_font = ExtResource("4_4ef35")
-bbcode_enabled = true
-text = "[b]Notice:[/b]"
-fit_content = true
-autowrap_mode = 0
+node_to_close = NodePath("../../../../..")
 
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2

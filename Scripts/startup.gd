@@ -19,6 +19,7 @@ func _ready()->void:
 	_load_bird_sounds()
 	_setup_screen_orientation()
 	_print_welcome_screen()
+	_load_easter_egg()
 	get_tree().set_auto_accept_quit(false)
 
 	
@@ -32,7 +33,11 @@ func _print_welcome_screen()->void:
 		get_tree().call_group("PlayerCamera", "turn_off_movement")
 		get_tree().call_group("Dialog", "increase_dialog")
 	# ;)
-	get_tree().root.find_child("EasterEgg", true, false).show()
+
+func _load_easter_egg()->void:
+	var easter_egg = get_tree().root.find_child("EasterEgg", true, false)
+	if easter_egg != null:
+		easter_egg.show()
 
 func _setup_screen_orientation()->void:
 	var os_name = OS.get_name()

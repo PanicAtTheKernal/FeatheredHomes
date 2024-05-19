@@ -57,9 +57,10 @@ func _login()->void:
 	var sign_result: AuthTask = await Supabase.auth.sign_in(email, password).completed
 	if sign_result.user == null:
 		Logger.print_debug("Failed to sign in", logger_key)
+		get_tree().call_group("Dialog", "display", "Not connected to database", "Warning!", false, false)
 		is_connected_to_db = false
 	else: 
-		access_token = sign_result.user.access_token
+		config.set_value(ENVIRONMENT_VARIABLES, "access_token", access_token)
 		is_connected_to_db = true
 
 func get_refresh_token()->String:
@@ -87,6 +88,9 @@ func fetch_value(table_name: String, id: String, col_name: String)->String:
 	return result[col_name]
 
 func fetch_supported_familes()->Array[String]:
+	if not is_connected_to_db:
+		Logger.print_debug("Unable to fetch supported birds since database is not connected", logger_key)		
+		return [] 
 	var family_query: SupabaseQuery = SupabaseQuery.new().from(DATABASE_NAME.FAMILY_TO_SHAPE).select()
 	var family_result = await Supabase.database.query(family_query).completed
 	var supported_familes: Array[String] = []
@@ -95,6 +99,9 @@ func fetch_supported_familes()->Array[String]:
 	return supported_familes
 
 func fetch_all_birds()->Array[String]:
+	if not is_connected_to_db:
+		Logger.print_debug("Unable to fetch all birds since database is not connected", logger_key)
+		return []
 	var species_query: SupabaseQuery = SupabaseQuery.new().from("BirdSpecies").select()
 	var species_result = await Supabase.database.query(species_query).completed
 	var supported_familes: Array[String] = []

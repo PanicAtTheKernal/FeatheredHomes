@@ -30,8 +30,8 @@ class ListItem:
 # Called when the node enters the scene tree for the first time.
 func _ready()->void:
 	dragging = false
-	setup_list(BirdResourceManager.get_bird_list_items())
-	BirdResourceManager.new_bird_added.connect(_on_new_bird)
+	setup_list(BirdResourceManager.collected_birds.get_list_items())
+	BirdResourceManager.collected_birds.collected_birds_list_updated.connect(_on_new_bird)
 
 #func _process(_delta)->void:
 	#var window_size = get_window().size
@@ -46,7 +46,7 @@ func _on_close_button_pressed()->void:
 	hide()
 
 func _on_new_bird()->void:
-	setup_list(BirdResourceManager.get_bird_list_items())
+	setup_list(BirdResourceManager.collected_birds.get_list_items())
 	Logger.print_debug(("Updated bird history"), logger_key)
 
 func setup_list(items: Array[ListItem])->void:
@@ -70,7 +70,7 @@ func _on_item_list_item_selected(index: int)->void:
 	await get_tree().create_timer(0.2).timeout
 	if dragging:
 		return
-	var bird_info: BirdInfo = BirdResourceManager.get_bird(index)
+	var bird_info: BirdInfo = BirdResourceManager.collected_birds.get_bird(index)
 	list.deselect(index)
 	get_tree().call_group("BirdStat", "show")	
 	get_tree().call_group("BirdStat", "load_new_bird", bird_info)

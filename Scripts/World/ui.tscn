@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cc7jo7b3cgbem"]
+[gd_scene load_steps=25 format=3 uid="uid://cc7jo7b3cgbem"]
 
 [ext_resource type="Texture2D" uid="uid://b7a6fk0fwanx8" path="res://Assets/crosshair.png" id="3_48hw7"]
 [ext_resource type="Texture2D" uid="uid://ccuajxhacsxoy" path="res://Assets/camera.png" id="3_r2s6u"]
@@ -19,6 +19,7 @@
 [ext_resource type="Script" path="res://Scripts/World/bird_history_button.gd" id="14_iyxci"]
 [ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="18_a5cmg"]
 [ext_resource type="Script" path="res://Scripts/Util/fps_ui.gd" id="19_85rgr"]
+[ext_resource type="PackedScene" uid="uid://ci5by2t26k4ye" path="res://Scripts/UI/Screens/bird_selection.tscn" id="20_aeoj1"]
 [ext_resource type="PackedScene" uid="uid://wu1rxyfuwmdt" path="res://Scripts/UI/settings.tscn" id="20_evmqt"]
 [ext_resource type="PackedScene" uid="uid://0w8vhuuiopaw" path="res://Scripts/UI/manual_search.tscn" id="20_uxstc"]
 
@@ -245,6 +246,9 @@ visible = false
 visible = false
 
 [node name="ManualSearch" parent="." groups=["Search"] instance=ExtResource("20_uxstc")]
+visible = false
+
+[node name="BirdSelection" parent="." groups=["Selection"] instance=ExtResource("20_aeoj1")]
 visible = false
 
 [node name="Debug" type="RichTextLabel" parent="."]

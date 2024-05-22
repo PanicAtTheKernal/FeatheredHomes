@@ -2,6 +2,7 @@ extends Node
 
 const BIRD_DATA_PATH: String = "user://Birds/"
 const BIRD_FILE_EXTENSION: String = "-INFO.tres"
+const LOCAL_BIRDS: String = "res://Assets/Birds/LocalBirds/"
 
 var birds: Array[BirdInfo]
 var logger_key = {
@@ -9,6 +10,7 @@ var logger_key = {
 	"obj": "BirdResourceManager"
 }
 var bird_manager: BirdManager
+var collected_birds: CollectedBirds = CollectedBirds.new()
 var birds_names: Array[String]
 
 signal new_bird_added
@@ -18,6 +20,8 @@ func _ready()->void:
 	_create_birds_folder()
 	_remove_outdated_bird_data()
 	_get_bird_manager()
+	#_load_birds_from_save()
+	_load_birds()
 
 func _get_bird_manager()->void:
 	bird_manager = get_tree().root.find_child("Birds", true, false)
@@ -30,6 +34,25 @@ func _create_birds_folder()->void:
 	if !DirAccess.dir_exists_absolute(BIRD_DATA_PATH):
 		Logger.print_debug("Creating Birds folder", logger_key)
 		DirAccess.make_dir_recursive_absolute(BIRD_DATA_PATH)
+
+func _load_birds()-> void:
+	var files = DirAccess.get_files_at(LOCAL_BIRDS)
+	for file in files:
+		var bird = ResourceLoader.load(LOCAL_BIRDS+file)
+		if bird == null:
+			continue
+		birds.push_back(bird)
+
+func _load_birds_from_save() -> void:
+	if len(PlayerResourceManager.player_data.birds) < 1:
+		return
+	for bird_state: BirdState in PlayerResourceManager.player_data.birds:
+		var bird_info = load_bird(bird_state.species_name, bird_state.gender)
+		# Skip if the bird data gets removed
+		if bird_info == null:
+			continue
+		bird_manager.load_bird(bird_info, bird_state)
+	PlayerResourceManager.player_data.birds = []
 
 func _remove_outdated_bird_data()->void:
 	var files = DirAccess.get_files_at(BIRD_DATA_PATH)
@@ -115,7 +138,7 @@ func add_bird(bird_species_name: String, random_bird: bool=false)->void:
 			get_tree().call_group("LoadingSearchButton", "hide_loading")
 			return
 		bird_request.queue_free()
-		if bird_data["birdUnisex"]:
+		if bird_data.has("birdUnisex"):
 			bird = await  _import_bird(bird_data, "Unisex")
 			# Give the bird a random gender if the bird apperance is unisex
 			bird.gender = ["male","female"].pick_random()
@@ -131,30 +154,9 @@ func add_bird(bird_species_name: String, random_bird: bool=false)->void:
 			bird = bird_infos.pick_random()
 	var new_bird = bird_manager.create_bird(bird)
 	bird_manager.add_bird(new_bird, random_bird)
-	birds.push_back(bird)
+	collected_birds.add(bird)
 	Logger.print_debug("Added new bird", logger_key)
 	get_tree().call_group("LoadingButton", "hide_loading")
 	get_tree().call_group("LoadingSearchButton", "hide_loading")
-	new_bird_added.emit()
+	#new_bird_added.emit()
 
-func get_bird_list_items()->Array[BirdLog.ListItem]:
-	var bird_list_items: Array[BirdLog.ListItem] = []
-	for bird in birds:
-		var new_bird_entry = BirdLog.ListItem.new().set_name(str("-",bird.species.name))
-		#if bird.status == "Dead":
-			#new_bird_entry.set_icon(bird.species.animations.get_frame_texture("Dead", 0))
-		#else:
-		new_bird_entry.set_icon(bird.species.animations.get_frame_texture("default", 0))
-		bird_list_items.push_back(new_bird_entry)
-	return bird_list_items
-
-func remove_bird(bird:BirdInfo)->void:
-	birds.erase(bird)
-	new_bird_added.emit()
-
-func get_bird(index: int)->BirdInfo:
-	return birds[index]
-
-func add_bird_to_list(bird: BirdInfo)->void:
-	birds.push_back(bird)
-	new_bird_added.emit()

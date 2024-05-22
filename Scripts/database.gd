@@ -39,7 +39,7 @@ var logger_key = {
 func _ready()->void:
 	is_connected_to_db = false
 	config = _load_env_file() 
-	await _login()
+	#await _login()
 	if not is_connected_to_db:
 		return
 

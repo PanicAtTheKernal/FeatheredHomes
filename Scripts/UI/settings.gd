@@ -68,9 +68,6 @@ func _on_navigation_toggled(toggled_on: bool) -> void:
 	DebugGizmos.enabled = toggled_on
 
 func _on_fps_toggled(toggled_on: bool) -> void:
-	DebugDraw2D.debug_enabled = toggled_on
-	if toggled_on:
-		DebugDraw2D.create_fps_graph("FPS")
 	var debug_stats = get_tree().root.find_child("Debug", true, false)
 	debug_stats.visible = toggled_on
 

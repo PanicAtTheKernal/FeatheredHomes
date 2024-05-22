@@ -1,0 +1,90 @@
+[gd_scene load_steps=4 format=3 uid="uid://d1r2323wjjern"]
+
+[ext_resource type="Texture2D" uid="uid://mflsr74fmyc" path="res://Assets/background.png" id="1_aduew"]
+[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="2_quqqr"]
+[ext_resource type="PackedScene" uid="uid://pvyfe81q2y78" path="res://Scripts/UI/Componets/Header/Header.tscn" id="3_iv28w"]
+
+[node name="DialogContent" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_aduew")
+expand_mode = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 100
+
+[node name="Panel" type="PanelContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 200)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("2_quqqr")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="Header" parent="MarginContainer/Panel/MarginContainer/VBoxContainer" instance=ExtResource("3_iv28w")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="Text" type="RichTextLabel" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_quqqr")
+theme_override_font_sizes/bold_font_size = 0
+bbcode_enabled = true
+text = "Place Holder asdfa sdf asd fas dfas dfas dfas dfa sdf asdf asd fasd fasd f asdf"
+fit_content = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+
+[node name="OkButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3/AspectRatioContainer"]
+custom_minimum_size = Vector2(128, 96)
+layout_mode = 2
+focus_mode = 0
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 56
+text = "OK"
+clip_text = true

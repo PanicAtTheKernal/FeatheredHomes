@@ -306,6 +306,93 @@ layout_mode = 2
 theme = ExtResource("1_ho04v")
 flat = true
 
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_top = 31
+
+[node name="AI Features" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("1_ho04v")
+theme_type_variation = &"InfoBox"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/AI Features"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/AI Features/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderSubInfo"
+text = "AI Features
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Heading2" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/AI Features/VBoxContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_ho04v")
+theme_type_variation = &"StatTextRich"
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]URL:[/u][/color] "
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="LineEdit" type="LineEdit" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/AI Features/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+virtual_keyboard_type = 7
+
+[node name="Heading3" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/AI Features/VBoxContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_ho04v")
+theme_type_variation = &"StatTextRich"
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]UserName:[/u][/color] "
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="LineEdit2" type="LineEdit" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/AI Features/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+virtual_keyboard_type = 5
+
+[node name="Heading4" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/AI Features/VBoxContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_ho04v")
+theme_type_variation = &"StatTextRich"
+theme_override_font_sizes/italics_font_size = 56
+bbcode_enabled = true
+text = "[color=#9f9f9f][u]Password:[/u][/color] "
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="LineEdit3" type="LineEdit" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/AI Features/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+virtual_keyboard_type = 6
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/AI Features/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 100
+
+[node name="Button" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/AI Features/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Enter"
+
 [node name="d2" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -321,3 +408,4 @@ size_flags_vertical = 4
 [connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/FPSCharts/CheckButton" to="." method="_on_fps_toggled"]
 [connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/WaterSound/CheckButton" to="." method="_on_wat_sound_sources_toggled"]
 [connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/DebugSettings/VBoxContainer/WindSound/CheckButton" to="." method="_on_win_sound_sources_toggled"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/VBoxContainer/AI Features/VBoxContainer/MarginContainer2/Button" to="." method="_on_submit_pressed"]

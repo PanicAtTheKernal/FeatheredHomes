@@ -17,6 +17,14 @@ var music_slider: HSlider = %MusicSlider
 @onready 
 var sound_slider: HSlider = %SoundSlider
 
+@onready
+var url_line: LineEdit = %LineEdit
+@onready
+var email_line: LineEdit = %LineEdit2
+@onready
+var password_line: LineEdit = %LineEdit3
+
+
 signal clear_lines
 
 # Called when the node enters the scene tree for the first time.
@@ -99,3 +107,7 @@ func _on_scroll_container_draw() -> void:
 func _on_button_pressed() -> void:
 	var credit_dialog = Dialog.new().message("[color=#9f9f9f][u]Created By:[/u][/color]\nDaniel Kondabarov\n\n[color=#9f9f9f][u]Music\\Sound By:[/u][/color]\nIan Cecil Scott").header("Credits:").grand_notification()
 	GlobalDialog.create(credit_dialog)
+
+
+func _on_submit_pressed() -> void:
+	pass # Replace with function body.

@@ -1,7 +1,7 @@
 extends Node
 
 const NON_MOBLIE_SIZE = 1080
-const welcome_text: String = "Welcome to Feathered Homes, where you can bring bird photos to life with the power of generative AI! Point your camera, snap a picture, and within a minute or two, connect with the beauty of nature in a whole new way. If you have any issues or feedback, mention it on the survey or open a ticket on the GitHub page at https://github.com/PanicAtTheKernal/FinalYearProject. This app collects anonymised data from users for debugging purposes. Any images you upload are not stored. No identifiable information is collected. By pressing ok, you agree to these terms."
+const welcome_text: String = "Welcome to Feathered Homes, where you can bring bird photos to life with the power of generative AI! This web version is a special offline build. Generative AI features are only available on the Android build. This build allows for the spawning of a handful of birds."
 const BIRD_SFX_FILE_PATH = "res://Assets/Sounds/SFX/Bird_SFX/"
 
 var graph

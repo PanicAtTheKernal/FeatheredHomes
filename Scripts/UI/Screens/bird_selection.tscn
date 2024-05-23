@@ -62,6 +62,7 @@ is_close_button_showing = true
 node_to_close = NodePath("../../../../..")
 text = "Bird Selection:"
 
-[node name="MarginContainer2" parent="MarginContainer/Panel/MarginContainer/VBoxContainer" instance=ExtResource("5_3tiaa")]
+[node name="MarginContainer2" parent="MarginContainer/Panel/MarginContainer/VBoxContainer" node_paths=PackedStringArray("node_to_hide") instance=ExtResource("5_3tiaa")]
 layout_mode = 2
 size_flags_vertical = 3
+node_to_hide = NodePath("../../../../..")

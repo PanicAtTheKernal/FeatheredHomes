@@ -22,6 +22,7 @@ func _ready() -> void:
 
 func _on_item_list_item_selected(index: int) -> void:
 	node_to_hide.hide()
+	get_tree().call_group("PlayerCamera", "turn_on_movement")
 	var bird_info = BirdResourceManager.birds[index]
 	var bird = BirdResourceManager.bird_manager.create_bird(bird_info)
 	BirdResourceManager.bird_manager.add_bird(bird)

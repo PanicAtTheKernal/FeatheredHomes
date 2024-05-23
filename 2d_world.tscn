@@ -12580,7 +12580,7 @@ script = ExtResource("8_bx5sd")
 [node name="PlayerCam" parent="." instance=ExtResource("11_csqhd")]
 unique_name_in_owner = true
 position = Vector2(360, 352)
-zoom = Vector2(4.5, 4.5)
+zoom = Vector2(7, 7)
 
 [node name="RegenFood" type="Timer" parent="."]
 wait_time = 10.0

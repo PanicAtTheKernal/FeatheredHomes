@@ -22,7 +22,9 @@ config/icon="res://Assets/main-logo.png"
 
 [autoload]
 
+ResourceFiles="*res://Scripts/Resources/ResourceSingleton/resource_files.gd"
 Logger="*res://Scripts/logger.gd"
+GlobalDialog="*res://Scripts/UI/Componets/Dialog/GlobalDialog.gd"
 Startup="*res://Scripts/startup.gd"
 Supabase="*res://addons/supabase/Supabase/supabase.gd"
 Database="*res://Scripts/database.gd"
@@ -48,6 +50,7 @@ project/assembly_name="Fyp Prototype 1"
 
 [editor]
 
+export/convert_text_resources_to_binary=false
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
 
@@ -74,6 +77,10 @@ folder_colors={
 "res://addons/": "gray",
 "res://android/": "gray"
 }
+
+[gui]
+
+theme/custom="res://Assets/Theme.tres"
 
 [input]
 

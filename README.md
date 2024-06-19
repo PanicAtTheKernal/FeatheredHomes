@@ -1,4 +1,8 @@
-C20456964 Daniel Kondabarov Final Year Project
+# Feathered Homes
+
+Play the web version here: [https://itch.io/embed-upload/10541332?color=333333](https://itch.io/embed-upload/10541332?color=333333)
+
+C20456964 Daniel Kondabarov
 
 Github: https://github.com/PanicAtTheKernal/FinalYearProject
 

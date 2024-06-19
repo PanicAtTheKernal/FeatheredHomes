@@ -10,7 +10,6 @@
 [ext_resource type="Script" path="res://Scripts/UI/zoom_in_button.gd" id="7_7goe6"]
 [ext_resource type="Script" path="res://Scripts/UI/loading_button.gd" id="7_dmda8"]
 [ext_resource type="Script" path="res://Scripts/UI/camera_button.gd" id="7_v6h0r"]
-[ext_resource type="PackedScene" uid="uid://d2vy7b25mpbee" path="res://Scripts/UI/dialog.tscn" id="8_q6ckc"]
 [ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="9_xomvi"]
 [ext_resource type="Texture2D" uid="uid://gnvcs6o4qapv" path="res://Assets/bird-history.png" id="12_mo8vx"]
 [ext_resource type="Texture2D" uid="uid://sr6nk37ytiq6" path="res://Assets/search.png" id="13_ieebc"]
@@ -20,6 +19,7 @@
 [ext_resource type="Script" path="res://Scripts/World/bird_history_button.gd" id="14_iyxci"]
 [ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="18_a5cmg"]
 [ext_resource type="Script" path="res://Scripts/Util/fps_ui.gd" id="19_85rgr"]
+[ext_resource type="PackedScene" uid="uid://ci5by2t26k4ye" path="res://Scripts/UI/Screens/bird_selection.tscn" id="20_aeoj1"]
 [ext_resource type="PackedScene" uid="uid://wu1rxyfuwmdt" path="res://Scripts/UI/settings.tscn" id="20_evmqt"]
 [ext_resource type="PackedScene" uid="uid://0w8vhuuiopaw" path="res://Scripts/UI/manual_search.tscn" id="20_uxstc"]
 
@@ -74,6 +74,7 @@ expand_icon = true
 script = ExtResource("5_3gpal")
 
 [node name="ZoomInButton" type="Button" parent="."]
+visible = false
 custom_minimum_size = Vector2(128, 128)
 anchors_preset = 1
 anchor_left = 1.0
@@ -89,6 +90,7 @@ text = "+"
 script = ExtResource("7_7goe6")
 
 [node name="ZoomOutButton" type="Button" parent="."]
+visible = false
 custom_minimum_size = Vector2(128, 128)
 anchors_preset = 1
 anchor_left = 1.0
@@ -103,7 +105,8 @@ theme_override_font_sizes/font_size = 80
 text = "-"
 script = ExtResource("5_igraa")
 
-[node name="CameraButton" type="Button" parent="." groups=["LoadingButton"]]
+[node name="CameraButtonDis" type="Button" parent="."]
+visible = false
 custom_minimum_size = Vector2(192, 192)
 anchors_preset = 3
 anchor_left = 1.0
@@ -138,7 +141,7 @@ texture = ExtResource("3_48hw7")
 
 [node name="FindSpeciesRequest" type="HTTPRequest" parent="."]
 
-[node name="LoadingButton" type="Button" parent="." groups=["LoadingButton"]]
+[node name="LoadingButton" type="Button" parent="."]
 visible = false
 anchors_preset = 3
 anchor_left = 1.0
@@ -155,7 +158,7 @@ theme = ExtResource("9_xomvi")
 disabled = true
 script = ExtResource("7_dmda8")
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="LoadingButton" groups=["LoadingButton"]]
+[node name="TextureProgressBar" type="TextureProgressBar" parent="LoadingButton"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
@@ -185,9 +188,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -200.0
-offset_top = -448.0
+offset_top = -240.0
 offset_right = -40.0
-offset_bottom = -288.0
+offset_bottom = -80.0
 grow_horizontal = 0
 grow_vertical = 0
 theme = ExtResource("9_xomvi")
@@ -238,11 +241,6 @@ script = ExtResource("5_afy4f")
 unique_name_in_owner = true
 visible = false
 
-[node name="Dialog" parent="." groups=["Dialog"] instance=ExtResource("8_q6ckc")]
-unique_name_in_owner = true
-visible = false
-offset_left = -0.00012207
-
 [node name="BirdHistory" parent="." instance=ExtResource("13_owhgl")]
 unique_name_in_owner = true
 visible = false
@@ -251,6 +249,9 @@ visible = false
 visible = false
 
 [node name="ManualSearch" parent="." groups=["Search"] instance=ExtResource("20_uxstc")]
+visible = false
+
+[node name="BirdSelection" parent="." groups=["Selection"] instance=ExtResource("20_aeoj1")]
 visible = false
 
 [node name="Debug" type="RichTextLabel" parent="."]
@@ -271,5 +272,5 @@ script = ExtResource("19_85rgr")
 [connection signal="pressed" from="SettingsButton" to="SettingsButton" method="_on_pressed"]
 [connection signal="pressed" from="ZoomInButton" to="ZoomInButton" method="_on_pressed"]
 [connection signal="pressed" from="ZoomOutButton" to="ZoomOutButton" method="_on_pressed"]
-[connection signal="pressed" from="CameraButton" to="CameraButton" method="_on_pressed"]
+[connection signal="pressed" from="CameraButtonDis" to="CameraButtonDis" method="_on_pressed"]
 [connection signal="pressed" from="SearchButton" to="SearchButton" method="_on_pressed"]

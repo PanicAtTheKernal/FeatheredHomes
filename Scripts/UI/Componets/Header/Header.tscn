@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://pvyfe81q2y78"]
+
+[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="1_bqwsa"]
+[ext_resource type="Script" path="res://Scripts/UI/Componets/Header/Header.gd" id="1_oq1ne"]
+[ext_resource type="FontFile" uid="uid://nxmuchvunil1" path="res://Assets/Silkscreen/Silkscreen-Bold.ttf" id="2_070lb"]
+[ext_resource type="Theme" uid="uid://dvj1la8mst6pa" path="res://Assets/hollow-button.tres" id="4_xsb33"]
+
+[node name="MarginContainer" type="MarginContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 67.0
+grow_horizontal = 2
+script = ExtResource("1_oq1ne")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Notice" type="RichTextLabel" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_bqwsa")
+theme_override_fonts/bold_font = ExtResource("2_070lb")
+theme_override_font_sizes/bold_font_size = 40
+bbcode_enabled = true
+text = "Notice:"
+fit_content = true
+autowrap_mode = 0
+
+[node name="Container" type="Container" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CloseButton" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme = ExtResource("4_xsb33")
+theme_override_font_sizes/font_size = 40
+text = "X"

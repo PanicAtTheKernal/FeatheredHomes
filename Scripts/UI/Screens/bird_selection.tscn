@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3 uid="uid://ci5by2t26k4ye"]
+
+[ext_resource type="Script" path="res://Scripts/UI/Screens/bird_selection.gd" id="1_gbkxo"]
+[ext_resource type="Texture2D" uid="uid://mflsr74fmyc" path="res://Assets/background.png" id="2_nlyjm"]
+[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="3_kpjo2"]
+[ext_resource type="PackedScene" uid="uid://pvyfe81q2y78" path="res://Scripts/UI/Componets/Header/Header.tscn" id="4_2xi0v"]
+[ext_resource type="PackedScene" uid="uid://bwd0konwtq70p" path="res://Scripts/UI/Componets/AssetLoader/asset_loader.tscn" id="5_3tiaa"]
+
+[node name="BirdSelection" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gbkxo")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -252.0
+offset_bottom = 252.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_nlyjm")
+expand_mode = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 100
+
+[node name="Panel" type="PanelContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 500)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_kpjo2")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer" node_paths=PackedStringArray("node_to_close") instance=ExtResource("4_2xi0v")]
+layout_mode = 2
+is_close_button_showing = true
+node_to_close = NodePath("../../../../..")
+text = "Bird Selection:"
+
+[node name="MarginContainer2" parent="MarginContainer/Panel/MarginContainer/VBoxContainer" node_paths=PackedStringArray("node_to_hide") instance=ExtResource("5_3tiaa")]
+layout_mode = 2
+size_flags_vertical = 3
+node_to_hide = NodePath("../../../../..")

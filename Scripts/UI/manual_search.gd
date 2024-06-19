@@ -40,7 +40,8 @@ func _on_ok_button_pressed()->void:
 		get_tree().call_group("LoadingSearchButton", "show_loading")
 		get_tree().call_group("PlayerCamera", "turn_on_movement")
 	else:
-		get_tree().call_group("Dialog", "display", "Please enter a valid name without numbers or special characters")
+		var error_dialog = Dialog.new().message("Please enter a valid name without numbers or special characters").regular_notification()
+		GlobalDialog.create(error_dialog)
 
 
 func _on_cancel_button_pressed() -> void:

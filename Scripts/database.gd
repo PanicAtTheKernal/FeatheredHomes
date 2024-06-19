@@ -28,6 +28,7 @@ const ID_COLS = {
 }
 
 var config: ConfigFile
+var access_token: String
 var is_connected_to_db: bool
 var traits: Dictionary
 var logger_key = {
@@ -38,7 +39,7 @@ var logger_key = {
 func _ready()->void:
 	is_connected_to_db = false
 	config = _load_env_file() 
-	await _login()
+	#await _login()
 	if not is_connected_to_db:
 		return
 
@@ -56,12 +57,15 @@ func _login()->void:
 	var sign_result: AuthTask = await Supabase.auth.sign_in(email, password).completed
 	if sign_result.user == null:
 		Logger.print_debug("Failed to sign in", logger_key)
+		var warning_dialog = Dialog.new().message("Not connected to database").header("Warning!")
+		GlobalDialog.create(warning_dialog)
 		is_connected_to_db = false
 	else: 
+		config.set_value(ENVIRONMENT_VARIABLES, "access_token", access_token)
 		is_connected_to_db = true
 
-func get_anon_token()->String:
-	return config.get_value(ENVIRONMENT_VARIABLES, "ANON_TOKEN", "")
+func get_refresh_token()->String:
+	return access_token
 
 func get_image_endpoint()->String:
 	return config.get_value(ENVIRONMENT_VARIABLES, "URL", "") + config.get_value(ENVIRONMENT_VARIABLES, "IMAGE_ENDPOINT", "")
@@ -85,6 +89,9 @@ func fetch_value(table_name: String, id: String, col_name: String)->String:
 	return result[col_name]
 
 func fetch_supported_familes()->Array[String]:
+	if not is_connected_to_db:
+		Logger.print_debug("Unable to fetch supported birds since database is not connected", logger_key)		
+		return [] 
 	var family_query: SupabaseQuery = SupabaseQuery.new().from(DATABASE_NAME.FAMILY_TO_SHAPE).select()
 	var family_result = await Supabase.database.query(family_query).completed
 	var supported_familes: Array[String] = []
@@ -93,6 +100,9 @@ func fetch_supported_familes()->Array[String]:
 	return supported_familes
 
 func fetch_all_birds()->Array[String]:
+	if not is_connected_to_db:
+		Logger.print_debug("Unable to fetch all birds since database is not connected", logger_key)
+		return []
 	var species_query: SupabaseQuery = SupabaseQuery.new().from("BirdSpecies").select()
 	var species_result = await Supabase.database.query(species_query).completed
 	var supported_familes: Array[String] = []

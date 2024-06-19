@@ -35,10 +35,12 @@ func _on_image_request_completed(image_buffers)->void:
 	sound_player.play()
 
 func _on_error(e)->void:
-	get_tree().call_group("Dialog", "display", e)
+	var dialog = Dialog.new().message(e).regular_notification()
+	GlobalDialog.create(dialog)
 
 func _on_permission_not_granted_by_user()->void:
-	get_tree().call_group("Dialog", "display", "You need to allow the camera for the app")
+	var dialog = Dialog.new().message("You need to allow the camera for the app").regular_notification()
+	GlobalDialog.create(dialog)
 	plugin.resendPermission()
 
 func take_picture()->void:
@@ -49,7 +51,8 @@ func take_picture()->void:
 		"iOS":
 			_take_picture_ios()
 		_:
-			get_tree().call_group("Dialog", "display", ("Platform "+os_name+" is not supported"))
+			var dialog = Dialog.new().message(("Platform "+os_name+" is not supported")).regular_notification()
+			GlobalDialog.create(dialog)
 
 func _take_picture_andorid()->void:
 	if plugin:
@@ -65,8 +68,8 @@ func _setup_camera_andorid()->void:
 	if Engine.has_singleton(plugin_name):
 		plugin = Engine.get_singleton(plugin_name)
 	else:
-		get_tree().call_group("Dialog", "display", ("Could not load plugin: "+plugin_name))
-	
+		var dialog = Dialog.new().message(("Could not load plugin: "+plugin_name)).regular_notification()
+		GlobalDialog.create(dialog)
 	if plugin:
 		plugin.connect("image_request_completed", _on_image_request_completed)
 		plugin.connect("error", _on_error)

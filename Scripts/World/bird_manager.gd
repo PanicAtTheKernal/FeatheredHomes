@@ -47,7 +47,6 @@ var male: BirdInfo = ResourceLoader.load("res://Assets/Birds/NewBird/DUNNOCK-MAL
 func _ready() -> void:
 	_intialise_bird_resources()
 	_load_birds()
-	
 	#for i in range(20):
 		#BirdResourceManager.add_bird("Dunnock")
 	#for i in range(15):
@@ -81,8 +80,8 @@ func _load_birds() -> void:
 		#bird.current_stamina = bird_state.current_stamina
 		bird.current_age = bird_state.age
 		spawn_bird(bird, bird_state.position)
-		BirdResourceManager.add_bird_to_list(bird.info)
 	PlayerResourceManager.player_data.birds = []
+
 
 func create_bird(bird_info: BirdInfo)->Bird:
 	var new_bird: Bird = blank_bird.instantiate()
@@ -114,22 +113,27 @@ func setup_bird(new_bird:Bird, bird_info: BirdInfo)->void:
 	# TODO Testing setup for bird mating/parenting
 	new_bird.current_age = 4
 
-func spawn_bird(new_bird: Bird, location: Vector2)->void:
-	new_bird.global_position = location
-	Logger.print_debug("New bird has been added ID: "+str(new_bird.id), logger_key)
-	Logger.create_new_bird_log(new_bird.id)
-	add_child(new_bird)
+func load_bird(bird_info: BirdInfo, bird_state: BirdState)->void:
+	var bird = create_bird(bird_info)
+	bird.species = bird_state.species.copy()
+	bird.current_age = bird_state.age
+	spawn_bird(bird, bird_state.position)
+
+func spawn_bird(bird: Bird, location: Vector2)->void:
+	bird.global_position = location
+	Logger.print_debug("New bird has been added ID: "+str(bird.id), logger_key)
+	Logger.create_new_bird_log(bird.id)
+	add_child(bird)
 	get_tree().root.find_child("BTimer", true, false).end_timer()
+	BirdResourceManager.collected_birds.add(bird.info)
 
 func add_bird(new_bird: Bird, random_bird: bool = false)->void:
 	spawn_bird(new_bird, player_camera.get_screen_center_position())
-	# TODO REMOVE THIS 
-	#if new_bird.info.gender == "female":
-		#new_bird.global_position.x += 75
 	var message = "You found a "+new_bird.info.species.name.capitalize()
 	if random_bird:
 		message = "You get a "+new_bird.info.species.name.capitalize()+" because the exact bird species can't be determined"
-	get_tree().call_group("Dialog", "display", message, "Congratulations!", true)
+	var dialog = Dialog.new().message(message).header("Congratulations!").grand_notification()
+	GlobalDialog.create(dialog)
 	get_tree().call_group("LoadingButton", "hide_loading")
 
 func create_traits(new_bird: Bird)->void:

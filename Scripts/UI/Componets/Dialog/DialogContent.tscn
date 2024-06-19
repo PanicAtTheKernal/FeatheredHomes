@@ -1,29 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://d2vy7b25mpbee"]
+[gd_scene load_steps=4 format=3 uid="uid://d1r2323wjjern"]
 
-[ext_resource type="Script" path="res://Scripts/UI/dialog.gd" id="1_6thm6"]
-[ext_resource type="Texture2D" uid="uid://mflsr74fmyc" path="res://Assets/background.png" id="1_eeyfq"]
-[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="3_2eewb"]
-[ext_resource type="FontFile" uid="uid://nxmuchvunil1" path="res://Assets/Silkscreen/Silkscreen-Bold.ttf" id="4_4ef35"]
+[ext_resource type="Texture2D" uid="uid://mflsr74fmyc" path="res://Assets/background.png" id="1_aduew"]
+[ext_resource type="Theme" uid="uid://sct70k5b8gxf" path="res://Assets/Theme.tres" id="2_quqqr"]
+[ext_resource type="PackedScene" uid="uid://pvyfe81q2y78" path="res://Scripts/UI/Componets/Header/Header.tscn" id="3_iv28w"]
 
-[node name="Dialog" type="Control"]
+[node name="DialogContent" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_6thm6")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -252.0
-offset_bottom = 252.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_eeyfq")
+texture = ExtResource("1_aduew")
 expand_mode = 4
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -43,7 +39,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(600, 200)
 layout_mode = 2
 size_flags_vertical = 4
-theme = ExtResource("3_2eewb")
+theme = ExtResource("2_quqqr")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel"]
 layout_mode = 2
@@ -55,22 +51,9 @@ theme_override_constants/margin_bottom = 20
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 12
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/MarginContainer"]
-layout_mode = 2
-
-[node name="Notice" type="RichTextLabel" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Header" parent="MarginContainer/Panel/MarginContainer/VBoxContainer" instance=ExtResource("3_iv28w")]
 unique_name_in_owner = true
 layout_mode = 2
-theme = ExtResource("3_2eewb")
-theme_override_fonts/bold_font = ExtResource("4_4ef35")
-bbcode_enabled = true
-text = "[b]Notice:[/b]"
-fit_content = true
-autowrap_mode = 0
 
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -84,7 +67,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("3_2eewb")
+theme = ExtResource("2_quqqr")
 theme_override_font_sizes/bold_font_size = 0
 bbcode_enabled = true
 text = "Place Holder asdfa sdf asd fas dfas dfas dfas dfa sdf asdf asd fasd fasd f asdf"
@@ -105,5 +88,3 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 56
 text = "OK"
 clip_text = true
-
-[connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3/AspectRatioContainer/OkButton" to="." method="_on_ok_button_pressed"]

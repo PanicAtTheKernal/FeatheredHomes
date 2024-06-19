@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwd0konwtq70p"]
+
+[ext_resource type="Script" path="res://Scripts/UI/Componets/AssetLoader/asset_loader.gd" id="1_0yyu4"]
+
+[node name="MarginContainer2" type="MarginContainer"]
+custom_minimum_size = Vector2(80, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 12
+script = ExtResource("1_0yyu4")
+
+[node name="ItemList" type="ItemList" parent="."]
+layout_mode = 2
+item_count = 1
+max_columns = 2
+item_0/text = "Bird"
+
+[connection signal="item_selected" from="ItemList" to="." method="_on_item_list_item_selected"]

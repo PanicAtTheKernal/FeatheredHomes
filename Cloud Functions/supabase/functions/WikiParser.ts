@@ -1,4 +1,4 @@
-import { CheerioAPI, Cheerio, Element, load } from "npm:cheerio";
+import { CheerioAPI, Cheerio, Element, load } from "npm:cheerio@1.0.0-rc.12";
 import { WikiPageRequest } from "./WikiPageRequest.ts";
 
 // Facade pattern

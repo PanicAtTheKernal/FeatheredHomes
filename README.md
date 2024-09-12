@@ -1,6 +1,6 @@
 # Feathered Homes
 
-Play the web version here: https://itch.io/embed-upload/10495439?color=333333
+Play the web version here: [https://itch.io/embed-upload/10541332?color=333333](https://itch.io/embed-upload/10541332?color=333333)
 
 C20456964 Daniel Kondabarov
 

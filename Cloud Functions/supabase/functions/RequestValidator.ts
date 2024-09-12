@@ -4,6 +4,7 @@ const HEADERS = { "Content-Type": CONTENT_TYPE };
 export type BirdRequest = {
     birdSpecies: string,
     hashMap?: object,
+    shapeId?: string,
 }
 
 export class RequestValidator {

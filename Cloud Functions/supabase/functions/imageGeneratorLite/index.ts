@@ -1,7 +1,6 @@
 import { RequestValidator } from "../RequestValidator.ts";
 import { Supabase } from "../SupabaseClient.ts";
 import { BirdWikiPage } from "../WikiPage.ts";
-import { ImageGenerator } from "../findSpecies/ImageGenerator.ts";
 import { ImageGeneratorLite } from "./ImageGeneratorLite.ts";
 
 const CONTENT_TYPE = "application/json; charset=utf-8";
@@ -17,14 +16,6 @@ Deno.serve(async (req) => {
     return validationResponse;
   };
   try {
-    const wikiPage = new BirdWikiPage(validation.body.birdSpecies.toLowerCase());
-    await wikiPage.setupParser();
-    const description = await wikiPage.getDescription();
-    let familyName = wikiPage.getBirdFamily().toUpperCase();
-    if (familyName == "ANATIDAE") {
-        familyName = wikiPage.getBirdGenus().toUpperCase();
-    }
-    const birdName = wikiPage.getBirdName();
     const imageGen = new ImageGeneratorLite(validation.body.hashMap as Object, validation.body.shapeId as string, validation.body.birdSpecies.toLowerCase());
     await imageGen.generateImageAndUpload();
     return new Response(      
